@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"hash"
+	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fr"
@@ -119,7 +120,6 @@ func generateWitness(newBuilder frontend.NewBuilder) (constraint.ConstraintSyste
 	}
 
 	r1cs_temp, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
-	log.Println("start setup")
 
 	schema, _ := frontend.NewSchema(&witnessCircuit)
 	ret, _ := witnessData.ToJSON(schema)
@@ -181,8 +181,15 @@ func plonkTest() {
 }
 
 func groth16Test() {
+	start := time.Now()
 	r1cs_temp, witnessData, err := generateWitness(r1cs.NewBuilder)
+	elapsed := time.Since(start)
+	log.Printf("Witness Generation: %d ms", elapsed.Milliseconds())
+	if err != nil {
+		panic(err)
+	}
 	// 1. One time setup
+	log.Println("start setup")
 	pk, vk, err := groth16.Setup(r1cs_temp)
 	if err != nil {
 		panic(err)

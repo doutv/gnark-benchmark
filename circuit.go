@@ -51,18 +51,18 @@ func (circuit *KycCircuit) Define(api frontend.API) error {
 
 	//// check age
 	// minage < age
-	api.AssertIsEqual(frontend.Variable(-1), api.Cmp(circuit.MinAge, circuit.Age))
-	// maxage > age
-	api.AssertIsEqual(frontend.Variable(1), api.Cmp(circuit.MaxAge, circuit.Age))
-	////check gender
-	//api.AssertIsEqual(circuit.isMale, circuit.Gender)
-	// contains nation
-	constrain_nations := api.ToBinary(circuit.ContainNations, 253)
-	nation := api.ToBinary(circuit.Nation, 253)
-	result := make([]frontend.Variable, 0)
-	for i := range constrain_nations {
-		result = append(result, api.And(constrain_nations[i], nation[i]))
-	}
+	// api.AssertIsEqual(frontend.Variable(-1), api.Cmp(circuit.MinAge, circuit.Age))
+	// // maxage > age
+	// api.AssertIsEqual(frontend.Variable(1), api.Cmp(circuit.MaxAge, circuit.Age))
+	// ////check gender
+	// //api.AssertIsEqual(circuit.isMale, circuit.Gender)
+	// // contains nation
+	// constrain_nations := api.ToBinary(circuit.ContainNations, 253)
+	// nation := api.ToBinary(circuit.Nation, 253)
+	// result := make([]frontend.Variable, 0)
+	// for i := range constrain_nations {
+	// 	result = append(result, api.And(constrain_nations[i], nation[i]))
+	// }
 	//api.AssertIsDifferent(api.FromBinary(result...), frontend.Variable(0))
 	return nil
 }

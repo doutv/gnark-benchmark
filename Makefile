@@ -7,12 +7,12 @@ install:
 	rm gnark
 
 local:
-	go run main.go
+	go run main.go full
 	
 android:
 	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark . 
-	adb push gnark /data/local/tmp/
-	adb shell "/data/local/tmp/gnark"
+	adb push gnark ecdsa.r1cs ecdsa.vkey ecdsa.zkey /data/local/tmp/
+	adb shell "cd /data/local/tmp && ./gnark"
 
 ios:
 	gomobile bind --target ios ./ecdsa

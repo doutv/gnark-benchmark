@@ -1,7 +1,13 @@
 package main
 
-import "gnark-benchmark/ecdsa"
+import (
+	"gnark-benchmark/ecdsa"
+	"os"
+)
 
 func main() {
-	ecdsa.Groth16Test()
+	if len(os.Args) > 1 && os.Args[1] == "full" {
+		ecdsa.Setup()
+	}
+	ecdsa.ProveAndVerify()
 }

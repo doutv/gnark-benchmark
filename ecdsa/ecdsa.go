@@ -1,22 +1,19 @@
 package ecdsa
 
 import (
-	"bytes"
 	"crypto/rand"
-	"encoding/json"
 	"hash"
+	"io"
+	"os"
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fr"
 	secp_mimc "github.com/consensys/gnark-crypto/ecc/bn254/fr/mimc"
 	secp_ecdsa "github.com/consensys/gnark-crypto/ecc/secp256k1/ecdsa"
-	"github.com/consensys/gnark/backend/plonk"
 	"github.com/consensys/gnark/backend/witness"
 	"github.com/consensys/gnark/constraint"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
-	"github.com/consensys/gnark/frontend/cs/scs"
-	"github.com/consensys/gnark/test/unsafekzg"
 
 	"log"
 	"math/big"
@@ -142,7 +139,16 @@ func (t *KycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecd
 
 var hFunc = secp_mimc.NewMiMC()
 
-func generateWitness(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, witness.Witness, error) {
+func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, error) {
+	circuit := KycCircuit{}
+	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
+	if err != nil {
+		return nil, err
+	}
+	return r1cs, nil
+}
+
+func generateWitness(hFunc hash.Hash) (witness.Witness, error) {
 	// generate parameters
 	privKey, _ := secp_ecdsa.GenerateKey(rand.Reader)
 
@@ -158,7 +164,6 @@ func generateWitness(newBuilder frontend.NewBuilder) (constraint.ConstraintSyste
 	r.SetBytes(sigBin.R[:32])
 	s.SetBytes(sigBin.S[:32])
 
-	circuit := KycCircuit{}
 	witnessCircuit := KycCircuit{
 		Signature: ecdsa.Signature[emulated.Secp256k1Fr]{
 			R: emulated.ValueOf[emulated.Secp256k1Fr](r),
@@ -180,107 +185,90 @@ func generateWitness(newBuilder frontend.NewBuilder) (constraint.ConstraintSyste
 		panic(err)
 	}
 
-	r1cs_temp, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
-
-	schema, _ := frontend.NewSchema(&witnessCircuit)
-	ret, _ := witnessData.ToJSON(schema)
-
-	var b bytes.Buffer
-	json.Indent(&b, ret, "", "\t")
-	//log.Println("start proof: witness", b.String())
-	return r1cs_temp, witnessData, nil
+	return witnessData, nil
 }
 
-func PlonkTest() {
-	r1cs_temp, witnessData, err := generateWitness(scs.NewBuilder)
-	// 1. One time setup
-	srs, srsLagrange, err := unsafekzg.NewSRS(r1cs_temp)
-
-	pk, vk, err := plonk.Setup(r1cs_temp, srs, srsLagrange)
-
+func writeToFile(data io.WriterTo, fileName string) {
+	file, err := os.Create(fileName)
 	if err != nil {
 		panic(err)
 	}
-
-	var pkbuffer bytes.Buffer
-	pkn, err := pk.WriteTo(&pkbuffer)
+	defer file.Close()
+	_, err = data.WriteTo(file)
 	if err != nil {
 		panic(err)
 	}
-	var r1csbuffer bytes.Buffer
-	r1csn, err := r1cs_temp.WriteTo(&r1csbuffer)
-	if err != nil {
-		panic(err)
-	}
-
-	log.Printf("end setup. size: %vmb, pk: %vmb constrain: %v mb", (float64(pkn+r1csn))/(1024.0*1024), (float64(pkn))/(1024.0*1024), (float64(r1csn))/(1024.0*1024))
-
-	// 2. Proof creation
-	proof, err := plonk.Prove(r1cs_temp, pk, witnessData)
-	if err != nil {
-		panic(err)
-	}
-
-	log.Println("end proof")
-
-	log.Println("start verify")
-	publicWitness, err := witnessData.Public()
-	if err != nil {
-		panic(err)
-	}
-	// 3. Proof verification
-	err = plonk.Verify(proof, vk, publicWitness)
-	if err != nil {
-		panic(err)
-	}
-	log.Println("end verify")
 }
 
-func Groth16Test() {
+func readFromFile(data io.ReaderFrom, fileName string) error {
+	file, err := os.Open(fileName)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	// Use the ReadFrom method to read the file's content into data.
+	if _, err := data.ReadFrom(file); err != nil {
+		return err
+	}
+	return nil
+}
+
+func Setup() {
+	r1cs, err := compileCircuit(r1cs.NewBuilder)
+	if err != nil {
+		panic(err)
+	}
+	pk, vk, err := groth16.Setup(r1cs)
+	if err != nil {
+		panic(err)
+	}
+	// Write to file
+	writeToFile(pk, "ecdsa.zkey")
+	writeToFile(r1cs, "ecdsa.r1cs")
+	writeToFile(vk, "ecdsa.vkey")
+}
+
+func ProveAndVerify() {
+	// Witness generation
 	start := time.Now()
-	r1cs_temp, witnessData, err := generateWitness(r1cs.NewBuilder)
+	witnessData, err := generateWitness(hFunc)
+	if err != nil {
+		panic(err)
+	}
 	elapsed := time.Since(start)
 	log.Printf("Witness Generation: %d ms", elapsed.Milliseconds())
-	if err != nil {
-		panic(err)
-	}
-	// 1. One time setup
-	log.Println("start setup")
-	pk, vk, err := groth16.Setup(r1cs_temp)
-	if err != nil {
-		panic(err)
-	}
-	log.Println("pk ", "nG1", pk.NbG1(), "nG2", pk.NbG2())
-	var pkbuffer bytes.Buffer
-	pkn, err := pk.WriteTo(&pkbuffer)
-	if err != nil {
-		panic(err)
-	}
-	var r1csbuffer bytes.Buffer
-	r1csn, err := r1cs_temp.WriteTo(&r1csbuffer)
-	if err != nil {
-		panic(err)
-	}
 
-	log.Printf("end setup. size: %vmb, pk: %vmb constrain: %v mb", (float64(pkn+r1csn))/(1024.0*1024), (float64(pkn))/(1024.0*1024), (float64(r1csn))/(1024.0*1024))
+	// Read files
+	start = time.Now()
+	r1cs := groth16.NewCS(ecc.BN254)
+	readFromFile(r1cs, "ecdsa.r1cs")
+	elapsed = time.Since(start)
+	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
-	// 2. Proof creation
-	proof, err := groth16.Prove(r1cs_temp, pk, witnessData)
+	start = time.Now()
+	pk := groth16.NewProvingKey(ecc.BN254)
+	readFromFile(pk, "ecdsa.zkey")
+	elapsed = time.Since(start)
+	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
+
+	// Proof generation
+	start = time.Now()
+	proof, err := groth16.Prove(r1cs, pk, witnessData)
 	if err != nil {
 		panic(err)
 	}
+	elapsed = time.Since(start)
+	log.Printf("Prove: %d ms", elapsed.Milliseconds())
 
-	log.Println("end proof")
-
-	log.Println("start verify")
+	// Proof verification
 	publicWitness, err := witnessData.Public()
 	if err != nil {
 		panic(err)
 	}
-	// 3. Proof verification
+	vk := groth16.NewVerifyingKey(ecc.BN254)
+	readFromFile(vk, "ecdsa.vkey")
 	err = groth16.Verify(proof, vk, publicWitness)
 	if err != nil {
 		panic(err)
 	}
-	log.Println("end verify")
 }

@@ -200,17 +200,16 @@ func writeToFile(data io.WriterTo, fileName string) {
 	}
 }
 
-func readFromFile(data io.ReaderFrom, fileName string) error {
+func readFromFile(data io.ReaderFrom, fileName string) {
 	file, err := os.Open(fileName)
 	if err != nil {
-		return err
+		panic(err)
 	}
 	defer file.Close()
 	// Use the ReadFrom method to read the file's content into data.
 	if _, err := data.ReadFrom(file); err != nil {
-		return err
+		panic(err)
 	}
-	return nil
 }
 
 func Setup() {
@@ -247,7 +246,16 @@ func ProveAndVerify() {
 
 	start = time.Now()
 	pk := groth16.NewProvingKey(ecc.BN254)
-	readFromFile(pk, "ecdsa.zkey")
+	file, err := os.Open("ecdsa.zkey")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	// UnsafeReadFrom is faster than ReadFrom
+	if _, err := pk.UnsafeReadFrom(file); err != nil {
+		panic(err)
+	}
+	// readFromFile(pk, "ecdsa.zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 

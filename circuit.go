@@ -1,4 +1,4 @@
-package main
+package ecdsa
 
 import (
 	"github.com/consensys/gnark/frontend"

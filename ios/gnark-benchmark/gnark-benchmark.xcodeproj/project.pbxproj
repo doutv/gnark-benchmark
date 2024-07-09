@@ -1,0 +1,615 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5095FDBD2C3BF18B00774FC1 /* gnark_benchmarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */; };
+		5095FDBF2C3BF18B00774FC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBE2C3BF18B00774FC1 /* ContentView.swift */; };
+		5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5095FDC02C3BF18C00774FC1 /* Assets.xcassets */; };
+		5095FDC42C3BF18C00774FC1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5095FDC32C3BF18C00774FC1 /* Preview Assets.xcassets */; };
+		5095FDCE2C3BF18C00774FC1 /* gnark_benchmarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDCD2C3BF18C00774FC1 /* gnark_benchmarkTests.swift */; };
+		5095FDD82C3BF18C00774FC1 /* gnark_benchmarkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDD72C3BF18C00774FC1 /* gnark_benchmarkUITests.swift */; };
+		5095FDDA2C3BF18C00774FC1 /* gnark_benchmarkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDD92C3BF18C00774FC1 /* gnark_benchmarkUITestsLaunchTests.swift */; };
+		5095FDE82C3BF21100774FC1 /* Ecdsa.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5095FDE72C3BF21100774FC1 /* Ecdsa.xcframework */; };
+		5095FDE92C3BF21100774FC1 /* Ecdsa.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5095FDE72C3BF21100774FC1 /* Ecdsa.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5095FDCA2C3BF18C00774FC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5095FDB12C3BF18B00774FC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5095FDB82C3BF18B00774FC1;
+			remoteInfo = "gnark-benchmark";
+		};
+		5095FDD42C3BF18C00774FC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5095FDB12C3BF18B00774FC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5095FDB82C3BF18B00774FC1;
+			remoteInfo = "gnark-benchmark";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5095FDEA2C3BF21100774FC1 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5095FDE92C3BF21100774FC1 /* Ecdsa.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5095FDB92C3BF18B00774FC1 /* gnark-benchmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gnark-benchmark.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkApp.swift; sourceTree = "<group>"; };
+		5095FDBE2C3BF18B00774FC1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		5095FDC02C3BF18C00774FC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5095FDC32C3BF18C00774FC1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5095FDC92C3BF18C00774FC1 /* gnark-benchmarkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "gnark-benchmarkTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5095FDCD2C3BF18C00774FC1 /* gnark_benchmarkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkTests.swift; sourceTree = "<group>"; };
+		5095FDD32C3BF18C00774FC1 /* gnark-benchmarkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "gnark-benchmarkUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5095FDD72C3BF18C00774FC1 /* gnark_benchmarkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkUITests.swift; sourceTree = "<group>"; };
+		5095FDD92C3BF18C00774FC1 /* gnark_benchmarkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		5095FDE72C3BF21100774FC1 /* Ecdsa.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Ecdsa.xcframework; path = ../Ecdsa.xcframework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5095FDB62C3BF18B00774FC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5095FDE82C3BF21100774FC1 /* Ecdsa.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5095FDC62C3BF18C00774FC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5095FDD02C3BF18C00774FC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5095FDB02C3BF18B00774FC1 = {
+			isa = PBXGroup;
+			children = (
+				5095FDBB2C3BF18B00774FC1 /* gnark-benchmark */,
+				5095FDCC2C3BF18C00774FC1 /* gnark-benchmarkTests */,
+				5095FDD62C3BF18C00774FC1 /* gnark-benchmarkUITests */,
+				5095FDBA2C3BF18B00774FC1 /* Products */,
+				5095FDE62C3BF21100774FC1 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		5095FDBA2C3BF18B00774FC1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5095FDB92C3BF18B00774FC1 /* gnark-benchmark.app */,
+				5095FDC92C3BF18C00774FC1 /* gnark-benchmarkTests.xctest */,
+				5095FDD32C3BF18C00774FC1 /* gnark-benchmarkUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5095FDBB2C3BF18B00774FC1 /* gnark-benchmark */ = {
+			isa = PBXGroup;
+			children = (
+				5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */,
+				5095FDBE2C3BF18B00774FC1 /* ContentView.swift */,
+				5095FDC02C3BF18C00774FC1 /* Assets.xcassets */,
+				5095FDC22C3BF18C00774FC1 /* Preview Content */,
+			);
+			path = "gnark-benchmark";
+			sourceTree = "<group>";
+		};
+		5095FDC22C3BF18C00774FC1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				5095FDC32C3BF18C00774FC1 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		5095FDCC2C3BF18C00774FC1 /* gnark-benchmarkTests */ = {
+			isa = PBXGroup;
+			children = (
+				5095FDCD2C3BF18C00774FC1 /* gnark_benchmarkTests.swift */,
+			);
+			path = "gnark-benchmarkTests";
+			sourceTree = "<group>";
+		};
+		5095FDD62C3BF18C00774FC1 /* gnark-benchmarkUITests */ = {
+			isa = PBXGroup;
+			children = (
+				5095FDD72C3BF18C00774FC1 /* gnark_benchmarkUITests.swift */,
+				5095FDD92C3BF18C00774FC1 /* gnark_benchmarkUITestsLaunchTests.swift */,
+			);
+			path = "gnark-benchmarkUITests";
+			sourceTree = "<group>";
+		};
+		5095FDE62C3BF21100774FC1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5095FDE72C3BF21100774FC1 /* Ecdsa.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5095FDB82C3BF18B00774FC1 /* gnark-benchmark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5095FDDD2C3BF18C00774FC1 /* Build configuration list for PBXNativeTarget "gnark-benchmark" */;
+			buildPhases = (
+				5095FDB52C3BF18B00774FC1 /* Sources */,
+				5095FDB62C3BF18B00774FC1 /* Frameworks */,
+				5095FDB72C3BF18B00774FC1 /* Resources */,
+				5095FDEA2C3BF21100774FC1 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "gnark-benchmark";
+			productName = "gnark-benchmark";
+			productReference = 5095FDB92C3BF18B00774FC1 /* gnark-benchmark.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5095FDC82C3BF18C00774FC1 /* gnark-benchmarkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5095FDE02C3BF18C00774FC1 /* Build configuration list for PBXNativeTarget "gnark-benchmarkTests" */;
+			buildPhases = (
+				5095FDC52C3BF18C00774FC1 /* Sources */,
+				5095FDC62C3BF18C00774FC1 /* Frameworks */,
+				5095FDC72C3BF18C00774FC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5095FDCB2C3BF18C00774FC1 /* PBXTargetDependency */,
+			);
+			name = "gnark-benchmarkTests";
+			productName = "gnark-benchmarkTests";
+			productReference = 5095FDC92C3BF18C00774FC1 /* gnark-benchmarkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5095FDD22C3BF18C00774FC1 /* gnark-benchmarkUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5095FDE32C3BF18C00774FC1 /* Build configuration list for PBXNativeTarget "gnark-benchmarkUITests" */;
+			buildPhases = (
+				5095FDCF2C3BF18C00774FC1 /* Sources */,
+				5095FDD02C3BF18C00774FC1 /* Frameworks */,
+				5095FDD12C3BF18C00774FC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5095FDD52C3BF18C00774FC1 /* PBXTargetDependency */,
+			);
+			name = "gnark-benchmarkUITests";
+			productName = "gnark-benchmarkUITests";
+			productReference = 5095FDD32C3BF18C00774FC1 /* gnark-benchmarkUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5095FDB12C3BF18B00774FC1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					5095FDB82C3BF18B00774FC1 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					5095FDC82C3BF18C00774FC1 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 5095FDB82C3BF18B00774FC1;
+					};
+					5095FDD22C3BF18C00774FC1 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 5095FDB82C3BF18B00774FC1;
+					};
+				};
+			};
+			buildConfigurationList = 5095FDB42C3BF18B00774FC1 /* Build configuration list for PBXProject "gnark-benchmark" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5095FDB02C3BF18B00774FC1;
+			productRefGroup = 5095FDBA2C3BF18B00774FC1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5095FDB82C3BF18B00774FC1 /* gnark-benchmark */,
+				5095FDC82C3BF18C00774FC1 /* gnark-benchmarkTests */,
+				5095FDD22C3BF18C00774FC1 /* gnark-benchmarkUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5095FDB72C3BF18B00774FC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5095FDC42C3BF18C00774FC1 /* Preview Assets.xcassets in Resources */,
+				5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5095FDC72C3BF18C00774FC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5095FDD12C3BF18C00774FC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5095FDB52C3BF18B00774FC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5095FDBF2C3BF18B00774FC1 /* ContentView.swift in Sources */,
+				5095FDBD2C3BF18B00774FC1 /* gnark_benchmarkApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5095FDC52C3BF18C00774FC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5095FDCE2C3BF18C00774FC1 /* gnark_benchmarkTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5095FDCF2C3BF18C00774FC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5095FDDA2C3BF18C00774FC1 /* gnark_benchmarkUITestsLaunchTests.swift in Sources */,
+				5095FDD82C3BF18C00774FC1 /* gnark_benchmarkUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5095FDCB2C3BF18C00774FC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5095FDB82C3BF18B00774FC1 /* gnark-benchmark */;
+			targetProxy = 5095FDCA2C3BF18C00774FC1 /* PBXContainerItemProxy */;
+		};
+		5095FDD52C3BF18C00774FC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5095FDB82C3BF18B00774FC1 /* gnark-benchmark */;
+			targetProxy = 5095FDD42C3BF18C00774FC1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5095FDDB2C3BF18C00774FC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5095FDDC2C3BF18C00774FC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5095FDDE2C3BF18C00774FC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"gnark-benchmark/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gnark-benchmark";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5095FDDF2C3BF18C00774FC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"gnark-benchmark/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gnark-benchmark";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5095FDE12C3BF18C00774FC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gnark-benchmarkTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/gnark-benchmark.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/gnark-benchmark";
+			};
+			name = Debug;
+		};
+		5095FDE22C3BF18C00774FC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gnark-benchmarkTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/gnark-benchmark.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/gnark-benchmark";
+			};
+			name = Release;
+		};
+		5095FDE42C3BF18C00774FC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gnark-benchmarkUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "gnark-benchmark";
+			};
+			name = Debug;
+		};
+		5095FDE52C3BF18C00774FC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gnark-benchmarkUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "gnark-benchmark";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5095FDB42C3BF18B00774FC1 /* Build configuration list for PBXProject "gnark-benchmark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5095FDDB2C3BF18C00774FC1 /* Debug */,
+				5095FDDC2C3BF18C00774FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5095FDDD2C3BF18C00774FC1 /* Build configuration list for PBXNativeTarget "gnark-benchmark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5095FDDE2C3BF18C00774FC1 /* Debug */,
+				5095FDDF2C3BF18C00774FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5095FDE02C3BF18C00774FC1 /* Build configuration list for PBXNativeTarget "gnark-benchmarkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5095FDE12C3BF18C00774FC1 /* Debug */,
+				5095FDE22C3BF18C00774FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5095FDE32C3BF18C00774FC1 /* Build configuration list for PBXNativeTarget "gnark-benchmarkUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5095FDE42C3BF18C00774FC1 /* Debug */,
+				5095FDE52C3BF18C00774FC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5095FDB12C3BF18B00774FC1 /* Project object */;
+}

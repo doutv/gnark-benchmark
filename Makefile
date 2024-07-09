@@ -1,4 +1,4 @@
-.PHONY: install run local clean
+.PHONY: install local android ios
 
 install:
 	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark . 
@@ -7,16 +7,15 @@ install:
 	rm gnark
 
 local:
-	go build -ldflags="-s -w" -o gnark .
-	./gnark
+	go run main.go
 	
-run-android:
+android:
 	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark . 
 	adb push gnark /data/local/tmp/
 	adb shell "/data/local/tmp/gnark"
 
-run-ios:
-	gomobile bind --target ios
+ios:
+	gomobile bind --target ios ./ecdsa
 	# run in xcode
 	open ios/gnark-benchmark/gnark-benchmark.xcodeproj
 

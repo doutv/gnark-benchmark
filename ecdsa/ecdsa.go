@@ -212,7 +212,7 @@ func readFromFile(data io.ReaderFrom, fileName string) {
 	}
 }
 
-func Setup() {
+func Setup(fileDir string) {
 	r1cs, err := compileCircuit(r1cs.NewBuilder)
 	if err != nil {
 		panic(err)
@@ -222,12 +222,13 @@ func Setup() {
 		panic(err)
 	}
 	// Write to file
-	writeToFile(pk, "ecdsa.zkey")
-	writeToFile(r1cs, "ecdsa.r1cs")
-	writeToFile(vk, "ecdsa.vkey")
+	writeToFile(pk, fileDir+"ecdsa.zkey")
+	writeToFile(r1cs, fileDir+"ecdsa.r1cs")
+	writeToFile(vk, fileDir+"ecdsa.vkey")
 }
 
-func ProveAndVerify() {
+func ProveAndVerify(fileDir string) {
+	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()
 	witnessData, err := generateWitness(hFunc)
@@ -240,13 +241,13 @@ func ProveAndVerify() {
 	// Read files
 	start = time.Now()
 	r1cs := groth16.NewCS(ecc.BN254)
-	readFromFile(r1cs, "ecdsa.r1cs")
+	readFromFile(r1cs, fileDir+"ecdsa.r1cs")
 	elapsed = time.Since(start)
 	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
 	start = time.Now()
 	pk := groth16.NewProvingKey(ecc.BN254)
-	file, err := os.Open("ecdsa.zkey")
+	file, err := os.Open(fileDir+"ecdsa.zkey")
 	if err != nil {
 		panic(err)
 	}
@@ -268,13 +269,16 @@ func ProveAndVerify() {
 	elapsed = time.Since(start)
 	log.Printf("Prove: %d ms", elapsed.Milliseconds())
 
+	proveElapsed := time.Since(proveStart)
+	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
+	
 	// Proof verification
 	publicWitness, err := witnessData.Public()
 	if err != nil {
 		panic(err)
 	}
 	vk := groth16.NewVerifyingKey(ecc.BN254)
-	readFromFile(vk, "ecdsa.vkey")
+	readFromFile(vk, fileDir+"ecdsa.vkey")
 	err = groth16.Verify(proof, vk, publicWitness)
 	if err != nil {
 		panic(err)

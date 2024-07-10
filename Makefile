@@ -13,9 +13,11 @@ android:
 	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark . 
 	adb push gnark ecdsa.r1cs ecdsa.vkey ecdsa.zkey /data/local/tmp/
 	adb shell "cd /data/local/tmp && ./gnark"
+	mkdir -p android/app/src/main/resources/lib/arm64
+	cp gnark ecdsa.r1cs ecdsa.vkey ecdsa.zkey android/app/src/main/resources/lib/arm64
 
 ios:
-	gomobile bind --target ios ./ecdsa
+	gomobile bind --target ios -o ./ios/Ecdsa.xcframework ./ecdsa
 	# run in xcode
 	open ios/gnark-benchmark/gnark-benchmark.xcodeproj
 

@@ -26,7 +26,7 @@ import (
 	"github.com/consensys/gnark/std/signature/ecdsa"
 )
 
-type KycCircuit struct {
+type kycCircuit struct {
 	Age    frontend.Variable `gnark:"age,secret"`
 	Gender frontend.Variable `gnark:"gender,secret"`
 	Nation frontend.Variable `gnark:"nation,secret"`
@@ -45,7 +45,7 @@ type KycCircuit struct {
 	Signature ecdsa.Signature[emulated.Secp256k1Fr]                       `gnark:",public"`
 }
 
-func (circuit *KycCircuit) Define(api frontend.API) error {
+func (circuit *kycCircuit) Define(api frontend.API) error {
 	// check signature
 	//hash function for kyc credential
 	hFunc, err := mimc.NewMiMC(api)
@@ -85,7 +85,7 @@ func (circuit *KycCircuit) Define(api frontend.API) error {
 	return nil
 }
 
-type KycCredential struct {
+type kycCredential struct {
 	Credential uint64
 	Age        uint64
 	Gender     uint64
@@ -94,7 +94,7 @@ type KycCredential struct {
 }
 
 // Sign signs a transaction
-func (t *KycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecdsa.Signature, []byte, error) {
+func (t *kycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecdsa.Signature, []byte, error) {
 
 	h.Reset()
 
@@ -140,7 +140,7 @@ func (t *KycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecd
 var hFunc = secp_mimc.NewMiMC()
 
 func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, error) {
-	circuit := KycCircuit{}
+	circuit := kycCircuit{}
 	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
 	if err != nil {
 		return nil, err
@@ -153,7 +153,7 @@ func generateWitness(hFunc hash.Hash) (witness.Witness, error) {
 	privKey, _ := secp_ecdsa.GenerateKey(rand.Reader)
 
 	// sign
-	credential := KycCredential{Credential: 12, Age: 18, Gender: 1, Nation: 0b10, Expirtime: 123}
+	credential := kycCredential{Credential: 12, Age: 18, Gender: 1, Nation: 0b10, Expirtime: 123}
 	sigBin, _, err := credential.Sign(privKey, hFunc)
 	if err != nil {
 		panic(err)
@@ -164,7 +164,7 @@ func generateWitness(hFunc hash.Hash) (witness.Witness, error) {
 	r.SetBytes(sigBin.R[:32])
 	s.SetBytes(sigBin.S[:32])
 
-	witnessCircuit := KycCircuit{
+	witnessCircuit := kycCircuit{
 		Signature: ecdsa.Signature[emulated.Secp256k1Fr]{
 			R: emulated.ValueOf[emulated.Secp256k1Fr](r),
 			S: emulated.ValueOf[emulated.Secp256k1Fr](s),

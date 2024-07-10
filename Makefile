@@ -10,6 +10,9 @@ local:
 	go run main.go full
 	
 android:
+	gomobile bind --target android -androidapi 21 -o ./android/app/libs/ecdsa.aar ./ecdsa
+
+android-binary:
 	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark . 
 	adb push gnark ecdsa.r1cs ecdsa.vkey ecdsa.zkey /data/local/tmp/
 	adb shell "cd /data/local/tmp && ./gnark"

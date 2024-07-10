@@ -1,16 +1,11 @@
-.PHONY: install local android ios
-
-install:
-	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark . 
-	cp gnark ./android/ZPrize/app/src/main/jniLibs/armeabi-v7a/lib_gnark_.so
-	cp gnark ./android/ZPrize/app/src/main/jniLibs/arm64-v8a/lib_gnark_.so
-	rm gnark
+.PHONY: install local android ios android-binary
 
 local:
 	go run main.go full
 	
 android:
 	gomobile bind --target android -androidapi 21 -o ./android/app/libs/ecdsa.aar ./ecdsa
+	open android -a Android\ Studio
 
 android-binary:
 	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark . 
@@ -24,4 +19,3 @@ ios:
 
 clean:
 	rm gnark
-	rm *.txt

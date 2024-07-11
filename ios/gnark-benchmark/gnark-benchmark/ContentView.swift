@@ -18,7 +18,7 @@ struct ContentView: View {
             Button("Setup") {
                 isRunning = true
                 let startTime = Date()
-                EcdsaSetup()
+                EcdsaSetup("")
                 let endTime = Date()
                 setupMessage = "Setup Time: \(endTime.timeIntervalSince(startTime)) seconds"
                 isRunning = false
@@ -29,7 +29,7 @@ struct ContentView: View {
             Button("Prove and Verify") {
                 isRunning = true
                 let startTime = Date()
-                EcdsaProveAndVerify()
+                EcdsaProveAndVerify("")
                 let endTime = Date()
                 proveMessage = "Prove and Verify Time: \(endTime.timeIntervalSince(startTime)) seconds"
                 isRunning = false

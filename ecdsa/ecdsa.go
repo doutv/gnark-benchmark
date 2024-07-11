@@ -11,9 +11,12 @@ import (
 	"github.com/consensys/gnark-crypto/ecc/bn254/fr"
 	secp_mimc "github.com/consensys/gnark-crypto/ecc/bn254/fr/mimc"
 	secp_ecdsa "github.com/consensys/gnark-crypto/ecc/secp256k1/ecdsa"
+	"github.com/consensys/gnark/backend/plonk"
 	"github.com/consensys/gnark/backend/witness"
 	"github.com/consensys/gnark/constraint"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
+	"github.com/consensys/gnark/frontend/cs/scs"
+	"github.com/consensys/gnark/test/unsafekzg"
 
 	"log"
 	"math/big"
@@ -283,4 +286,77 @@ func ProveAndVerify(fileDir string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func PlonkSetup(fileDir string) {
+	circuit := kycCircuit{}
+	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), scs.NewBuilder, &circuit)
+	if err != nil {
+		panic(err)
+	}
+	srs, srsLagrange, err := unsafekzg.NewSRS(r1cs)
+	if err != nil {
+		panic(err)
+	}
+	pk, vk, err := plonk.Setup(r1cs, srs, srsLagrange)
+	if err != nil {
+		panic(err)
+	}
+	// Write to file
+	writeToFile(pk, fileDir+"ecdsa.plonk.zkey")
+	writeToFile(r1cs, fileDir+"ecdsa.plonk.r1cs")
+	writeToFile(vk, fileDir+"ecdsa.plonk.vkey")
+}
+
+func PlonkProveAndVerify(fileDir string) {
+	proveStart := time.Now()
+	witnessData, err := generateWitness(hFunc)
+	if err != nil {
+		panic(err)
+	}
+	// Read files
+	start := time.Now()
+	r1cs := plonk.NewCS(ecc.BN254)
+	readFromFile(r1cs, fileDir+"ecdsa.plonk.r1cs")
+	elapsed := time.Since(start)
+	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
+
+	start = time.Now()
+	pk := plonk.NewProvingKey(ecc.BN254)
+	file, err := os.Open(fileDir+"ecdsa.plonk.zkey")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	// UnsafeReadFrom is faster than ReadFrom
+	if _, err := pk.UnsafeReadFrom(file); err != nil {
+		panic(err)
+	}
+	elapsed = time.Since(start)
+	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
+
+	// Proof generation
+	start = time.Now()
+	proof, err := plonk.Prove(r1cs, pk, witnessData)
+	if err != nil {
+		panic(err)
+	}
+	elapsed = time.Since(start)
+	log.Printf("Prove: %d ms", elapsed.Milliseconds())
+
+	proveElapsed := time.Since(proveStart)
+	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
+
+	log.Println("start verify")
+	publicWitness, err := witnessData.Public()
+	if err != nil {
+		panic(err)
+	}
+	vk := plonk.NewVerifyingKey(ecc.BN254)
+	readFromFile(vk, fileDir+"ecdsa.plonk.vkey")
+	err = plonk.Verify(proof, vk, publicWitness)
+	if err != nil {
+		panic(err)
+	}
+	log.Println("end verify")
 }

@@ -11,8 +11,12 @@
 #include "Universe.objc.h"
 
 
-FOUNDATION_EXPORT void EcdsaProveAndVerify(void);
+FOUNDATION_EXPORT void EcdsaPlonkProveAndVerify(NSString* _Nullable fileDir);
 
-FOUNDATION_EXPORT void EcdsaSetup(void);
+FOUNDATION_EXPORT void EcdsaPlonkSetup(NSString* _Nullable fileDir);
+
+FOUNDATION_EXPORT void EcdsaProveAndVerify(NSString* _Nullable fileDir);
+
+FOUNDATION_EXPORT void EcdsaSetup(NSString* _Nullable fileDir);
 
 #endif

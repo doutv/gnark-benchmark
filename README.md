@@ -16,8 +16,16 @@ export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 ```
 
 ```bash
+# Groth16
 make local
-make android
-make android-binary
+# Xcode app
 make ios
+# Android Studio app
+make android
+# Run binary executable in adb shell 
+make android-groth16
+
+# Plonk
+make local-plonk
+make android-plonk
 ```

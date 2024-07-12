@@ -275,6 +275,7 @@ func ProveAndVerify(fileDir string) {
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
 	
+	writeToFile(proof, "ecdsa.proof")
 	// Proof verification
 	publicWitness, err := witnessData.Public()
 	if err != nil {
@@ -346,6 +347,7 @@ func PlonkProveAndVerify(fileDir string) {
 
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
+	writeToFile(proof, "ecdsa.plonk.proof")
 
 	log.Println("start verify")
 	publicWitness, err := witnessData.Public()

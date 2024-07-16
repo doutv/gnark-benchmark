@@ -1,2 +1,6 @@
 gnark
 .DS_Store
+*.proof
+*.r1cs
+*.zkey
+*.vkey

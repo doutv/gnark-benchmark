@@ -16,15 +16,15 @@ ios:
 	# Open Xcode
 	open ios/gnark-benchmark/gnark-benchmark.xcodeproj
 
-android-groth16:
+android-binary:
 	GOARCH=arm64 go build -ldflags="-s -w" -o gnark .
 	adb push gnark *.r1cs *.vkey *.zkey /data/local/tmp/
+
+android-groth16: android-binary
 	adb shell "cd /data/local/tmp && ./gnark"
 
-android-plonk:
-	GOARCH=arm64 go build -ldflags="-s -w" -o gnark .
-	adb push gnark ecdsa.plonk.r1cs ecdsa.plonk.vkey ecdsa.plonk.zkey /data/local/tmp/
+android-plonk: android-binary
 	adb shell "cd /data/local/tmp && ./gnark plonk"
 
 clean:
-	rm gnark
+	rm gnark *.proof *.r1cs *.vkey *.zkey

@@ -226,7 +226,7 @@ func Groth16ProveAndVerify(fileDir string) {
 	start = time.Now()
 	pk := groth16.NewProvingKey(ecc.BN254)
 	
-	utils.UnsafeReadFromFile(pk, "ecdsa.zkey")
+	utils.UnsafeReadFromFile(pk, fileDir+"ecdsa.zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
@@ -242,7 +242,7 @@ func Groth16ProveAndVerify(fileDir string) {
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
 	
-	utils.WriteToFile(proof, "ecdsa.proof")
+	utils.WriteToFile(proof, fileDir+"ecdsa.proof")
 	// Proof verification
 	publicWitness, err := witnessData.Public()
 	if err != nil {
@@ -291,7 +291,7 @@ func PlonkProveAndVerify(fileDir string) {
 
 	start = time.Now()
 	pk := plonk.NewProvingKey(ecc.BN254)
-	utils.UnsafeReadFromFile(pk, "ecdsa.plonk.zkey")
+	utils.UnsafeReadFromFile(pk, fileDir+"ecdsa.plonk.zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
@@ -306,7 +306,7 @@ func PlonkProveAndVerify(fileDir string) {
 
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
-	utils.WriteToFile(proof, "ecdsa.plonk.proof")
+	utils.WriteToFile(proof, fileDir+"ecdsa.plonk.proof")
 
 	log.Println("start verify")
 	publicWitness, err := witnessData.Public()

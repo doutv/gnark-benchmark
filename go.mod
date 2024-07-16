@@ -8,8 +8,8 @@ require (
 	github.com/bits-and-blooms/bitset v1.8.0 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/consensys/bavard v0.1.13 // indirect
-	github.com/consensys/gnark v0.10.0 // indirect
-	github.com/consensys/gnark-crypto v0.12.2-0.20240215234832-d72fcb379d3e // indirect
+	github.com/consensys/gnark v0.10.1-0.20240712113021-8c1cd75f6a9c // indirect
+	github.com/consensys/gnark-crypto v0.12.2-0.20240703135258-5d8b5fab1afb // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.5.0 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect

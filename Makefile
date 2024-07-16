@@ -7,12 +7,12 @@ local-plonk:
 	go run main.go plonk
 	
 android:
-	gomobile bind --target android -androidapi 21 -o ./android/app/libs/ecdsa.aar ./ecdsa
+	gomobile bind --target android -androidapi 21 -o ./android/app/libs/gnark.aar ./ecdsa ./eddsa
 	# Open Android Studio
 	open android -a Android\ Studio
 
 ios:
-	gomobile bind --target ios -o ./ios/Ecdsa.xcframework ./ecdsa
+	gomobile bind --target ios -o ./ios/Gnark.xcframework ./ecdsa ./eddsa
 	# Open Xcode
 	open ios/gnark-benchmark/gnark-benchmark.xcodeproj
 

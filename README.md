@@ -1,7 +1,7 @@
 # Benchmark Gnark on Mobile and Desktop
 
 Dependecies:
-- Golang
+- Golang, Gomobile
 - iOS: Xcode
 - Android: Android Studio, Android SDK, Android NDK
 
@@ -16,16 +16,16 @@ export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 ```
 
 ```bash
-# Groth16
+# Local
 make local
-# Xcode app
+make local-plonk
+
+# iOS Xcode app
 make ios
+
 # Android Studio app
 make android
-# Run binary executable in adb shell 
+# Android Run binary executable in adb shell 
 make android-groth16
-
-# Plonk
-make local-plonk
 make android-plonk
 ```

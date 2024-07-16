@@ -1,0 +1,9 @@
+framework module "Gnark" {
+	header "ref.h"
+    header "Ecdsa.objc.h"
+    header "Eddsa.objc.h"
+    header "Universe.objc.h"
+    header "Gnark.h"
+
+    export *
+}

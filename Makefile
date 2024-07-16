@@ -17,12 +17,12 @@ ios:
 	open ios/gnark-benchmark/gnark-benchmark.xcodeproj
 
 android-groth16:
-	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark .
-	adb push gnark ecdsa.r1cs ecdsa.vkey ecdsa.zkey /data/local/tmp/
+	GOARCH=arm64 go build -ldflags="-s -w" -o gnark .
+	adb push gnark *.r1cs *.vkey *.zkey /data/local/tmp/
 	adb shell "cd /data/local/tmp && ./gnark"
 
 android-plonk:
-	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gnark .
+	GOARCH=arm64 go build -ldflags="-s -w" -o gnark .
 	adb push gnark ecdsa.plonk.r1cs ecdsa.plonk.vkey ecdsa.plonk.zkey /data/local/tmp/
 	adb shell "cd /data/local/tmp && ./gnark plonk"
 

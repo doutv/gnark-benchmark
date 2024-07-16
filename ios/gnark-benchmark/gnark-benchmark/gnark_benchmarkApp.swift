@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Ecdsa
 
 @main
 struct gnark_benchmarkApp: App {

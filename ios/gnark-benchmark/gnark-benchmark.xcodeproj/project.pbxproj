@@ -14,8 +14,8 @@
 		5095FDCE2C3BF18C00774FC1 /* gnark_benchmarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDCD2C3BF18C00774FC1 /* gnark_benchmarkTests.swift */; };
 		5095FDD82C3BF18C00774FC1 /* gnark_benchmarkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDD72C3BF18C00774FC1 /* gnark_benchmarkUITests.swift */; };
 		5095FDDA2C3BF18C00774FC1 /* gnark_benchmarkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDD92C3BF18C00774FC1 /* gnark_benchmarkUITestsLaunchTests.swift */; };
-		509BD8392C3E3370005D8215 /* Ecdsa.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509BD8372C3E336D005D8215 /* Ecdsa.xcframework */; };
-		509BD83A2C3E3370005D8215 /* Ecdsa.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 509BD8372C3E336D005D8215 /* Ecdsa.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		50E5FE242C4627B100399287 /* Gnark.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E5FE232C4627B100399287 /* Gnark.xcframework */; };
+		50E5FE252C4627B100399287 /* Gnark.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 50E5FE232C4627B100399287 /* Gnark.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,13 +36,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		509BD82F2C3CD8B8005D8215 /* Embed Frameworks */ = {
+		50E5FE262C4627B100399287 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				509BD83A2C3E3370005D8215 /* Ecdsa.xcframework in Embed Frameworks */,
+				50E5FE252C4627B100399287 /* Gnark.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,6 +61,7 @@
 		5095FDD72C3BF18C00774FC1 /* gnark_benchmarkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkUITests.swift; sourceTree = "<group>"; };
 		5095FDD92C3BF18C00774FC1 /* gnark_benchmarkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		509BD8372C3E336D005D8215 /* Ecdsa.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Ecdsa.xcframework; path = ../Ecdsa.xcframework; sourceTree = "<group>"; };
+		50E5FE232C4627B100399287 /* Gnark.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Gnark.xcframework; path = ../Gnark.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				509BD8392C3E3370005D8215 /* Ecdsa.xcframework in Frameworks */,
+				50E5FE242C4627B100399287 /* Gnark.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +151,7 @@
 		5095FDE62C3BF21100774FC1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				50E5FE232C4627B100399287 /* Gnark.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -164,7 +166,7 @@
 				5095FDB52C3BF18B00774FC1 /* Sources */,
 				5095FDB62C3BF18B00774FC1 /* Frameworks */,
 				5095FDB72C3BF18B00774FC1 /* Resources */,
-				509BD82F2C3CD8B8005D8215 /* Embed Frameworks */,
+				50E5FE262C4627B100399287 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

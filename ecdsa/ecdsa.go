@@ -2,9 +2,8 @@ package ecdsa
 
 import (
 	"crypto/rand"
+	"gnark-benchmark/utils"
 	"hash"
-	"io"
-	"os"
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
@@ -140,7 +139,6 @@ func (t *kycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecd
 	return sig, msg, nil
 }
 
-var hFunc = secp_mimc.NewMiMC()
 
 func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, error) {
 	circuit := kycCircuit{}
@@ -151,7 +149,8 @@ func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem
 	return r1cs, nil
 }
 
-func generateWitness(hFunc hash.Hash) (witness.Witness, error) {
+func generateWitness() (witness.Witness, error) {
+	hFunc := secp_mimc.NewMiMC()
 	// generate parameters
 	privKey, _ := secp_ecdsa.GenerateKey(rand.Reader)
 
@@ -191,30 +190,6 @@ func generateWitness(hFunc hash.Hash) (witness.Witness, error) {
 	return witnessData, nil
 }
 
-func writeToFile(data io.WriterTo, fileName string) {
-	file, err := os.Create(fileName)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	_, err = data.WriteTo(file)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func readFromFile(data io.ReaderFrom, fileName string) {
-	file, err := os.Open(fileName)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	// Use the ReadFrom method to read the file's content into data.
-	if _, err := data.ReadFrom(file); err != nil {
-		panic(err)
-	}
-}
-
 func Groth16Setup(fileDir string) {
 	r1cs, err := compileCircuit(r1cs.NewBuilder)
 	if err != nil {
@@ -225,16 +200,16 @@ func Groth16Setup(fileDir string) {
 		panic(err)
 	}
 	// Write to file
-	writeToFile(pk, fileDir+"ecdsa.zkey")
-	writeToFile(r1cs, fileDir+"ecdsa.r1cs")
-	writeToFile(vk, fileDir+"ecdsa.vkey")
+	utils.WriteToFile(pk, fileDir+"ecdsa.zkey")
+	utils.WriteToFile(r1cs, fileDir+"ecdsa.r1cs")
+	utils.WriteToFile(vk, fileDir+"ecdsa.vkey")
 }
 
 func Groth16ProveAndVerify(fileDir string) {
 	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()
-	witnessData, err := generateWitness(hFunc)
+	witnessData, err := generateWitness()
 	if err != nil {
 		panic(err)
 	}
@@ -244,22 +219,14 @@ func Groth16ProveAndVerify(fileDir string) {
 	// Read files
 	start = time.Now()
 	r1cs := groth16.NewCS(ecc.BN254)
-	readFromFile(r1cs, fileDir+"ecdsa.r1cs")
+	utils.ReadFromFile(r1cs, fileDir+"ecdsa.r1cs")
 	elapsed = time.Since(start)
 	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
 	start = time.Now()
 	pk := groth16.NewProvingKey(ecc.BN254)
-	file, err := os.Open(fileDir+"ecdsa.zkey")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	// UnsafeReadFrom is faster than ReadFrom
-	if _, err := pk.UnsafeReadFrom(file); err != nil {
-		panic(err)
-	}
-	// readFromFile(pk, "ecdsa.zkey")
+	
+	utils.UnsafeReadFromFile(pk, "ecdsa.zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
@@ -275,14 +242,14 @@ func Groth16ProveAndVerify(fileDir string) {
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
 	
-	writeToFile(proof, "ecdsa.proof")
+	utils.WriteToFile(proof, "ecdsa.proof")
 	// Proof verification
 	publicWitness, err := witnessData.Public()
 	if err != nil {
 		panic(err)
 	}
 	vk := groth16.NewVerifyingKey(ecc.BN254)
-	readFromFile(vk, fileDir+"ecdsa.vkey")
+	utils.ReadFromFile(vk, fileDir+"ecdsa.vkey")
 	err = groth16.Verify(proof, vk, publicWitness)
 	if err != nil {
 		panic(err)
@@ -304,35 +271,27 @@ func PlonkSetup(fileDir string) {
 		panic(err)
 	}
 	// Write to file
-	writeToFile(pk, fileDir+"ecdsa.plonk.zkey")
-	writeToFile(r1cs, fileDir+"ecdsa.plonk.r1cs")
-	writeToFile(vk, fileDir+"ecdsa.plonk.vkey")
+	utils.WriteToFile(pk, fileDir+"ecdsa.plonk.zkey")
+	utils.WriteToFile(r1cs, fileDir+"ecdsa.plonk.r1cs")
+	utils.WriteToFile(vk, fileDir+"ecdsa.plonk.vkey")
 }
 
 func PlonkProveAndVerify(fileDir string) {
 	proveStart := time.Now()
-	witnessData, err := generateWitness(hFunc)
+	witnessData, err := generateWitness()
 	if err != nil {
 		panic(err)
 	}
 	// Read files
 	start := time.Now()
 	r1cs := plonk.NewCS(ecc.BN254)
-	readFromFile(r1cs, fileDir+"ecdsa.plonk.r1cs")
+	utils.ReadFromFile(r1cs, fileDir+"ecdsa.plonk.r1cs")
 	elapsed := time.Since(start)
 	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
 	start = time.Now()
 	pk := plonk.NewProvingKey(ecc.BN254)
-	file, err := os.Open(fileDir+"ecdsa.plonk.zkey")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	// UnsafeReadFrom is faster than ReadFrom
-	if _, err := pk.UnsafeReadFrom(file); err != nil {
-		panic(err)
-	}
+	utils.UnsafeReadFromFile(pk, "ecdsa.plonk.zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
@@ -347,7 +306,7 @@ func PlonkProveAndVerify(fileDir string) {
 
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
-	writeToFile(proof, "ecdsa.plonk.proof")
+	utils.WriteToFile(proof, "ecdsa.plonk.proof")
 
 	log.Println("start verify")
 	publicWitness, err := witnessData.Public()
@@ -355,7 +314,7 @@ func PlonkProveAndVerify(fileDir string) {
 		panic(err)
 	}
 	vk := plonk.NewVerifyingKey(ecc.BN254)
-	readFromFile(vk, fileDir+"ecdsa.plonk.vkey")
+	utils.ReadFromFile(vk, fileDir+"ecdsa.plonk.vkey")
 	err = plonk.Verify(proof, vk, publicWitness)
 	if err != nil {
 		panic(err)

@@ -1,16 +1,18 @@
 package eddsa
 
 import (
+	"github.com/consensys/gnark/constraint"
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/std/hash/mimc"
 	"github.com/consensys/gnark/std/selector"
 	"github.com/consensys/gnark/std/signature/eddsa"
 
+	"github.com/consensys/gnark-crypto/ecc"
 	tedwards "github.com/consensys/gnark-crypto/ecc/twistededwards"
 	"github.com/consensys/gnark/std/algebra/native/twistededwards"
 )
 
-type KycCircuit struct {
+type kycCircuit struct {
 	Attributes     []frontend.Variable `gnark:"fields,secret"`
 	Expire         frontend.Variable   `gnark:"expire,secret"`
 	ClaimAttribute frontend.Variable   `gnark:",secret"`
@@ -31,7 +33,7 @@ type KycCircuit struct {
 	Signature eddsa.Signature `gnark:",public"`
 }
 
-func (circuit *KycCircuit) Define(api frontend.API) error {
+func (circuit *kycCircuit) Define(api frontend.API) error {
 	hFunc, err := mimc.NewMiMC(api)
 	if err != nil {
 		return err
@@ -83,4 +85,15 @@ func (circuit *KycCircuit) Define(api frontend.API) error {
 	// api.AssertIsEqual(circuit.PublicKeyHash, hFunc.Sum())
 
 	return nil
+}
+
+func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, error) {
+	circuit := kycCircuit{
+		Attributes: make([]frontend.Variable, 4),
+	}
+	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
+	if err != nil {
+		return nil, err
+	}
+	return r1cs, nil
 }

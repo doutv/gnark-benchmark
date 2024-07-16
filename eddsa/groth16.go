@@ -1,10 +1,10 @@
 package eddsa
 
 import (
-	"bytes"
-	"fmt"
+	"gnark-benchmark/utils"
 	"time"
 
+	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 
 	"log"
@@ -12,59 +12,68 @@ import (
 	"github.com/consensys/gnark/backend/groth16"
 )
 
-func Groth16Test() {
+func Groth16Setup(fileDir string) {
+	r1cs, err := compileCircuit(r1cs.NewBuilder)
+	if err != nil {
+		panic(err)
+	}
+	pk, vk, err := groth16.Setup(r1cs)
+	if err != nil {
+		panic(err)
+	}
+	// Write to file
+	utils.WriteToFile(pk, fileDir+"eddsa.zkey")
+	utils.WriteToFile(r1cs, fileDir+"eddsa.r1cs")
+	utils.WriteToFile(vk, fileDir+"eddsa.vkey")
+}
+
+
+func Groth16ProveAndVerify(fileDir string) {
+	proveStart := time.Now()
+	// Witness generation
 	start := time.Now()
-
-	cs, witnessData, err := generateWitness(r1cs.NewBuilder)
+	witnessData, err := generateWitness()
 	if err != nil {
 		panic(err)
 	}
-	// fmt.Printf("%+v\n", witnessData)
-	fmt.Printf("generate witness %v\n", time.Since(start))
+	elapsed := time.Since(start)
+	log.Printf("Witness Generation: %d ms", elapsed.Milliseconds())
+
+	// Read files
 	start = time.Now()
-	// 1. One time setup
-	pk, vk, err := groth16.Setup(cs)
-	if err != nil {
-		panic(err)
-	}
+	r1cs := groth16.NewCS(ecc.BN254)
+	utils.ReadFromFile(r1cs, fileDir+"eddsa.r1cs")
+	elapsed = time.Since(start)
+	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
-	log.Println("pk ", "nG1", pk.NbG1(), "nG2", pk.NbG2())
-	var pkbuffer bytes.Buffer
-	pkn, err := pk.WriteTo(&pkbuffer)
-	if err != nil {
-		panic(err)
-	}
-	var r1csbuffer bytes.Buffer
-	r1csn, err := cs.WriteTo(&r1csbuffer)
-	if err != nil {
-		panic(err)
-	}
-
-	log.Printf("end setup. size: %vmb, pk: %vmb constrain: %v mb", (float64(pkn+r1csn))/(1024.0*1024), (float64(pkn))/(1024.0*1024), (float64(r1csn))/(1024.0*1024))
-
-	fmt.Printf("setup %v\n", time.Since(start))
 	start = time.Now()
+	pk := groth16.NewProvingKey(ecc.BN254)
+	utils.UnsafeReadFromFile(pk, fileDir+"eddsa.zkey")
+	elapsed = time.Since(start)
+	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
-	// 2. Proof creation
-	proof, err := groth16.Prove(cs, pk, witnessData)
+	// Proof generation
+	start = time.Now()
+	proof, err := groth16.Prove(r1cs, pk, witnessData)
 	if err != nil {
 		panic(err)
 	}
+	elapsed = time.Since(start)
+	log.Printf("Prove: %d ms", elapsed.Milliseconds())
 
-	fmt.Printf("prove %v\n", time.Since(start))
-	// start = time.Now()
-
-	log.Println("end proof")
-
-	log.Println("start verify")
+	proveElapsed := time.Since(proveStart)
+	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
+	
+	utils.WriteToFile(proof, "eddsa.proof")
+	// Proof verification
 	publicWitness, err := witnessData.Public()
 	if err != nil {
 		panic(err)
 	}
-	// 3. Proof verification
+	vk := groth16.NewVerifyingKey(ecc.BN254)
+	utils.ReadFromFile(vk, fileDir+"eddsa.vkey")
 	err = groth16.Verify(proof, vk, publicWitness)
 	if err != nil {
 		panic(err)
 	}
-	log.Println("end verify")
 }

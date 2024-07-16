@@ -14,7 +14,6 @@ import (
 	"github.com/consensys/gnark-crypto/hash"
 	"github.com/consensys/gnark-crypto/signature/eddsa"
 	"github.com/consensys/gnark/backend/witness"
-	"github.com/consensys/gnark/constraint"
 
 	"github.com/consensys/gnark/frontend"
 )
@@ -24,7 +23,7 @@ func panicIfErr(err error) {
 		panic(err)
 	}
 }
-func generateWitness(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, witness.Witness, error) {
+func generateWitness() (witness.Witness, error) {
 	attributes := []int{1, 2, 3, 4}
 	fields := make([][]byte, len(attributes))
 
@@ -50,10 +49,6 @@ func generateWitness(newBuilder frontend.NewBuilder) (constraint.ConstraintSyste
 	var fieldsInVar []frontend.Variable
 	for _, d := range fields {
 		fieldsInVar = append(fieldsInVar, d)
-	}
-
-	circuit := KycCircuit{
-		Attributes: fieldsInVar,
 	}
 
 	// generate parameters for the signatures
@@ -91,7 +86,7 @@ func generateWitness(newBuilder frontend.NewBuilder) (constraint.ConstraintSyste
 
 	pubkeyHash := hFunc.Sum(nil)
 
-	witnessCircuit := KycCircuit{
+	witnessCircuit := kycCircuit{
 		Attributes:     fieldsInVar,
 		Expire:         userIdBytes,
 		ClaimAttribute: claimAttributeBytes,
@@ -109,10 +104,7 @@ func generateWitness(newBuilder frontend.NewBuilder) (constraint.ConstraintSyste
 	witnessData, err := frontend.NewWitness(&witnessCircuit, ecc.BN254.ScalarField())
 	panicIfErr(err)
 
-	cs, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
-	panicIfErr(err)
-
-	return cs, witnessData, nil
+	return witnessData, nil
 }
 
 func convertToBytes(msg big.Int, snarkField *big.Int) []byte {

@@ -30,9 +30,9 @@ func PlonkSetup(fileDir string) {
 		panic(err)
 	}
 	// Write to file
-	utils.WriteToFile(pk, fileDir+"ecdsa.plonk.zkey")
-	utils.WriteToFile(r1cs, fileDir+"ecdsa.plonk.r1cs")
-	utils.WriteToFile(vk, fileDir+"ecdsa.plonk.vkey")
+	utils.WriteToFile(pk, fileDir+"eddsa.plonk.zkey")
+	utils.WriteToFile(r1cs, fileDir+"eddsa.plonk.r1cs")
+	utils.WriteToFile(vk, fileDir+"eddsa.plonk.vkey")
 }
 
 func PlonkProveAndVerify(fileDir string) {
@@ -44,13 +44,13 @@ func PlonkProveAndVerify(fileDir string) {
 	// Read files
 	start := time.Now()
 	r1cs := plonk.NewCS(ecc.BN254)
-	utils.ReadFromFile(r1cs, fileDir+"ecdsa.plonk.r1cs")
+	utils.ReadFromFile(r1cs, fileDir+"eddsa.plonk.r1cs")
 	elapsed := time.Since(start)
 	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
 	start = time.Now()
 	pk := plonk.NewProvingKey(ecc.BN254)
-	utils.UnsafeReadFromFile(pk, fileDir+"ecdsa.plonk.zkey")
+	utils.UnsafeReadFromFile(pk, fileDir+"eddsa.plonk.zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
@@ -65,7 +65,7 @@ func PlonkProveAndVerify(fileDir string) {
 
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
-	utils.WriteToFile(proof, fileDir+"ecdsa.plonk.proof")
+	utils.WriteToFile(proof, fileDir+"eddsa.plonk.proof")
 
 	log.Println("start verify")
 	publicWitness, err := witnessData.Public()
@@ -73,7 +73,7 @@ func PlonkProveAndVerify(fileDir string) {
 		panic(err)
 	}
 	vk := plonk.NewVerifyingKey(ecc.BN254)
-	utils.ReadFromFile(vk, fileDir+"ecdsa.plonk.vkey")
+	utils.ReadFromFile(vk, fileDir+"eddsa.plonk.vkey")
 	err = plonk.Verify(proof, vk, publicWitness)
 	if err != nil {
 		panic(err)

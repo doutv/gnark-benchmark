@@ -15,8 +15,8 @@ func main() {
 		eddsa.PlonkTest()
 	} else {
 		println("------Groth16 ECDSA Secp256k1------")
-		ecdsa.Setup("")
-		ecdsa.ProveAndVerify("")
+		ecdsa.Groth16Setup("")
+		ecdsa.Groth16ProveAndVerify("")
 		println("------Groth16 EdDSA BN254------")
 		eddsa.Groth16Test()
 	}

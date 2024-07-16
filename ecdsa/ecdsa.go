@@ -215,7 +215,7 @@ func readFromFile(data io.ReaderFrom, fileName string) {
 	}
 }
 
-func Setup(fileDir string) {
+func Groth16Setup(fileDir string) {
 	r1cs, err := compileCircuit(r1cs.NewBuilder)
 	if err != nil {
 		panic(err)
@@ -230,7 +230,7 @@ func Setup(fileDir string) {
 	writeToFile(vk, fileDir+"ecdsa.vkey")
 }
 
-func ProveAndVerify(fileDir string) {
+func Groth16ProveAndVerify(fileDir string) {
 	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()

@@ -3,65 +3,32 @@ import Gnark
 import Foundation
 
 struct ContentView: View {
-    @State private var isRunning = false
-    @State private var setupMessage = ""
-    @State private var proveMessage = ""
-    @State private var algorithmSelection = "EdDSA"
-    @State private var systemSelection = "Groth16"
-    var directory: URL {
-        let documentDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-        return documentDirectory.appendingPathComponent("depositStorage")
-    }
+    @State private var selectedTab = 0
+    @State private var attribute = -1
+    @State private var op = -1
+    @State private var value = -1
+    
     var body: some View {
-        VStack {
-            
-            
-            Button("Setup") {
-                isRunning = true
-                let startTime = Date()
-                
-                DispatchQueue.global().async {
-                    
-                    EddsaGroth16Setup(directory.filePath)
-                    
-                    let endTime = Date()
-                    DispatchQueue.main.async {
-                        setupMessage = "Setup Time: \(endTime.timeIntervalSince(startTime)) seconds"
-                        isRunning = false
-                    }
+        TabView(selection: $selectedTab) {
+            OkxView(attribute:$attribute,op: $op,value:$value)
+                .tabItem {
+                    Label("Okx", systemImage: "1.circle")
                 }
-            }
-            .padding()
-            .disabled(isRunning)
-            
-            Text(setupMessage)
-            Button("Prove") {
-                isRunning = true
-                let startTime = Date()
-                EddsaGroth16Prove(directory.filePath)
-                
-                let endTime = Date()
-                DispatchQueue.main.async {
-                    proveMessage = "Prove Time: \(endTime.timeIntervalSince(startTime)) seconds"
-                    isRunning = false
+                .tag(0)
+
+            ThirdPartyView(selectedTab: $selectedTab,attribute:$attribute,op: $op,value:$value)
+                .tabItem {
+                    Label("ThirdParty", systemImage: "2.circle")
                 }
-            }
-            .disabled(isRunning)
-            Text(proveMessage)
+                .tag(1)
         }
-        .padding()
     }
 }
+
 // Preview
 struct ContentView_Previews: PreviewProvider {
+    
     static var previews: some View {
         ContentView()
     }
 }
-extension URL {
-    var filePath: String {
-        absoluteString.replacingOccurrences(of: "file://", with: "")
-    }
-}
-
-

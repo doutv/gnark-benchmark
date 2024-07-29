@@ -2,15 +2,12 @@ package eddsa
 
 import (
 	"gnark-benchmark/utils"
-	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/backend/plonk"
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/scs"
 	"github.com/consensys/gnark/test/unsafekzg"
-
-	"log"
 )
 
 func PlonkSetup(fileDir string) {
@@ -34,39 +31,40 @@ func PlonkSetup(fileDir string) {
 	utils.WriteToFile(r1cs, fileDir+"eddsa.plonk.r1cs")
 	utils.WriteToFile(vk, fileDir+"eddsa.plonk.vkey")
 }
-func PlonkProve(fileDir string) {
-	proveStart := time.Now()
-	witnessData, err := generateWitness()
-	if err != nil {
-		panic(err)
-	}
-	// Read files
-	start := time.Now()
-	r1cs := plonk.NewCS(ecc.BN254)
-	utils.ReadFromFile(r1cs, fileDir+"eddsa.plonk.r1cs")
-	elapsed := time.Since(start)
-	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
-	start = time.Now()
-	pk := plonk.NewProvingKey(ecc.BN254)
-	utils.UnsafeReadFromFile(pk, fileDir+"eddsa.plonk.zkey")
-	elapsed = time.Since(start)
-	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
+// func PlonkProve(fileDir string) {
+// 	proveStart := time.Now()
+// 	witnessData, err := generateWitness()
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	// Read files
+// 	start := time.Now()
+// 	r1cs := plonk.NewCS(ecc.BN254)
+// 	utils.ReadFromFile(r1cs, fileDir+"eddsa.plonk.r1cs")
+// 	elapsed := time.Since(start)
+// 	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
-	// Proof generation
-	start = time.Now()
-	proof, err := plonk.Prove(r1cs, pk, witnessData)
-	if err != nil {
-		panic(err)
-	}
-	elapsed = time.Since(start)
-	log.Printf("Prove: %d ms", elapsed.Milliseconds())
+// 	start = time.Now()
+// 	pk := plonk.NewProvingKey(ecc.BN254)
+// 	utils.UnsafeReadFromFile(pk, fileDir+"eddsa.plonk.zkey")
+// 	elapsed = time.Since(start)
+// 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
-	proveElapsed := time.Since(proveStart)
-	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
-	utils.WriteToFile(proof, fileDir+"eddsa.plonk.proof")
+// 	// Proof generation
+// 	start = time.Now()
+// 	proof, err := plonk.Prove(r1cs, pk, witnessData)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	elapsed = time.Since(start)
+// 	log.Printf("Prove: %d ms", elapsed.Milliseconds())
 
-}
+// 	proveElapsed := time.Since(proveStart)
+// 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
+// 	utils.WriteToFile(proof, fileDir+"eddsa.plonk.proof")
+
+// }
 
 // func plonkProveAndVerify(fileDir string) {
 // 	proveStart := time.Now()

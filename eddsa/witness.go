@@ -23,8 +23,12 @@ func panicIfErr(err error) {
 		panic(err)
 	}
 }
-func generateWitness() (witness.Witness, error) {
-	attributes := []int{1, 2, 3, 4}
+func generateWitness(attribute int64, op int64, value int64) (witness.Witness, error) {
+	//age,gender,natioinality
+	//gender:0 female,1 male
+	//nationality,0 America,1 China
+	//user info先写死: 19,1,1
+	attributes := []int{19, 1, 1}
 	fields := make([][]byte, len(attributes))
 
 	curve := tedwards.BN254
@@ -69,9 +73,9 @@ func generateWitness() (witness.Witness, error) {
 	fmt.Println(checkSig)
 
 	// calculate claimHash
-	claimAttributeBytes := convertToBytes(*big.NewInt(1), snarkField)
-	claimOperatorBytes := convertToBytes(*big.NewInt(1), snarkField)
-	claimValueBytes := convertToBytes(*big.NewInt(1), snarkField)
+	claimAttributeBytes := convertToBytes(*big.NewInt(attribute), snarkField)
+	claimOperatorBytes := convertToBytes(*big.NewInt(op), snarkField)
+	claimValueBytes := convertToBytes(*big.NewInt(value), snarkField)
 
 	hFunc.Reset()
 	hFunc.Write(claimAttributeBytes)

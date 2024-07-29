@@ -89,7 +89,7 @@ func (circuit *kycCircuit) Define(api frontend.API) error {
 
 func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, error) {
 	circuit := kycCircuit{
-		Attributes: make([]frontend.Variable, 4),
+		Attributes: make([]frontend.Variable, 3),
 	}
 	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
 	if err != nil {

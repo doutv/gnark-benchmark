@@ -205,7 +205,7 @@ func Groth16Setup(fileDir string) {
 	utils.WriteToFile(vk, fileDir+"ecdsa.vkey")
 }
 
-func Groth16ProveAndVerify(fileDir string) {
+func Groth16Prove(fileDir string) {
 	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()
@@ -244,16 +244,16 @@ func Groth16ProveAndVerify(fileDir string) {
 	
 	utils.WriteToFile(proof, fileDir+"ecdsa.proof")
 	// Proof verification
-	publicWitness, err := witnessData.Public()
-	if err != nil {
-		panic(err)
-	}
-	vk := groth16.NewVerifyingKey(ecc.BN254)
-	utils.ReadFromFile(vk, fileDir+"ecdsa.vkey")
-	err = groth16.Verify(proof, vk, publicWitness)
-	if err != nil {
-		panic(err)
-	}
+	// publicWitness, err := witnessData.Public()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// vk := groth16.NewVerifyingKey(ecc.BN254)
+	// utils.ReadFromFile(vk, fileDir+"ecdsa.vkey")
+	// err = groth16.Verify(proof, vk, publicWitness)
+	// if err != nil {
+	// 	panic(err)
+	// }
 }
 
 func PlonkSetup(fileDir string) {
@@ -276,7 +276,7 @@ func PlonkSetup(fileDir string) {
 	utils.WriteToFile(vk, fileDir+"ecdsa.plonk.vkey")
 }
 
-func PlonkProveAndVerify(fileDir string) {
+func PlonkProve(fileDir string) {
 	proveStart := time.Now()
 	witnessData, err := generateWitness()
 	if err != nil {
@@ -308,16 +308,16 @@ func PlonkProveAndVerify(fileDir string) {
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
 	utils.WriteToFile(proof, fileDir+"ecdsa.plonk.proof")
 
-	log.Println("start verify")
-	publicWitness, err := witnessData.Public()
-	if err != nil {
-		panic(err)
-	}
-	vk := plonk.NewVerifyingKey(ecc.BN254)
-	utils.ReadFromFile(vk, fileDir+"ecdsa.plonk.vkey")
-	err = plonk.Verify(proof, vk, publicWitness)
-	if err != nil {
-		panic(err)
-	}
-	log.Println("end verify")
+	// log.Println("start verify")
+	// publicWitness, err := witnessData.Public()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// vk := plonk.NewVerifyingKey(ecc.BN254)
+	// utils.ReadFromFile(vk, fileDir+"ecdsa.plonk.vkey")
+	// err = plonk.Verify(proof, vk, publicWitness)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// log.Println("end verify")
 }

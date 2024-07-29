@@ -11,11 +11,11 @@
 #include "Universe.objc.h"
 
 
-FOUNDATION_EXPORT void EddsaGroth16ProveAndVerify(NSString* _Nullable fileDir);
+FOUNDATION_EXPORT void EddsaGroth16Prove(NSString* _Nullable fileDir);
 
 FOUNDATION_EXPORT void EddsaGroth16Setup(NSString* _Nullable fileDir);
 
-FOUNDATION_EXPORT void EddsaPlonkProveAndVerify(NSString* _Nullable fileDir);
+FOUNDATION_EXPORT void EddsaPlonkProve(NSString* _Nullable fileDir);
 
 FOUNDATION_EXPORT void EddsaPlonkSetup(NSString* _Nullable fileDir);
 

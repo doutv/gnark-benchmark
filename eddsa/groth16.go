@@ -28,7 +28,7 @@ func Groth16Setup(fileDir string) {
 }
 
 
-func Groth16ProveAndVerify(fileDir string) {
+func Groth16Prove(fileDir string) {
 	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()
@@ -66,14 +66,14 @@ func Groth16ProveAndVerify(fileDir string) {
 	
 	utils.WriteToFile(proof, fileDir+"eddsa.proof")
 	// Proof verification
-	publicWitness, err := witnessData.Public()
-	if err != nil {
-		panic(err)
-	}
-	vk := groth16.NewVerifyingKey(ecc.BN254)
-	utils.ReadFromFile(vk, fileDir+"eddsa.vkey")
-	err = groth16.Verify(proof, vk, publicWitness)
-	if err != nil {
-		panic(err)
-	}
+	// publicWitness, err := witnessData.Public()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// vk := groth16.NewVerifyingKey(ecc.BN254)
+	// utils.ReadFromFile(vk, fileDir+"eddsa.vkey")
+	// err = groth16.Verify(proof, vk, publicWitness)
+	// if err != nil {
+	// 	panic(err)
+	// }
 }

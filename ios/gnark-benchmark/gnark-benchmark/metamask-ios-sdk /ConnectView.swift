@@ -92,46 +92,53 @@ struct ConnectView: View {
 
                     if metaMaskSDK.account.isEmpty {
                         Section {
+//                            Button {
+//                                isConnectWith = true
+//                            } label: {
+//                                Text("Connect With Request")
+//                                    .modifier(TextButton())
+//                                    .frame(maxWidth: .infinity, maxHeight: 32)
+//                            }
+//                            .sheet(isPresented: $isConnectWith, onDismiss: {
+//                                isConnectWith = false
+//                            }) {
+//                                TransactionView(isConnectWith: true)
+//                                    .environmentObject(metaMaskSDK)
+//                            }
+//                            .modifier(ButtonStyle())
+
+                            
+                            
                             Button {
-                                isConnectWith = true
+                                Task {
+                                    await connectSDK()
+                                }
                             } label: {
-                                Text("Connect With Request")
+                                Text("Connect to MetaMask")
                                     .modifier(TextButton())
                                     .frame(maxWidth: .infinity, maxHeight: 32)
-                            }
-                            .sheet(isPresented: $isConnectWith, onDismiss: {
-                                isConnectWith = false
-                            }) {
-                                TransactionView(isConnectWith: true)
-                                    .environmentObject(metaMaskSDK)
                             }
                             .modifier(ButtonStyle())
 
                             
-                            ZStack {
-                                Button {
-                                    Task {
-                                        await connectSDK()
-                                    }
-                                } label: {
-                                    Text("Connect to MetaMask")
-                                        .modifier(TextButton())
-                                        .frame(maxWidth: .infinity, maxHeight: 32)
+                            
+                            Button{
+                                Task{
+                                    await connectAndCallVerifyFunction()
                                 }
-                                .modifier(ButtonStyle())
-
-                                if showProgressView {
-                                    ProgressView()
-                                        .scaleEffect(1.5, anchor: .center)
-                                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                                }
+                            }label:{
+                                Text("Connect and verify")
+                                    .modifier(TextButton())
+                                    .frame(maxWidth: .infinity, maxHeight: 32)
                             }
-                            .alert(isPresented: $showError) {
-                                Alert(
-                                    title: Text("Error"),
-                                    message: Text(errorMessage)
-                                )
+                            .modifier(ButtonStyle())
+                            if showProgressView {
+                                ProgressView()
+                                    .scaleEffect(1.5, anchor: .center)
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .black))
                             }
+                            
+                            
                         } footer: {
                             Text(connectAndSignResult)
                                 .modifier(TextCaption())
@@ -193,6 +200,37 @@ struct ConnectView: View {
         case .success:
             status = "Online"
         case let .failure(error):
+            errorMessage = error.localizedDescription
+            showError = true
+        }
+    }
+    private func connectAndCallVerifyFunction() async {
+        showProgressView = true
+        
+        let transaction = Transaction(
+            to: "0x74c3e0074dc0ff91252b0485dae9d05ee67145e4",
+            from: metaMaskSDK.account, // this is initially empty before connection, will be populated with selected address once connected
+            value: "0x0",
+            data:"0x8753367f0000000000000000000000000000000000000000000000000000000000003039"
+        )
+
+        let parameters: [Transaction] = [transaction]
+
+        let transactionRequest = EthereumRequest(
+            method: .ethSendTransaction,
+            params: parameters
+        )
+
+        let transactionResult = await metaMaskSDK.connectWith(transactionRequest)
+        
+        showProgressView = false
+        
+        switch transactionResult {
+        case .success(let result):
+            // 处理成功结果
+            status = "Function Called: \(result)"
+        case .failure(let error):
+            // 处理错误
             errorMessage = error.localizedDescription
             showError = true
         }

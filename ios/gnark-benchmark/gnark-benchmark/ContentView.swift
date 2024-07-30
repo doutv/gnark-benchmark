@@ -26,11 +26,11 @@ struct ContentView: View {
                     Label("ThirdParty", systemImage: "2.circle")
                 }
                 .tag(1)
-//            ConnectView()
-//                .tabItem {
-//                    Label("Connect", systemImage: "link.circle")
-//                }
-//                .tag(2)
+            ConnectTestView()
+                .tabItem {
+                    Label("Connect", systemImage: "link.circle")
+                }
+                .tag(2)
         }
     }
 }

@@ -10,23 +10,24 @@
 		264C14DB2C5794EE00ED83CE /* metamask-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 264C14DA2C5794EE00ED83CE /* metamask-ios-sdk */; };
 		2667543E2C5740020014BF7C /* ThirdPartyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2667543D2C5740020014BF7C /* ThirdPartyView.swift */; };
 		266754402C57408E0014BF7C /* OkxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2667543F2C57408E0014BF7C /* OkxView.swift */; };
-		267E29E02C58869C00F17594 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29CB2C58869C00F17594 /* AppDelegate.swift */; };
-		267E29E12C58869C00F17594 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29CC2C58869C00F17594 /* ButtonStyle.swift */; };
-		267E29E22C58869C00F17594 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29CD2C58869C00F17594 /* ConnectView.swift */; };
-		267E29E32C58869C00F17594 /* Curvature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29CE2C58869C00F17594 /* Curvature.swift */; };
-		267E29E42C58869C00F17594 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 267E29CF2C58869C00F17594 /* Images.xcassets */; };
-		267E29E62C58869C00F17594 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 267E29D22C58869C00F17594 /* LaunchScreen.xib */; };
-		267E29E72C58869C00F17594 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 267E29D42C58869C00F17594 /* Main.storyboard */; };
-		267E29E82C58869C00F17594 /* NetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29D52C58869C00F17594 /* NetworkView.swift */; };
-		267E29E92C58869C00F17594 /* ReadOnlyCallsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29D62C58869C00F17594 /* ReadOnlyCallsView.swift */; };
-		267E29EA2C58869C00F17594 /* SignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29D72C58869C00F17594 /* SignView.swift */; };
-		267E29EB2C58869C00F17594 /* SwitchChainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29D82C58869C00F17594 /* SwitchChainView.swift */; };
-		267E29EC2C58869C00F17594 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29D92C58869C00F17594 /* TextStyle.swift */; };
-		267E29ED2C58869C00F17594 /* ToastOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29DA2C58869C00F17594 /* ToastOverlay.swift */; };
-		267E29EE2C58869C00F17594 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29DB2C58869C00F17594 /* ToastView.swift */; };
-		267E29EF2C58869C00F17594 /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29DC2C58869C00F17594 /* TransactionView.swift */; };
-		267E29F02C58869C00F17594 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29DD2C58869C00F17594 /* ViewController.swift */; };
-		267E29F12C58869C00F17594 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E29DE2C58869C00F17594 /* ViewExtension.swift */; };
+		267E2A2F2C58B60200F17594 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A1A2C58B60200F17594 /* AppDelegate.swift */; };
+		267E2A302C58B60200F17594 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A1B2C58B60200F17594 /* ButtonStyle.swift */; };
+		267E2A312C58B60200F17594 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A1C2C58B60200F17594 /* ConnectView.swift */; };
+		267E2A322C58B60200F17594 /* Curvature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A1D2C58B60200F17594 /* Curvature.swift */; };
+		267E2A332C58B60200F17594 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 267E2A1E2C58B60200F17594 /* Images.xcassets */; };
+		267E2A352C58B60200F17594 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 267E2A212C58B60200F17594 /* LaunchScreen.xib */; };
+		267E2A362C58B60200F17594 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 267E2A232C58B60200F17594 /* Main.storyboard */; };
+		267E2A372C58B60200F17594 /* NetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A242C58B60200F17594 /* NetworkView.swift */; };
+		267E2A382C58B60200F17594 /* ReadOnlyCallsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A252C58B60200F17594 /* ReadOnlyCallsView.swift */; };
+		267E2A392C58B60200F17594 /* SignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A262C58B60200F17594 /* SignView.swift */; };
+		267E2A3A2C58B60200F17594 /* SwitchChainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A272C58B60200F17594 /* SwitchChainView.swift */; };
+		267E2A3B2C58B60200F17594 /* TextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A282C58B60200F17594 /* TextStyle.swift */; };
+		267E2A3C2C58B60200F17594 /* ToastOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A292C58B60200F17594 /* ToastOverlay.swift */; };
+		267E2A3D2C58B60200F17594 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A2A2C58B60200F17594 /* ToastView.swift */; };
+		267E2A3E2C58B60200F17594 /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A2B2C58B60200F17594 /* TransactionView.swift */; };
+		267E2A3F2C58B60200F17594 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A2C2C58B60200F17594 /* ViewController.swift */; };
+		267E2A402C58B60200F17594 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A2D2C58B60200F17594 /* ViewExtension.swift */; };
+		26A61A2E2C58BFE800B65A18 /* ConnectTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A61A2D2C58BFE800B65A18 /* ConnectTestView.swift */; };
 		5095FDBD2C3BF18B00774FC1 /* gnark_benchmarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */; };
 		5095FDBF2C3BF18B00774FC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBE2C3BF18B00774FC1 /* ContentView.swift */; };
 		5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5095FDC02C3BF18C00774FC1 /* Assets.xcassets */; };
@@ -72,24 +73,25 @@
 /* Begin PBXFileReference section */
 		2667543D2C5740020014BF7C /* ThirdPartyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdPartyView.swift; sourceTree = "<group>"; };
 		2667543F2C57408E0014BF7C /* OkxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkxView.swift; sourceTree = "<group>"; };
-		267E29CB2C58869C00F17594 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		267E29CC2C58869C00F17594 /* ButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
-		267E29CD2C58869C00F17594 /* ConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
-		267E29CE2C58869C00F17594 /* Curvature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Curvature.swift; sourceTree = "<group>"; };
-		267E29CF2C58869C00F17594 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		267E29D02C58869C00F17594 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		267E29D12C58869C00F17594 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		267E29D32C58869C00F17594 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		267E29D52C58869C00F17594 /* NetworkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkView.swift; sourceTree = "<group>"; };
-		267E29D62C58869C00F17594 /* ReadOnlyCallsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadOnlyCallsView.swift; sourceTree = "<group>"; };
-		267E29D72C58869C00F17594 /* SignView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignView.swift; sourceTree = "<group>"; };
-		267E29D82C58869C00F17594 /* SwitchChainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchChainView.swift; sourceTree = "<group>"; };
-		267E29D92C58869C00F17594 /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
-		267E29DA2C58869C00F17594 /* ToastOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastOverlay.swift; sourceTree = "<group>"; };
-		267E29DB2C58869C00F17594 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
-		267E29DC2C58869C00F17594 /* TransactionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
-		267E29DD2C58869C00F17594 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		267E29DE2C58869C00F17594 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		267E2A1A2C58B60200F17594 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		267E2A1B2C58B60200F17594 /* ButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
+		267E2A1C2C58B60200F17594 /* ConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
+		267E2A1D2C58B60200F17594 /* Curvature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Curvature.swift; sourceTree = "<group>"; };
+		267E2A1E2C58B60200F17594 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		267E2A1F2C58B60200F17594 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		267E2A202C58B60200F17594 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		267E2A222C58B60200F17594 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		267E2A242C58B60200F17594 /* NetworkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkView.swift; sourceTree = "<group>"; };
+		267E2A252C58B60200F17594 /* ReadOnlyCallsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadOnlyCallsView.swift; sourceTree = "<group>"; };
+		267E2A262C58B60200F17594 /* SignView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignView.swift; sourceTree = "<group>"; };
+		267E2A272C58B60200F17594 /* SwitchChainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchChainView.swift; sourceTree = "<group>"; };
+		267E2A282C58B60200F17594 /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
+		267E2A292C58B60200F17594 /* ToastOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastOverlay.swift; sourceTree = "<group>"; };
+		267E2A2A2C58B60200F17594 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		267E2A2B2C58B60200F17594 /* TransactionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
+		267E2A2C2C58B60200F17594 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		267E2A2D2C58B60200F17594 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		26A61A2D2C58BFE800B65A18 /* ConnectTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTestView.swift; sourceTree = "<group>"; };
 		5095FDB92C3BF18B00774FC1 /* gnark-benchmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gnark-benchmark.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkApp.swift; sourceTree = "<group>"; };
 		5095FDBE2C3BF18B00774FC1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -131,30 +133,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		267E29DF2C58869C00F17594 /* metamask-ios-sdk */ = {
+		267E2A2E2C58B60200F17594 /* metamask-ios-sdk  */ = {
 			isa = PBXGroup;
 			children = (
-				267E29CB2C58869C00F17594 /* AppDelegate.swift */,
-				267E29CC2C58869C00F17594 /* ButtonStyle.swift */,
-				267E29CD2C58869C00F17594 /* ConnectView.swift */,
-				267E29CE2C58869C00F17594 /* Curvature.swift */,
-				267E29CF2C58869C00F17594 /* Images.xcassets */,
-				267E29D02C58869C00F17594 /* Info.plist */,
-				267E29D22C58869C00F17594 /* LaunchScreen.xib */,
-				267E29D42C58869C00F17594 /* Main.storyboard */,
-				267E29D52C58869C00F17594 /* NetworkView.swift */,
-				267E29D62C58869C00F17594 /* ReadOnlyCallsView.swift */,
-				267E29D72C58869C00F17594 /* SignView.swift */,
-				267E29D82C58869C00F17594 /* SwitchChainView.swift */,
-				267E29D92C58869C00F17594 /* TextStyle.swift */,
-				267E29DA2C58869C00F17594 /* ToastOverlay.swift */,
-				267E29DB2C58869C00F17594 /* ToastView.swift */,
-				267E29DC2C58869C00F17594 /* TransactionView.swift */,
-				267E29DD2C58869C00F17594 /* ViewController.swift */,
-				267E29DE2C58869C00F17594 /* ViewExtension.swift */,
+				267E2A1A2C58B60200F17594 /* AppDelegate.swift */,
+				267E2A1B2C58B60200F17594 /* ButtonStyle.swift */,
+				267E2A1C2C58B60200F17594 /* ConnectView.swift */,
+				267E2A1D2C58B60200F17594 /* Curvature.swift */,
+				267E2A1E2C58B60200F17594 /* Images.xcassets */,
+				267E2A1F2C58B60200F17594 /* Info.plist */,
+				267E2A212C58B60200F17594 /* LaunchScreen.xib */,
+				267E2A232C58B60200F17594 /* Main.storyboard */,
+				267E2A242C58B60200F17594 /* NetworkView.swift */,
+				267E2A252C58B60200F17594 /* ReadOnlyCallsView.swift */,
+				267E2A262C58B60200F17594 /* SignView.swift */,
+				267E2A272C58B60200F17594 /* SwitchChainView.swift */,
+				267E2A282C58B60200F17594 /* TextStyle.swift */,
+				267E2A292C58B60200F17594 /* ToastOverlay.swift */,
+				267E2A2A2C58B60200F17594 /* ToastView.swift */,
+				267E2A2B2C58B60200F17594 /* TransactionView.swift */,
+				267E2A2C2C58B60200F17594 /* ViewController.swift */,
+				267E2A2D2C58B60200F17594 /* ViewExtension.swift */,
 			);
-			name = "metamask-ios-sdk";
-			path = "../../../../metamask-ios-sdk/Example/metamask-ios-sdk";
+			path = "metamask-ios-sdk ";
 			sourceTree = "<group>";
 		};
 		5095FDB02C3BF18B00774FC1 = {
@@ -184,11 +185,12 @@
 			children = (
 				5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */,
 				5095FDBE2C3BF18B00774FC1 /* ContentView.swift */,
-				267E29DF2C58869C00F17594 /* metamask-ios-sdk */,
+				267E2A2E2C58B60200F17594 /* metamask-ios-sdk  */,
 				5095FDC02C3BF18C00774FC1 /* Assets.xcassets */,
 				5095FDC22C3BF18C00774FC1 /* Preview Content */,
 				2667543D2C5740020014BF7C /* ThirdPartyView.swift */,
 				2667543F2C57408E0014BF7C /* OkxView.swift */,
+				26A61A2D2C58BFE800B65A18 /* ConnectTestView.swift */,
 			);
 			path = "gnark-benchmark";
 			sourceTree = "<group>";
@@ -339,9 +341,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				267E29E62C58869C00F17594 /* LaunchScreen.xib in Resources */,
-				267E29E42C58869C00F17594 /* Images.xcassets in Resources */,
-				267E29E72C58869C00F17594 /* Main.storyboard in Resources */,
+				267E2A352C58B60200F17594 /* LaunchScreen.xib in Resources */,
+				267E2A332C58B60200F17594 /* Images.xcassets in Resources */,
+				267E2A362C58B60200F17594 /* Main.storyboard in Resources */,
 				5095FDC42C3BF18C00774FC1 /* Preview Assets.xcassets in Resources */,
 				5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */,
 			);
@@ -368,23 +370,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				267E29F12C58869C00F17594 /* ViewExtension.swift in Sources */,
+				267E2A402C58B60200F17594 /* ViewExtension.swift in Sources */,
 				2667543E2C5740020014BF7C /* ThirdPartyView.swift in Sources */,
-				267E29EF2C58869C00F17594 /* TransactionView.swift in Sources */,
-				267E29E22C58869C00F17594 /* ConnectView.swift in Sources */,
-				267E29ED2C58869C00F17594 /* ToastOverlay.swift in Sources */,
+				267E2A3E2C58B60200F17594 /* TransactionView.swift in Sources */,
+				267E2A312C58B60200F17594 /* ConnectView.swift in Sources */,
+				267E2A3C2C58B60200F17594 /* ToastOverlay.swift in Sources */,
 				266754402C57408E0014BF7C /* OkxView.swift in Sources */,
-				267E29EE2C58869C00F17594 /* ToastView.swift in Sources */,
-				267E29EA2C58869C00F17594 /* SignView.swift in Sources */,
-				267E29E82C58869C00F17594 /* NetworkView.swift in Sources */,
-				267E29EC2C58869C00F17594 /* TextStyle.swift in Sources */,
-				267E29F02C58869C00F17594 /* ViewController.swift in Sources */,
-				267E29E32C58869C00F17594 /* Curvature.swift in Sources */,
+				267E2A3D2C58B60200F17594 /* ToastView.swift in Sources */,
+				267E2A392C58B60200F17594 /* SignView.swift in Sources */,
+				267E2A372C58B60200F17594 /* NetworkView.swift in Sources */,
+				267E2A3B2C58B60200F17594 /* TextStyle.swift in Sources */,
+				267E2A3F2C58B60200F17594 /* ViewController.swift in Sources */,
+				267E2A322C58B60200F17594 /* Curvature.swift in Sources */,
 				5095FDBF2C3BF18B00774FC1 /* ContentView.swift in Sources */,
-				267E29E92C58869C00F17594 /* ReadOnlyCallsView.swift in Sources */,
-				267E29EB2C58869C00F17594 /* SwitchChainView.swift in Sources */,
-				267E29E12C58869C00F17594 /* ButtonStyle.swift in Sources */,
-				267E29E02C58869C00F17594 /* AppDelegate.swift in Sources */,
+				267E2A382C58B60200F17594 /* ReadOnlyCallsView.swift in Sources */,
+				267E2A3A2C58B60200F17594 /* SwitchChainView.swift in Sources */,
+				267E2A302C58B60200F17594 /* ButtonStyle.swift in Sources */,
+				267E2A2F2C58B60200F17594 /* AppDelegate.swift in Sources */,
+				26A61A2E2C58BFE800B65A18 /* ConnectTestView.swift in Sources */,
 				5095FDBD2C3BF18B00774FC1 /* gnark_benchmarkApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -422,18 +425,18 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		267E29D22C58869C00F17594 /* LaunchScreen.xib */ = {
+		267E2A212C58B60200F17594 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				267E29D12C58869C00F17594 /* Base */,
+				267E2A202C58B60200F17594 /* Base */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
-		267E29D42C58869C00F17594 /* Main.storyboard */ = {
+		267E2A232C58B60200F17594 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				267E29D32C58869C00F17594 /* Base */,
+				267E2A222C58B60200F17594 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -571,7 +574,7 @@
 				DEVELOPMENT_TEAM = 7PZYH4D4FW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "/Users/stevenliu/code/cur_0725/metamask-ios-sdk/Example/metamask-ios-sdk/Info.plist";
+				INFOPLIST_FILE = "/Users/stevenliu/code/cur_0725/gnark-benchmark/ios/gnark-benchmark/gnark-benchmark/metamask-ios-sdk /Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -602,7 +605,7 @@
 				DEVELOPMENT_TEAM = 7PZYH4D4FW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "/Users/stevenliu/code/cur_0725/metamask-ios-sdk/Example/metamask-ios-sdk/Info.plist";
+				INFOPLIST_FILE = "/Users/stevenliu/code/cur_0725/gnark-benchmark/ios/gnark-benchmark/gnark-benchmark/metamask-ios-sdk /Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -4,11 +4,11 @@ import metamask_ios_sdk
 struct ConnectTestView: View {
     @StateObject private var metaMaskSDK = MetaMaskSDK.shared(
         AppMetadata(
-            name: "Your Dapp Name",
-            url: "https://yourdapp.com",
+            name: "zkkyc2",
+            url: "https://zkkyc2.com",
             iconUrl: "https://yourdapp.com/icon.png"
         ),
-        transport: .socket,
+        transport: .deeplinking(dappScheme: "zkkyc2"),
         sdkOptions: SDKOptions(infuraAPIKey: "0x2d04488d5611460ba7d2c2958e2b7227"))
     
     @State private var connected: Bool = false
@@ -30,7 +30,10 @@ struct ConnectTestView: View {
             
             Button(action: {
                 Task {
-                    await connectAndCallVerifyFunction()
+//                    await connectAndCallVerifyFunction()
+                    showProgressView = true
+                    await metaMaskSDK.connect()
+                    showProgressView = false
                 }
             }) {
                 Text("Connect and Call Verify Function")
@@ -40,14 +43,25 @@ struct ConnectTestView: View {
                     .cornerRadius(8)
             }
                 
-            Button {
-                metaMaskSDK.clearSession()
-            } label: {
-                Text("Clear Session")
-                    .modifier(TextButton())
-                    .frame(maxWidth: .infinity, maxHeight: 32)
+            Section {
+                Button {
+                    metaMaskSDK.clearSession()
+                } label: {
+                    Text("Clear Session")
+                        .modifier(TextButton())
+                        .frame(maxWidth: .infinity, maxHeight: 32)
+                }
+                .modifier(ButtonStyle())
+
+                Button {
+                    metaMaskSDK.disconnect()
+                } label: {
+                    Text("Disconnect")
+                        .modifier(TextButton())
+                        .frame(maxWidth: .infinity, maxHeight: 32)
+                }
+                .modifier(ButtonStyle())
             }
-            .modifier(ButtonStyle())
             
             .alert(isPresented: $showError) {
                 Alert(
@@ -59,6 +73,28 @@ struct ConnectTestView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .Connection)) { notification in
             status = notification.userInfo?["value"] as? String ?? "Offline"
+        }
+    }
+    
+    private func sendTx() async {
+        showProgressView = true
+        
+        
+
+       
+
+        let transactionResult = await metaMaskSDK.sendTransaction(from: metaMaskSDK.account, to: "0x74c3e0074dc0ff91252b0485dae9d05ee67145e4", amount: "0x0")
+        
+        showProgressView = false
+        
+        switch transactionResult {
+        case .success(let result):
+            // 处理成功结果
+            status = "Function Called: \(result)"
+        case .failure(let error):
+            // 处理错误
+            errorMessage = error.localizedDescription
+            showError = true
         }
     }
 

@@ -26,7 +26,7 @@ struct ContentView: View {
                     Label("ThirdParty", systemImage: "2.circle")
                 }
                 .tag(1)
-            ConnectTestView()
+            ConnectView()
                 .tabItem {
                     Label("Connect", systemImage: "link.circle")
                 }

@@ -26,8 +26,7 @@ struct ConnectView: View {
             iconUrl: "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png"
         ),
         transport: .socket,
-        sdkOptions: SDKOptions(infuraAPIKey: "2d04488d5611460ba7d2c2958e2b7227")
-                )
+        sdkOptions: nil)
 
     @State private var connected: Bool = false
     @State private var status: String = "Offline"
@@ -41,181 +40,148 @@ struct ConnectView: View {
     @State private var isConnectWith = false
 
     @State private var showProgressView = false
+    
+    @State private var selectedTab = 0
+    @State private var attribute = -1
+    @State private var op = -1
+    @State private var value = -1
+    @State private var proof = -1
 
     var body: some View {
-        NavigationView {
-            List {
-                Section {
-                    Group {
-                        HStack {
-                            Text("Status")
-                                .bold()
-                                .modifier(TextCallout())
-                            Spacer()
-                            Text(status)
-                                .modifier(TextCaption())
-                        }
-
-                        HStack {
-                            Text("Chain ID")
-                                .bold()
-                                .modifier(TextCallout())
-                            Spacer()
-                            Text(metaMaskSDK.chainId)
-                                .modifier(TextCaption())
-                        }
-
-                        HStack {
-                            Text("Account")
-                                .bold()
-                                .modifier(TextCallout())
-                            Spacer()
-                            Text(metaMaskSDK.account)
-                                .modifier(TextCaption())
-                        }
-                    }
+        
+        TabView(selection: $selectedTab) {
+            OkxView(selectedTab:$selectedTab, attribute:$attribute,op: $op,value:$value)
+                .tabItem {
+                    Label("Okx", systemImage: "1.circle")
                 }
+                .tag(0)
 
-//                if #available(iOS 17.0, *) {
-//                    Section {
-//                        Picker("Transport Layer", selection: $selectedTransport) {
-//                            Text("Socket").tag(Transport.socket)
-//                            Text("Deeplinking").tag(Transport.deeplinking(dappScheme: dappScheme))
-//                        }
-//                        .onChange(of: selectedTransport, initial: false, { _, newValue in
-//                            metaMaskSDK.updateTransportLayer(newValue)
-//                        })
-//
-//                        if case .deeplinking = selectedTransport {
-//                            TextField("Dapp Scheme", text: $dappScheme)
-//                                .frame(minHeight: 32)
-//                                .modifier(TextCurvature())
-//                        }
-//                    }
-//                }
-
-                if !metaMaskSDK.account.isEmpty {
+            ThirdPartyView(selectedTab: $selectedTab,attribute:$attribute,op: $op,value:$value)
+                .tabItem {
+                    Label("ThirdParty", systemImage: "2.circle")
+                }
+                .tag(1)
+            NavigationView {
+                List {
                     Section {
                         Group {
-                            NavigationLink("Sign") {
-                                SignView().environmentObject(metaMaskSDK)
-                            }
 
-                            NavigationLink("Chained signing") {
-                                SignView(isChainedSigning: true).environmentObject(metaMaskSDK)
-                            }
-
-                            NavigationLink("Transact") {
-                                TransactionView().environmentObject(metaMaskSDK)
-                            }
-
-                            NavigationLink("Switch chain") {
-                                SwitchChainView().environmentObject(metaMaskSDK)
-                            }
-
-                            NavigationLink("Read-only RPCs") {
-                                ReadOnlyCallsView().environmentObject(metaMaskSDK)
+                            HStack {
+                                Text("Account")
+                                    .bold()
+                                    .modifier(TextCallout())
+                                Spacer()
+                                Text(metaMaskSDK.account)
+                                    .modifier(TextCaption())
                             }
                         }
                     }
-                }
 
-                if metaMaskSDK.account.isEmpty {
-                    Section {
-                        Button {
-                            isConnectWith = true
-                        } label: {
-                            Text("Connect With Request")
-                                .modifier(TextButton())
-                                .frame(maxWidth: .infinity, maxHeight: 32)
-                        }
-                        .sheet(isPresented: $isConnectWith, onDismiss: {
-                            isConnectWith = false
-                        }) {
-                            TransactionView(isConnectWith: true)
-                                .environmentObject(metaMaskSDK)
-                        }
-                        .modifier(ButtonStyle())
 
-                        Button {
-                            isConnectAndSign = true
-                        } label: {
-                            Text("Connect & Sign")
-                                .modifier(TextButton())
-                                .frame(maxWidth: .infinity, maxHeight: 32)
-                        }
-                        .sheet(isPresented: $isConnectAndSign, onDismiss: {
-                            isConnectAndSign = false
-                        }) {
-                            SignView(isConnectAndSign: true)
-                                .environmentObject(metaMaskSDK)
-                        }
-                        .modifier(ButtonStyle())
+                        Section {
+                            Group {
+                               
 
-                        ZStack {
-                            Button {
-                                Task {
-                                    await connectSDK()
+                                NavigationLink("Transact") {
+                                    TransactionView().environmentObject(metaMaskSDK)
                                 }
+
+                            }
+                        }
+                    
+
+                    if metaMaskSDK.account.isEmpty {
+                        Section {
+                            Button {
+                                isConnectWith = true
                             } label: {
-                                Text("Connect to MetaMask")
+                                Text("Connect With Request")
+                                    .modifier(TextButton())
+                                    .frame(maxWidth: .infinity, maxHeight: 32)
+                            }
+                            .sheet(isPresented: $isConnectWith, onDismiss: {
+                                isConnectWith = false
+                            }) {
+                                TransactionView(isConnectWith: true)
+                                    .environmentObject(metaMaskSDK)
+                            }
+                            .modifier(ButtonStyle())
+
+                            
+                            ZStack {
+                                Button {
+                                    Task {
+                                        await connectSDK()
+                                    }
+                                } label: {
+                                    Text("Connect to MetaMask")
+                                        .modifier(TextButton())
+                                        .frame(maxWidth: .infinity, maxHeight: 32)
+                                }
+                                .modifier(ButtonStyle())
+
+                                if showProgressView {
+                                    ProgressView()
+                                        .scaleEffect(1.5, anchor: .center)
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                }
+                            }
+                            .alert(isPresented: $showError) {
+                                Alert(
+                                    title: Text("Error"),
+                                    message: Text(errorMessage)
+                                )
+                            }
+                        } footer: {
+                            Text(connectAndSignResult)
+                                .modifier(TextCaption())
+                        }
+                    }
+
+                    
+                        Section {
+                            Button {
+                                metaMaskSDK.clearSession()
+                            } label: {
+                                Text("Clear Session")
                                     .modifier(TextButton())
                                     .frame(maxWidth: .infinity, maxHeight: 32)
                             }
                             .modifier(ButtonStyle())
 
-                            if showProgressView {
-                                ProgressView()
-                                    .scaleEffect(1.5, anchor: .center)
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                            Button {
+                                metaMaskSDK.disconnect()
+                            } label: {
+                                Text("Disconnect")
+                                    .modifier(TextButton())
+                                    .frame(maxWidth: .infinity, maxHeight: 32)
                             }
+                            .modifier(ButtonStyle())
                         }
-                        .alert(isPresented: $showError) {
-                            Alert(
-                                title: Text("Error"),
-                                message: Text(errorMessage)
-                            )
-                        }
-                    } footer: {
-                        Text(connectAndSignResult)
-                            .modifier(TextCaption())
-                    }
-                }
-
-                if !metaMaskSDK.account.isEmpty {
-                    Section {
-                        Button {
-                            metaMaskSDK.clearSession()
-                        } label: {
-                            Text("Clear Session")
-                                .modifier(TextButton())
-                                .frame(maxWidth: .infinity, maxHeight: 32)
-                        }
-                        .modifier(ButtonStyle())
-
-                        Button {
-                            metaMaskSDK.disconnect()
-                        } label: {
-                            Text("Disconnect")
-                                .modifier(TextButton())
-                                .frame(maxWidth: .infinity, maxHeight: 32)
-                        }
-                        .modifier(ButtonStyle())
-                    }
-                }
-                
                     
-                
+                    
+                        
+                    
+                }
+                .font(.body)
+                .onReceive(NotificationCenter.default.publisher(for: .Connection)) { notification in
+                    status = notification.userInfo?["value"] as? String ?? "Offline"
+                }
+                .navigationTitle("ZKkyc")
+                .onAppear {
+                    showProgressView = false
+                }
             }
-            .font(.body)
-            .onReceive(NotificationCenter.default.publisher(for: .Connection)) { notification in
-                status = notification.userInfo?["value"] as? String ?? "Offline"
-            }
-            .navigationTitle("ZKkyc")
-            .onAppear {
-                showProgressView = false
-            }
+                .tabItem {
+                    Label("Connect", systemImage: "link.circle")
+                }
+                .tag(2)
         }
+        
+            
+        
+        
+        
     }
 
     func connectSDK() async {

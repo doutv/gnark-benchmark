@@ -7,7 +7,7 @@ import UIKit
 import SwiftUI
 
 class ViewController: UIViewController {
-    let connectView = ContentView()
+    let connectView = ConnectView()
 
     override func viewDidLoad() {
         super.viewDidLoad()

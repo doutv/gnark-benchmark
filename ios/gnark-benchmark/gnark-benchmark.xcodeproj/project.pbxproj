@@ -10,7 +10,6 @@
 		264C14DB2C5794EE00ED83CE /* metamask-ios-sdk in Frameworks */ = {isa = PBXBuildFile; productRef = 264C14DA2C5794EE00ED83CE /* metamask-ios-sdk */; };
 		2667543E2C5740020014BF7C /* ThirdPartyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2667543D2C5740020014BF7C /* ThirdPartyView.swift */; };
 		266754402C57408E0014BF7C /* OkxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2667543F2C57408E0014BF7C /* OkxView.swift */; };
-		267E2A2F2C58B60200F17594 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A1A2C58B60200F17594 /* AppDelegate.swift */; };
 		267E2A302C58B60200F17594 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A1B2C58B60200F17594 /* ButtonStyle.swift */; };
 		267E2A312C58B60200F17594 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A1C2C58B60200F17594 /* ConnectView.swift */; };
 		267E2A322C58B60200F17594 /* Curvature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A1D2C58B60200F17594 /* Curvature.swift */; };
@@ -28,6 +27,7 @@
 		267E2A3F2C58B60200F17594 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A2C2C58B60200F17594 /* ViewController.swift */; };
 		267E2A402C58B60200F17594 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A2D2C58B60200F17594 /* ViewExtension.swift */; };
 		26A61A2E2C58BFE800B65A18 /* ConnectTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A61A2D2C58BFE800B65A18 /* ConnectTestView.swift */; };
+		26A61A302C58DA5E00B65A18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A61A2F2C58DA5E00B65A18 /* AppDelegate.swift */; };
 		5095FDBD2C3BF18B00774FC1 /* gnark_benchmarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */; };
 		5095FDBF2C3BF18B00774FC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBE2C3BF18B00774FC1 /* ContentView.swift */; };
 		5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5095FDC02C3BF18C00774FC1 /* Assets.xcassets */; };
@@ -73,7 +73,6 @@
 /* Begin PBXFileReference section */
 		2667543D2C5740020014BF7C /* ThirdPartyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdPartyView.swift; sourceTree = "<group>"; };
 		2667543F2C57408E0014BF7C /* OkxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkxView.swift; sourceTree = "<group>"; };
-		267E2A1A2C58B60200F17594 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		267E2A1B2C58B60200F17594 /* ButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		267E2A1C2C58B60200F17594 /* ConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
 		267E2A1D2C58B60200F17594 /* Curvature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Curvature.swift; sourceTree = "<group>"; };
@@ -92,6 +91,7 @@
 		267E2A2C2C58B60200F17594 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		267E2A2D2C58B60200F17594 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		26A61A2D2C58BFE800B65A18 /* ConnectTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTestView.swift; sourceTree = "<group>"; };
+		26A61A2F2C58DA5E00B65A18 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5095FDB92C3BF18B00774FC1 /* gnark-benchmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gnark-benchmark.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkApp.swift; sourceTree = "<group>"; };
 		5095FDBE2C3BF18B00774FC1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -136,7 +136,7 @@
 		267E2A2E2C58B60200F17594 /* metamask-ios-sdk  */ = {
 			isa = PBXGroup;
 			children = (
-				267E2A1A2C58B60200F17594 /* AppDelegate.swift */,
+				26A61A2F2C58DA5E00B65A18 /* AppDelegate.swift */,
 				267E2A1B2C58B60200F17594 /* ButtonStyle.swift */,
 				267E2A1C2C58B60200F17594 /* ConnectView.swift */,
 				267E2A1D2C58B60200F17594 /* Curvature.swift */,
@@ -372,6 +372,7 @@
 			files = (
 				267E2A402C58B60200F17594 /* ViewExtension.swift in Sources */,
 				2667543E2C5740020014BF7C /* ThirdPartyView.swift in Sources */,
+				26A61A302C58DA5E00B65A18 /* AppDelegate.swift in Sources */,
 				267E2A3E2C58B60200F17594 /* TransactionView.swift in Sources */,
 				267E2A312C58B60200F17594 /* ConnectView.swift in Sources */,
 				267E2A3C2C58B60200F17594 /* ToastOverlay.swift in Sources */,
@@ -386,7 +387,6 @@
 				267E2A382C58B60200F17594 /* ReadOnlyCallsView.swift in Sources */,
 				267E2A3A2C58B60200F17594 /* SwitchChainView.swift in Sources */,
 				267E2A302C58B60200F17594 /* ButtonStyle.swift in Sources */,
-				267E2A2F2C58B60200F17594 /* AppDelegate.swift in Sources */,
 				26A61A2E2C58BFE800B65A18 /* ConnectTestView.swift in Sources */,
 				5095FDBD2C3BF18B00774FC1 /* gnark_benchmarkApp.swift in Sources */,
 			);

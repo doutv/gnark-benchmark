@@ -15,9 +15,9 @@ func main() {
 		// eddsa.PlonkSetup("")
 		// eddsa.PlonkProveAndVerify("")
 	} else {
-		attribute := 0
-		op := 3
-		value := 19
+		attribute := 2
+		op := 1
+		value := 1
 		println("------Groth16 ECDSA Secp256k1------")
 		ecdsa.Groth16Setup("")
 		ecdsa.Groth16Prove("")

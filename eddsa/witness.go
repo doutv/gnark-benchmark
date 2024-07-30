@@ -27,8 +27,8 @@ func generateWitness(attribute int64, op int64, value int64) (witness.Witness, e
 	//age,gender,natioinality
 	//gender:0 female,1 male
 	//nationality,0 America,1 China
-	//user info先写死: 19,1,1
-	attributes := []int{19, 1, 1}
+	//user info先写死: 18,1,0
+	attributes := []int{18, 1, 0}
 	fields := make([][]byte, len(attributes))
 
 	curve := tedwards.BN254

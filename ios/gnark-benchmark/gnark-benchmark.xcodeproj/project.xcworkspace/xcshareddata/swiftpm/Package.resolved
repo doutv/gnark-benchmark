@@ -1,0 +1,33 @@
+{
+  "originHash" : "4e058f4d69bbc60bae856285f09af01ec099e1e1b03c0dc660c965cecb77e434",
+  "pins" : [
+    {
+      "identity" : "metamask-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MetaMask/metamask-ios-sdk",
+      "state" : {
+        "revision" : "9a384bb5910cd3fd2937f30ebf78dac4790d1593",
+        "version" : "0.8.0"
+      }
+    },
+    {
+      "identity" : "socket.io-client-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/socketio/socket.io-client-swift",
+      "state" : {
+        "revision" : "175da8b5156f6b132436f0676cc84c2f6a766b6e",
+        "version" : "16.1.0"
+      }
+    },
+    {
+      "identity" : "starscream",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/daltoniam/Starscream",
+      "state" : {
+        "revision" : "ac6c0fc9da221873e01bd1a0d4818498a71eef33",
+        "version" : "4.0.6"
+      }
+    }
+  ],
+  "version" : 3
+}

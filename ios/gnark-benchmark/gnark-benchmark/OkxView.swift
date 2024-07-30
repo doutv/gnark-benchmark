@@ -7,6 +7,11 @@ struct OkxView: View {
     @State private var setupMessage = ""
     @State private var proveMessage = ""
     
+    @State private var proofGenerated = false
+    
+    
+    @Binding var selectedTab: Int
+
     // 0: age
     // 1: gender
     // 2: nationality
@@ -20,6 +25,7 @@ struct OkxView: View {
     
     var attributesMap : [Int:String] = [0:"age",1:"gender",2:"nationality"]
     var opMap  : [Int:String] = [0:"equal",1:"not equal",2:"less than",3:"greater than"]
+    var contryMap:[Int:String] = [0:"America",1:"China"]
     
     var directory: URL {
         let documentDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -30,7 +36,7 @@ struct OkxView: View {
         VStack {
             
             if  attribute != -1, op != -1, value != -1 {
-                Text("Requirement: \(attributesMap[attribute] ?? "") \(opMap[op] ?? "") \(value)")
+                Text("Requirement: \(attributesMap[attribute] ?? "") \(opMap[op] ?? "") \(contryMap[value] ?? "")")
                 Text("attribute:\(attribute) op:\(op) value:\(value)")
             }
             
@@ -50,13 +56,11 @@ struct OkxView: View {
                     
                     let proveStartTime = Date()
                     
-                    var res: Void =  EddsaGroth16Prove(directory.filePath,Int64(attribute) ,Int64(op) ,Int64(value))
+                    EddsaGroth16Prove(directory.filePath,Int64(attribute) ,Int64(op) ,Int64(value))
 
-                    if res == Void {
-                        print("res:\(res)")
-                    }
-                    
+                  
                     let proveEndTime = Date()
+                    proofGenerated = true
                     DispatchQueue.main.async {
                         proveMessage = "Prove Time: \(proveEndTime.timeIntervalSince(proveStartTime)) seconds"
                         isRunning = false
@@ -66,7 +70,12 @@ struct OkxView: View {
             .padding()
             .disabled(isRunning)
             
+            
             Text("\(setupMessage) \n \(proveMessage)")
+            Button("Go back to claim"){
+                selectedTab = 1
+            }
+            .disabled(!proofGenerated)
         }
         .padding()
         .navigationTitle("Okx")
@@ -75,11 +84,12 @@ struct OkxView: View {
 }
 
 struct OkxView_Previews: PreviewProvider {
+    @State static var selectedTab = 0
     @State static var attribute = -1
     @State static var op = -1
     @State static var value = -1
     static var previews: some View {
-        OkxView(attribute: $attribute, op: $op, value: $value)
+        OkxView(selectedTab:$selectedTab, attribute: $attribute, op: $op, value: $value)
     }
 }
 

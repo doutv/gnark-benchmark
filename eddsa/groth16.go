@@ -7,7 +7,6 @@ import (
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 
-	"fmt"
 	"log"
 
 	"github.com/consensys/gnark/backend/groth16"
@@ -28,13 +27,13 @@ func Groth16Setup(fileDir string) {
 	utils.WriteToFile(vk, fileDir+"eddsa.vkey")
 }
 
-func Groth16Prove(fileDir string, attribute int64, op int64, value int64) error {
+func Groth16Prove(fileDir string, attribute int64, op int64, value int64) {
 	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()
 	witnessData, err := generateWitness(attribute, op, value)
 	if err != nil {
-		return fmt.Errorf("generate witness error: %w", err)
+		panic(err)
 	}
 	elapsed := time.Since(start)
 	log.Printf("Witness Generation: %d ms", elapsed.Milliseconds())
@@ -56,7 +55,7 @@ func Groth16Prove(fileDir string, attribute int64, op int64, value int64) error 
 	start = time.Now()
 	proof, err := groth16.Prove(r1cs, pk, witnessData)
 	if err != nil {
-		return fmt.Errorf("prove error: %w", err)
+		panic(err)
 	}
 	elapsed = time.Since(start)
 	log.Printf("Prove: %d ms", elapsed.Milliseconds())
@@ -76,5 +75,5 @@ func Groth16Prove(fileDir string, attribute int64, op int64, value int64) error 
 	// if err != nil {
 	// 	panic(err)
 	// }
-	return nil
+
 }

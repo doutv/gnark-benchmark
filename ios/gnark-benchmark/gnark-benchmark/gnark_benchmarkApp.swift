@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@main
+//@main
 struct gnark_benchmarkApp: App {
     var body: some Scene {
         WindowGroup {

@@ -15,17 +15,17 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            OkxView(selectedTab:$selectedTab, attribute:$attribute,op: $op,value:$value)
-                .tabItem {
-                    Label("Okx", systemImage: "1.circle")
-                }
-                .tag(0)
+//            OkxView(selectedTab:$selectedTab,proofGenerated: $pro attribute:$attribute,op: $op,value:$value)
+//                .tabItem {
+//                    Label("Okx", systemImage: "1.circle")
+//                }
+//                .tag(0)
 
-            ThirdPartyView(selectedTab: $selectedTab,attribute:$attribute,op: $op,value:$value)
-                .tabItem {
-                    Label("ThirdParty", systemImage: "2.circle")
-                }
-                .tag(1)
+//            ThirdPartyView(selectedTab: $selectedTab,attribute:$attribute,op: $op,value:$value)
+//                .tabItem {
+//                    Label("ThirdParty", systemImage: "2.circle")
+//                }
+//                .tag(1)
             ConnectView()
                 .tabItem {
                     Label("Connect", systemImage: "link.circle")

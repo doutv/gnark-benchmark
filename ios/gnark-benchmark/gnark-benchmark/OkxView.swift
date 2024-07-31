@@ -7,10 +7,11 @@ struct OkxView: View {
     @State private var setupMessage = ""
     @State private var proveMessage = ""
     
-    @State private var proofGenerated = false
+    
     
     
     @Binding var selectedTab: Int
+    @Binding var proofGenerated: Bool
 
     // 0: age
     // 1: gender
@@ -37,11 +38,11 @@ struct OkxView: View {
             
             if  attribute != -1, op != -1, value != -1 {
                 Text("Requirement: \(attributesMap[attribute] ?? "") \(opMap[op] ?? "") \(contryMap[value] ?? "")")
-                Text("attribute:\(attribute) op:\(op) value:\(value)")
             }
             
-            Button("Setup and Prove") {
+            Button("Prove") {
                 isRunning = true
+                print("directory.filePath:\(directory.filePath)")
                 let setupStartTime = Date()
                 
                 DispatchQueue.global().async {
@@ -72,7 +73,7 @@ struct OkxView: View {
             
             
             Text("\(setupMessage) \n \(proveMessage)")
-            Button("Go back to claim"){
+            Button("Go back to third party app"){
                 selectedTab = 1
             }
             .disabled(!proofGenerated)
@@ -88,8 +89,9 @@ struct OkxView_Previews: PreviewProvider {
     @State static var attribute = -1
     @State static var op = -1
     @State static var value = -1
+    @State static var proofGenerated = false
     static var previews: some View {
-        OkxView(selectedTab:$selectedTab, attribute: $attribute, op: $op, value: $value)
+        OkxView(selectedTab:$selectedTab, proofGenerated: $proofGenerated, attribute: $attribute, op: $op, value: $value)
     }
 }
 

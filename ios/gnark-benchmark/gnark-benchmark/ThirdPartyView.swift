@@ -7,21 +7,12 @@ struct ThirdPartyView: View {
     @Binding var attribute: Int
     @Binding var op: Int
     @Binding var value: Int
+    @Binding var proofGenerated:Bool
+    @Binding var claimClicked:Bool
     
     
     
-    // 创建 MetaMaskSDK 实例
-    @ObservedObject var metaMaskSDK = MetaMaskSDK.shared(
-        AppMetadata(
-            name: "Your App Name",
-            url: "https://yourapp.com",
-            iconUrl: "https://yourapp.com/icon.png"
-        ),
-        transport: .deeplinking(dappScheme: "yourappscheme"),
-        sdkOptions: nil
-    )
     
-    @State private var status: String = "Offline"
     @State private var errorMessage = ""
     @State private var showError = false
     @State private var showProgressView = false
@@ -31,26 +22,46 @@ struct ThirdPartyView: View {
             Text("Criteria: nationality not equal China")
                 .padding()
             
-            Button("Prove") {
-                attribute = 2
-                op = 1
-                value = 1
-                selectedTab = 0
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(8)
             
-            Button("Connect to MetaMask") {
-                Task {
-                    await connectSDK()
+                Button("Prove") {
+                    attribute = 2
+                    op = 1
+                    value = 1
+                    selectedTab = 0
                 }
-            }
-            .padding()
-            .background(Color.green)
-            .foregroundColor(.white)
-            .cornerRadius(8)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            
+            
+            
+            
+            
+//            if proofGenerated{
+//                Button("Claim") {
+//                    claimClicked = true
+//                    
+//                }
+//                .padding()
+//                .background(Color.blue)
+//                .foregroundColor(.white)
+//                .cornerRadius(8)
+//            }
+            
+            
+            
+            
+            
+//            Button("Connect to MetaMask") {
+//                Task {
+//                    await connectSDK()
+//                }
+//            }
+//            .padding()
+//            .background(Color.green)
+//            .foregroundColor(.white)
+//            .cornerRadius(8)
             
             if showProgressView {
                 ProgressView()
@@ -63,23 +74,11 @@ struct ThirdPartyView: View {
                     .foregroundColor(.red)
             }
             
-            Text("Status: \(status)")
-                .padding()
+            
         }
     }
     
-    func connectSDK() async {
-        showProgressView = true
-        let result = await metaMaskSDK.connect()
-        showProgressView = false
-        switch result {
-        case .success:
-            status = "Online"
-        case let .failure(error):
-            errorMessage = error.localizedDescription
-            showError = true
-        }
-    }
+    
 }
 
 struct ThirdPartyView_Previews: PreviewProvider {
@@ -87,8 +86,10 @@ struct ThirdPartyView_Previews: PreviewProvider {
     @State static var attribute = 0
     @State static var op = 3
     @State static var value = 18
+    @State static var proofGenerated = false;
+    @State static var claimClicked = false
     
     static var previews: some View {
-        ThirdPartyView(selectedTab: $selectedTab, attribute: $attribute, op: $op, value: $value)
+        ThirdPartyView(selectedTab: $selectedTab, attribute: $attribute, op: $op, value: $value,proofGenerated:$proofGenerated,claimClicked: $claimClicked)
     }
 }

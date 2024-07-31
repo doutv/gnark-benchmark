@@ -64,6 +64,7 @@ func Groth16Prove(fileDir string, attribute int64, op int64, value int64) {
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
 
 	utils.WriteToFile(proof, fileDir+"eddsa.proof")
+
 	// Proof verification
 	// publicWitness, err := witnessData.Public()
 	// if err != nil {

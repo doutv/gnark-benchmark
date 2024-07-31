@@ -29,7 +29,7 @@ struct ConnectView: View {
         sdkOptions: nil)
 
     @State private var connected: Bool = false
-    @State private var status: String = "Offline"
+    @State private var status: Bool = false
 
     @State private var errorMessage = ""
     @State private var showError = false
@@ -46,143 +46,100 @@ struct ConnectView: View {
     @State private var op = -1
     @State private var value = -1
     @State private var proof = -1
+    @State private var proofGenerated = false
+    @State private var claimClicked = false
 
     var body: some View {
         
         TabView(selection: $selectedTab) {
-            OkxView(selectedTab:$selectedTab, attribute:$attribute,op: $op,value:$value)
+            OkxView(selectedTab:$selectedTab,proofGenerated: $proofGenerated, attribute:$attribute,op: $op,value:$value)
                 .tabItem {
                     Label("Okx", systemImage: "1.circle")
                 }
                 .tag(0)
 
-            ThirdPartyView(selectedTab: $selectedTab,attribute:$attribute,op: $op,value:$value)
-                .tabItem {
-                    Label("ThirdParty", systemImage: "2.circle")
-                }
-                .tag(1)
-            NavigationView {
-                List {
-                    Section {
-                        Group {
+            
+            if !proofGenerated {
+                ThirdPartyView(selectedTab: $selectedTab,attribute:$attribute,op: $op,value:$value,proofGenerated: $proofGenerated,claimClicked: $claimClicked)
+                    .tabItem {
+                        Label("ThirdParty", systemImage: "2.circle")
+                    }
+                    .tag(1)
+            }
+            
+            if proofGenerated {
+                VStack {
+                   
+                        
 
-                            HStack {
-                                Text("Account")
-                                    .bold()
-                                    .modifier(TextCallout())
-                                Spacer()
-                                Text(metaMaskSDK.account)
+
+                        if status{
+                            Text("Claim Success!")
+                        }
+                        
+
+                        
+                            Section {
+
+                                if !status{
+                                    Button{
+                                        Task{
+    //                                        metaMaskSDK.clearSession()
+    //                                        metaMaskSDK.disconnect()
+                                            await connectAndCallVerifyFunction()
+                                        }
+                                    }label:{
+                                        Text("Claim")
+                                            
+                                    }
+                                    
+                                }
+                                
+                                
+                                if showProgressView {
+                                    ProgressView()
+                                        .scaleEffect(1.5, anchor: .center)
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                }
+                                
+                                
+                            } footer: {
+                                Text(connectAndSignResult)
                                     .modifier(TextCaption())
                             }
-                        }
-                    }
+                        
 
-
-                        Section {
-                            Group {
-                               
-
-                                NavigationLink("Transact") {
-                                    TransactionView().environmentObject(metaMaskSDK)
-                                }
-
-                            }
-                        }
-                    
-
-                    if metaMaskSDK.account.isEmpty {
-                        Section {
-//                            Button {
-//                                isConnectWith = true
-//                            } label: {
-//                                Text("Connect With Request")
-//                                    .modifier(TextButton())
-//                                    .frame(maxWidth: .infinity, maxHeight: 32)
+                        
+//                            Section {
+//                                Button {
+//
+//                                } label: {
+//                                    Text("Clear Session and disconnect")
+//                                        .modifier(TextButton())
+//                                        .frame(maxWidth: .infinity, maxHeight: 32)
+//                                }
+//                                .modifier(ButtonStyle())
+//
 //                            }
-//                            .sheet(isPresented: $isConnectWith, onDismiss: {
-//                                isConnectWith = false
-//                            }) {
-//                                TransactionView(isConnectWith: true)
-//                                    .environmentObject(metaMaskSDK)
-//                            }
-//                            .modifier(ButtonStyle())
-
+                        
+                        
                             
-                            
-                            Button {
-                                Task {
-                                    await connectSDK()
-                                }
-                            } label: {
-                                Text("Connect to MetaMask")
-                                    .modifier(TextButton())
-                                    .frame(maxWidth: .infinity, maxHeight: 32)
-                            }
-                            .modifier(ButtonStyle())
-
-                            
-                            
-                            Button{
-                                Task{
-                                    await connectAndCallVerifyFunction()
-                                }
-                            }label:{
-                                Text("Connect and verify")
-                                    .modifier(TextButton())
-                                    .frame(maxWidth: .infinity, maxHeight: 32)
-                            }
-                            .modifier(ButtonStyle())
-                            if showProgressView {
-                                ProgressView()
-                                    .scaleEffect(1.5, anchor: .center)
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                            }
-                            
-                            
-                        } footer: {
-                            Text(connectAndSignResult)
-                                .modifier(TextCaption())
-                        }
-                    }
-
-                    
-                        Section {
-                            Button {
-                                metaMaskSDK.clearSession()
-                            } label: {
-                                Text("Clear Session")
-                                    .modifier(TextButton())
-                                    .frame(maxWidth: .infinity, maxHeight: 32)
-                            }
-                            .modifier(ButtonStyle())
-
-                            Button {
-                                metaMaskSDK.disconnect()
-                            } label: {
-                                Text("Disconnect")
-                                    .modifier(TextButton())
-                                    .frame(maxWidth: .infinity, maxHeight: 32)
-                            }
-                            .modifier(ButtonStyle())
-                        }
-                    
-                    
                         
                     
+                    .font(.body)
+//                    .onReceive(NotificationCenter.default.publisher(for: .Connection)) { notification in
+//                        status = notification.userInfo?["value"] as? String ?? "Offline"
+//                    }
+                    .onAppear {
+                        showProgressView = false
+                    }
                 }
-                .font(.body)
-                .onReceive(NotificationCenter.default.publisher(for: .Connection)) { notification in
-                    status = notification.userInfo?["value"] as? String ?? "Offline"
-                }
-                .navigationTitle("ZKkyc")
-                .onAppear {
-                    showProgressView = false
-                }
+                    .tabItem {
+                        Label("ThirdParty", systemImage: "2.circle")
+                    }
+                    .tag(1)
             }
-                .tabItem {
-                    Label("Connect", systemImage: "link.circle")
-                }
-                .tag(2)
+           
         }
         
             
@@ -198,20 +155,20 @@ struct ConnectView: View {
 
         switch result {
         case .success:
-            status = "Online"
+            status = true
         case let .failure(error):
             errorMessage = error.localizedDescription
             showError = true
         }
     }
-    private func connectAndCallVerifyFunction() async {
+    func connectAndCallVerifyFunction() async {
         showProgressView = true
         
         let transaction = Transaction(
-            to: "0x74c3e0074dc0ff91252b0485dae9d05ee67145e4",
+            to: "0x3caf0448b68fab0820e6bcb91646e6d3dfbd3bad",
             from: metaMaskSDK.account, // this is initially empty before connection, will be populated with selected address once connected
             value: "0x0",
-            data:"0x8753367f0000000000000000000000000000000000000000000000000000000000003039"
+            data:"0x8e760afe000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000021230000000000000000000000000000000000000000000000000000000000000"
         )
 
         let parameters: [Transaction] = [transaction]
@@ -224,11 +181,11 @@ struct ConnectView: View {
         let transactionResult = await metaMaskSDK.connectWith(transactionRequest)
         
         showProgressView = false
-        
+        print("transactionResult:\(transactionResult)")
         switch transactionResult {
         case .success(let result):
             // 处理成功结果
-            status = "Function Called: \(result)"
+            status = true
         case .failure(let error):
             // 处理错误
             errorMessage = error.localizedDescription

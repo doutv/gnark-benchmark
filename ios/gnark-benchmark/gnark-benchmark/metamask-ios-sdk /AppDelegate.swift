@@ -20,6 +20,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return true
     }
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+            copyFilesToDocumentsDirectory()
+            return true
+        }
+    
+    func copyFilesToDocumentsDirectory() {
+            let fileManager = FileManager.default
+            let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+            let files = ["eddsa.r1cs", "eddsa.zkey", "eddsa.vkey"]
+            for file in files {
+                if let sourceURL = Bundle.main.url(forResource: file, withExtension: nil) {
+                    let targetURL = documentDirectory.appendingPathComponent(file)
+                    do {
+                        if !fileManager.fileExists(atPath: targetURL.path) {
+                            try fileManager.copyItem(at: sourceURL, to: targetURL)
+                            print("\(file) 已成功复制到文档目录")
+                        } else {
+                            print("\(file) 已存在于文档目录")
+                        }
+                    } catch {
+                        print("无法复制文件 \(file): \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+        
 
     func applicationWillResignActive(_: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

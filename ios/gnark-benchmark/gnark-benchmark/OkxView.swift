@@ -43,18 +43,18 @@ struct OkxView: View {
             Button("Prove") {
                 isRunning = true
                 print("directory.filePath:\(directory.filePath)")
-                let setupStartTime = Date()
+//                let setupStartTime = Date()
                 
                 DispatchQueue.global().async {
-                    EddsaGroth16Setup(directory.filePath)
-                    
-                    let setupEndTime = Date()
-                    DispatchQueue.main.async {
-                        setupMessage = "Setup Time: \(setupEndTime.timeIntervalSince(setupStartTime)) seconds"
-                    }
-                    
-                    
-                    
+//                    EddsaGroth16Setup(directory.filePath)
+//                    
+//                    let setupEndTime = Date()
+//                    DispatchQueue.main.async {
+//                        setupMessage = "Setup Time: \(setupEndTime.timeIntervalSince(setupStartTime)) seconds"
+//                    }
+//                    
+//                    
+//                    
                     let proveStartTime = Date()
                     
                     EddsaGroth16Prove(directory.filePath,Int64(attribute) ,Int64(op) ,Int64(value))
@@ -100,3 +100,4 @@ extension URL {
         absoluteString.replacingOccurrences(of: "file://", with: "")
     }
 }
+

@@ -70,14 +70,14 @@ struct ConnectView: View {
             if proofGenerated {
                 VStack {
                    
-                        
+                        Text("proof path:")
 
 
                         if status{
                             Text("Claim Success!")
                         }
                         
-
+                        
                         
                             Section {
 
@@ -164,6 +164,9 @@ struct ConnectView: View {
     func connectAndCallVerifyFunction() async {
         showProgressView = true
         
+        // 读取proof
+        copyProofToDocumentsDirectory()
+        
         let transaction = Transaction(
             to: "0x3caf0448b68fab0820e6bcb91646e6d3dfbd3bad",
             from: metaMaskSDK.account, // this is initially empty before connection, will be populated with selected address once connected
@@ -199,3 +202,43 @@ struct ConnectView_Previews: PreviewProvider {
         ConnectView()
     }
 }
+
+func readFileFromBundle(resourceName: String, fileExtension: String) -> Data? {
+    // 获取文件的 URL
+    guard let fileURL = Bundle.main.url(forResource: resourceName, withExtension: fileExtension) else {
+        print("文件未找到：\(resourceName).\(fileExtension)")
+        return nil
+    }
+    
+    do {
+        // 读取文件内容
+        let fileData = try Data(contentsOf: fileURL)
+        return fileData
+    } catch {
+        print("无法读取文件：\(error.localizedDescription)")
+        return nil
+    }
+}
+
+func copyProofToDocumentsDirectory() {
+        let fileManager = FileManager.default
+        let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+        let files = ["eddsa.proof"]
+        for file in files {
+            if let sourceURL = Bundle.main.url(forResource: file, withExtension: nil) {
+                let targetURL = documentDirectory.appendingPathComponent(file)
+                do {
+                    if !fileManager.fileExists(atPath: targetURL.path) {
+                        try fileManager.copyItem(at: sourceURL, to: targetURL)
+                        print("\(file) 已成功复制到文档目录")
+                    } else {
+                        print("\(file) 已存在于文档目录")
+                    }
+                } catch {
+                    print("无法复制文件 \(file): \(error.localizedDescription)")
+                    fatalError()
+                }
+            }
+        }
+    }

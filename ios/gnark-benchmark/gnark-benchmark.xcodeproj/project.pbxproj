@@ -28,6 +28,9 @@
 		267E2A402C58B60200F17594 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E2A2D2C58B60200F17594 /* ViewExtension.swift */; };
 		26A61A2E2C58BFE800B65A18 /* ConnectTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A61A2D2C58BFE800B65A18 /* ConnectTestView.swift */; };
 		26A61A302C58DA5E00B65A18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A61A2F2C58DA5E00B65A18 /* AppDelegate.swift */; };
+		26A61A342C5A424B00B65A18 /* eddsa.vkey in Resources */ = {isa = PBXBuildFile; fileRef = 26A61A312C5A424B00B65A18 /* eddsa.vkey */; };
+		26A61A352C5A424B00B65A18 /* eddsa.r1cs in Resources */ = {isa = PBXBuildFile; fileRef = 26A61A322C5A424B00B65A18 /* eddsa.r1cs */; };
+		26A61A362C5A424B00B65A18 /* eddsa.zkey in Resources */ = {isa = PBXBuildFile; fileRef = 26A61A332C5A424B00B65A18 /* eddsa.zkey */; };
 		5095FDBD2C3BF18B00774FC1 /* gnark_benchmarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */; };
 		5095FDBF2C3BF18B00774FC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBE2C3BF18B00774FC1 /* ContentView.swift */; };
 		5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5095FDC02C3BF18C00774FC1 /* Assets.xcassets */; };
@@ -92,6 +95,9 @@
 		267E2A2D2C58B60200F17594 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		26A61A2D2C58BFE800B65A18 /* ConnectTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTestView.swift; sourceTree = "<group>"; };
 		26A61A2F2C58DA5E00B65A18 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		26A61A312C5A424B00B65A18 /* eddsa.vkey */ = {isa = PBXFileReference; lastKnownFileType = file; path = eddsa.vkey; sourceTree = "<group>"; };
+		26A61A322C5A424B00B65A18 /* eddsa.r1cs */ = {isa = PBXFileReference; lastKnownFileType = file; path = eddsa.r1cs; sourceTree = "<group>"; };
+		26A61A332C5A424B00B65A18 /* eddsa.zkey */ = {isa = PBXFileReference; lastKnownFileType = file; path = eddsa.zkey; sourceTree = "<group>"; };
 		5095FDB92C3BF18B00774FC1 /* gnark-benchmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gnark-benchmark.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gnark_benchmarkApp.swift; sourceTree = "<group>"; };
 		5095FDBE2C3BF18B00774FC1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -189,6 +195,9 @@
 				5095FDC02C3BF18C00774FC1 /* Assets.xcassets */,
 				5095FDC22C3BF18C00774FC1 /* Preview Content */,
 				2667543D2C5740020014BF7C /* ThirdPartyView.swift */,
+				26A61A322C5A424B00B65A18 /* eddsa.r1cs */,
+				26A61A312C5A424B00B65A18 /* eddsa.vkey */,
+				26A61A332C5A424B00B65A18 /* eddsa.zkey */,
 				2667543F2C57408E0014BF7C /* OkxView.swift */,
 				26A61A2D2C58BFE800B65A18 /* ConnectTestView.swift */,
 			);
@@ -345,7 +354,10 @@
 				267E2A332C58B60200F17594 /* Images.xcassets in Resources */,
 				267E2A362C58B60200F17594 /* Main.storyboard in Resources */,
 				5095FDC42C3BF18C00774FC1 /* Preview Assets.xcassets in Resources */,
+				26A61A362C5A424B00B65A18 /* eddsa.zkey in Resources */,
+				26A61A342C5A424B00B65A18 /* eddsa.vkey in Resources */,
 				5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */,
+				26A61A352C5A424B00B65A18 /* eddsa.r1cs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

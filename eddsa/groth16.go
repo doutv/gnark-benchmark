@@ -4,6 +4,9 @@ import (
 	"gnark-benchmark/utils"
 	"time"
 
+	"os"
+	"path/filepath"
+
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 
@@ -12,7 +15,7 @@ import (
 	"github.com/consensys/gnark/backend/groth16"
 )
 
-func Groth16Setup(fileDir string) {
+func groth16Setup(fileDir string) {
 	r1cs, err := compileCircuit(r1cs.NewBuilder)
 	if err != nil {
 		panic(err)
@@ -41,13 +44,13 @@ func Groth16Prove(fileDir string, attribute int64, op int64, value int64) {
 	// Read files
 	start = time.Now()
 	r1cs := groth16.NewCS(ecc.BN254)
-	utils.ReadFromFile(r1cs, fileDir+"eddsa.r1cs")
+	utils.ReadFromFile(r1cs, filepath.Join(os.Getenv("HOME"), "Documents", "eddsa.r1cs"))
 	elapsed = time.Since(start)
 	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
 	start = time.Now()
 	pk := groth16.NewProvingKey(ecc.BN254)
-	utils.UnsafeReadFromFile(pk, fileDir+"eddsa.zkey")
+	utils.ReadFromFile(pk, filepath.Join(os.Getenv("HOME"), "Documents", "eddsa.zkey"))
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
@@ -63,7 +66,7 @@ func Groth16Prove(fileDir string, attribute int64, op int64, value int64) {
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
 
-	utils.WriteToFile(proof, fileDir+"eddsa.proof")
+	utils.WriteToFile(proof, filepath.Join(os.Getenv("HOME"), "Documents", "eddsa.proof"))
 
 	// Proof verification
 	// publicWitness, err := witnessData.Public()
@@ -78,3 +81,12 @@ func Groth16Prove(fileDir string, attribute int64, op int64, value int64) {
 	// }
 
 }
+
+// func readFile(filename string) ([]byte, error) {
+// 	path := filepath.Join(os.Getenv("HOME"), "Documents", filename)
+// 	data, err := os.ReadFile(path)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return data, nil
+// }

@@ -31,6 +31,9 @@
 		26A61A342C5A424B00B65A18 /* eddsa.vkey in Resources */ = {isa = PBXBuildFile; fileRef = 26A61A312C5A424B00B65A18 /* eddsa.vkey */; };
 		26A61A352C5A424B00B65A18 /* eddsa.r1cs in Resources */ = {isa = PBXBuildFile; fileRef = 26A61A322C5A424B00B65A18 /* eddsa.r1cs */; };
 		26A61A362C5A424B00B65A18 /* eddsa.zkey in Resources */ = {isa = PBXBuildFile; fileRef = 26A61A332C5A424B00B65A18 /* eddsa.zkey */; };
+		26A61A3A2C5B3B4800B65A18 /* BigInt in Frameworks */ = {isa = PBXBuildFile; productRef = 26A61A392C5B3B4800B65A18 /* BigInt */; };
+		26A61A3C2C5B3B6D00B65A18 /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 26A61A3B2C5B3B6D00B65A18 /* Crypto */; };
+		26A61A3E2C5B3B6D00B65A18 /* _CryptoExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 26A61A3D2C5B3B6D00B65A18 /* _CryptoExtras */; };
 		5095FDBD2C3BF18B00774FC1 /* gnark_benchmarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBC2C3BF18B00774FC1 /* gnark_benchmarkApp.swift */; };
 		5095FDBF2C3BF18B00774FC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDBE2C3BF18B00774FC1 /* ContentView.swift */; };
 		5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5095FDC02C3BF18C00774FC1 /* Assets.xcassets */; };
@@ -117,8 +120,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26A61A3A2C5B3B4800B65A18 /* BigInt in Frameworks */,
 				264C14DB2C5794EE00ED83CE /* metamask-ios-sdk in Frameworks */,
 				50E5FE242C4627B100399287 /* Gnark.xcframework in Frameworks */,
+				26A61A3C2C5B3B6D00B65A18 /* Crypto in Frameworks */,
+				26A61A3E2C5B3B6D00B65A18 /* _CryptoExtras in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +262,9 @@
 			name = "gnark-benchmark";
 			packageProductDependencies = (
 				264C14DA2C5794EE00ED83CE /* metamask-ios-sdk */,
+				26A61A392C5B3B4800B65A18 /* BigInt */,
+				26A61A3B2C5B3B6D00B65A18 /* Crypto */,
+				26A61A3D2C5B3B6D00B65A18 /* _CryptoExtras */,
 			);
 			productName = "gnark-benchmark";
 			productReference = 5095FDB92C3BF18B00774FC1 /* gnark-benchmark.app */;
@@ -333,6 +342,8 @@
 			mainGroup = 5095FDB02C3BF18B00774FC1;
 			packageReferences = (
 				264C14D92C5794EE00ED83CE /* XCRemoteSwiftPackageReference "metamask-ios-sdk" */,
+				26A61A372C5B371500B65A18 /* XCRemoteSwiftPackageReference "swift-crypto" */,
+				26A61A382C5B3B4800B65A18 /* XCRemoteSwiftPackageReference "BigInt" */,
 			);
 			productRefGroup = 5095FDBA2C3BF18B00774FC1 /* Products */;
 			projectDirPath = "";
@@ -763,6 +774,22 @@
 				minimumVersion = 0.8.0;
 			};
 		};
+		26A61A372C5B371500B65A18 /* XCRemoteSwiftPackageReference "swift-crypto" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-crypto.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.5.2;
+			};
+		};
+		26A61A382C5B3B4800B65A18 /* XCRemoteSwiftPackageReference "BigInt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/attaswift/BigInt.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -770,6 +797,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 264C14D92C5794EE00ED83CE /* XCRemoteSwiftPackageReference "metamask-ios-sdk" */;
 			productName = "metamask-ios-sdk";
+		};
+		26A61A392C5B3B4800B65A18 /* BigInt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26A61A382C5B3B4800B65A18 /* XCRemoteSwiftPackageReference "BigInt" */;
+			productName = BigInt;
+		};
+		26A61A3B2C5B3B6D00B65A18 /* Crypto */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26A61A372C5B371500B65A18 /* XCRemoteSwiftPackageReference "swift-crypto" */;
+			productName = Crypto;
+		};
+		26A61A3D2C5B3B6D00B65A18 /* _CryptoExtras */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26A61A372C5B371500B65A18 /* XCRemoteSwiftPackageReference "swift-crypto" */;
+			productName = _CryptoExtras;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

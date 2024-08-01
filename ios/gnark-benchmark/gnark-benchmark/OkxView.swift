@@ -12,6 +12,7 @@ struct OkxView: View {
     
     @Binding var selectedTab: Int
     @Binding var proofGenerated: Bool
+    @Binding var proof:Data
 
     // 0: age
     // 1: gender
@@ -62,9 +63,17 @@ struct OkxView: View {
                   
                     let proveEndTime = Date()
                     proofGenerated = true
-                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async {
                         proveMessage = "Prove Time: \(proveEndTime.timeIntervalSince(proveStartTime)) seconds"
                         isRunning = false
+//                    }
+                    if let fileData = readFileFromDocumentsDirectory(fileName: "eddsa.proof") {
+                                // 处理读取到的数据
+                                
+                    proof = fileData
+                    } else {
+                        
+                        fatalError()
                     }
                 }
             }
@@ -72,7 +81,7 @@ struct OkxView: View {
             .disabled(isRunning)
             
             
-            Text("\(setupMessage) \n \(proveMessage)")
+            Text("\(proveMessage)")
             Button("Go back to third party app"){
                 selectedTab = 1
             }
@@ -90,8 +99,9 @@ struct OkxView_Previews: PreviewProvider {
     @State static var op = -1
     @State static var value = -1
     @State static var proofGenerated = false
+    @State static var proof = Data()
     static var previews: some View {
-        OkxView(selectedTab:$selectedTab, proofGenerated: $proofGenerated, attribute: $attribute, op: $op, value: $value)
+        OkxView(selectedTab:$selectedTab, proofGenerated: $proofGenerated, proof:$proof, attribute: $attribute, op: $op, value: $value)
     }
 }
 

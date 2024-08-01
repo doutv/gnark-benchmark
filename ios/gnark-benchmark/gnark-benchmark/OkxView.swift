@@ -24,6 +24,7 @@ struct OkxView: View {
     // 3: greater than
     @Binding var op :Int
     @Binding var value :Int
+    @Binding var calldata:String
     
     var attributesMap : [Int:String] = [0:"age",1:"gender",2:"nationality"]
     var opMap  : [Int:String] = [0:"equal",1:"not equal",2:"less than",3:"greater than"]
@@ -58,7 +59,7 @@ struct OkxView: View {
 //                    
                     let proveStartTime = Date()
                     
-                    EddsaGroth16Prove(directory.filePath,Int64(attribute) ,Int64(op) ,Int64(value))
+                    calldata = EddsaGroth16Prove(directory.filePath,Int64(attribute) ,Int64(op) ,Int64(value))
 
                   
                     let proveEndTime = Date()
@@ -100,8 +101,9 @@ struct OkxView_Previews: PreviewProvider {
     @State static var value = -1
     @State static var proofGenerated = false
     @State static var proof = Data()
+    @State static var calldata = ""
     static var previews: some View {
-        OkxView(selectedTab:$selectedTab, proofGenerated: $proofGenerated, proof:$proof, attribute: $attribute, op: $op, value: $value)
+        OkxView(selectedTab:$selectedTab, proofGenerated: $proofGenerated, proof:$proof, attribute: $attribute, op: $op, value: $value,calldata: $calldata)
     }
 }
 

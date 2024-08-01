@@ -55,7 +55,7 @@ struct ConnectView: View {
     var body: some View {
         
         TabView(selection: $selectedTab) {
-            OkxView(selectedTab:$selectedTab,proofGenerated: $proofGenerated, proof:$proof, attribute:$attribute,op: $op,value:$value)
+            OkxView(selectedTab:$selectedTab,proofGenerated: $proofGenerated, proof:$proof, attribute:$attribute,op: $op,value:$value,calldata: $calldata)
                 .tabItem {
                     Label("Okx", systemImage: "1.circle")
                 }
@@ -183,32 +183,32 @@ struct ConnectView: View {
         
 //        var calldata : String
 //        构造calldata
-        if let publicWitness = readFileFromDocumentsDirectory(fileName: "public_witness.bin"){
-            publicwitnessCount = publicWitness.count
-            var tempCalldata = Data()
-            let functionSelector = "0x94e4398a"
-           
-            
-
-            
-
-//            calldata = tempCalldata.map { String(format: "%02x", $0) }.joined()
-            
-
-            
-        }else{
-            fatalError()
-        }
+//        if let publicWitness = readFileFromDocumentsDirectory(fileName: "public_witness.bin"){
+//            publicwitnessCount = publicWitness.count
+//            var tempCalldata = Data()
+//            let functionSelector = "0x94e4398a"
+//           
+//            
+//
+//            
+//
+////            calldata = tempCalldata.map { String(format: "%02x", $0) }.joined()
+//            
+//
+//            
+//        }else{
+//            fatalError()
+//        }
        
         
 
         
         
         let transaction = Transaction(
-            to: "0xcb4e5Ed25A0184b7AB7490D60ea0C9d4b808027B",
+            to: "0x73fdb44133ead4b38aba350df187de1f74626f7d",
             from: metaMaskSDK.account, // this is initially empty before connection, will be populated with selected address once connected
             value: "0x0",
-            data:"0xae09343225af1f7eb842c31ad1c2394ce033e8699993322ca20bc6c35747d41dda693e1e20c655e1169c7fe674a8c031913d65ec968ad76aad9b93089f1e361aadb551fd0becf0b2dd6d78a38075a13acd94f75eda35657b5e348a4dbcb1cd9796a250c708b3dcac8b805b0c5c18c2219fa49f3fea70fa19d7458ca30c076fe00c9a19e829ab9d5cc6dacee420d85fa9a600cfeac8f079e821bdedc2cf0c2772bae6b0770b6139e512e1fd4e9496082f92a5a97d6ccf96123e57b0dc6a24540f6966e1c7136dfa86414218bd7735b84ae67ba1b45c2d54f20854a0a4575a2fb8e312f709123715f21de416ebdf64cc844df0a319f16dda657924f6b6d372552d749ea8650000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000011d0cac6c5315f5e7ce0e39c458128b8caa6c80b61035b74f7a147af0cd43d7050000000000000000000000000000000000000000000000000000000000000000003781b646161485443ade42dec68d95c9e9a6ece7c9e491d0715b99bfcc51b501dccb41d97d4b9cafb8e05e62c9bcac76e87bcba77219190b100e6dc64e1f8d2b0531cb30ba890c194b37fbba2b511ebd1fe42109ad006ec376e1cf902fa21110d69730b354c858fda63a9520210554f741050733f3318085326ca0d63868a3020b6ce91c0cb374f5af57084d3dbe689d3d0ce56ae0a26b1ca32eb6990872f5"
+            data:calldata
         )
 
         let parameters: [Transaction] = [transaction]

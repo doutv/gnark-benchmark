@@ -1,16 +1,18 @@
 package eddsa
 
 import (
+	"bytes"
+	"fmt"
 	"gnark-benchmark/utils"
-	"time"
-
+	"log"
+	"math/big"
 	"os"
 	"path/filepath"
+	"strings"
+	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
-
-	"log"
 
 	"github.com/consensys/gnark/backend/groth16"
 )
@@ -30,7 +32,7 @@ func groth16Setup(fileDir string) {
 	utils.WriteToFile(vk, fileDir+"eddsa.vkey")
 }
 
-func Groth16Prove(fileDir string, attribute int64, op int64, value int64) {
+func Groth16Prove(fileDir string, attribute int64, op int64, value int64) string {
 	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()
@@ -68,6 +70,40 @@ func Groth16Prove(fileDir string, attribute int64, op int64, value int64) {
 
 	utils.WriteToFile(proof, filepath.Join(os.Getenv("HOME"), "Documents", "eddsa.proof"))
 
+	buf := bytes.Buffer{}
+
+	_, err = proof.WriteRawTo(&buf)
+	b := buf.Bytes()
+	var p [8]string
+
+	for i := 0; i < 8; i++ {
+		p[i] = fmt.Sprintf("%064x", new(big.Int).SetBytes(b[32*i:32*(i+1)]))
+
+	}
+
+	serialized_proof := strings.Join(p[:], "")
+
+	public_witness, _ := witnessData.Public()
+	serialized_pubwitness, _ := public_witness.MarshalBinary()
+	pubwitness_string := fmt.Sprintf("%x", serialized_pubwitness)
+
+	println("before len(pubwitness_string):%d", len(pubwitness_string))
+
+	fixedLength := 640
+	if len(pubwitness_string) < fixedLength {
+		pubwitness_string = strings.Repeat("0", fixedLength-len(pubwitness_string)) + pubwitness_string
+	} else if len(pubwitness_string) > fixedLength {
+		pubwitness_string = pubwitness_string[len(pubwitness_string)-fixedLength:]
+	}
+	println("before len(pubwitness_string):%d", len(pubwitness_string))
+
+	calldata := "0xae093432" + serialized_proof + pubwitness_string
+
+	println("calldata" + calldata)
+	println("calldata.len:%d", len(calldata))
+	println("len(serialized_proof):%d", len(serialized_proof))
+	println("len(pubwitness_string):%d", len(pubwitness_string))
+
 	// Proof verification
 	// publicWitness, err := witnessData.Public()
 	// if err != nil {
@@ -79,6 +115,7 @@ func Groth16Prove(fileDir string, attribute int64, op int64, value int64) {
 	// if err != nil {
 	// 	panic(err)
 	// }
+	return calldata
 
 }
 

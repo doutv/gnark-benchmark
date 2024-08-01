@@ -11,7 +11,7 @@
 #include "Universe.objc.h"
 
 
-FOUNDATION_EXPORT void EddsaGroth16Prove(NSString* _Nullable fileDir, int64_t attribute, int64_t op, int64_t value);
+FOUNDATION_EXPORT NSString* _Nonnull EddsaGroth16Prove(NSString* _Nullable fileDir, int64_t attribute, int64_t op, int64_t value);
 
 FOUNDATION_EXPORT void EddsaPlonkSetup(NSString* _Nullable fileDir);
 

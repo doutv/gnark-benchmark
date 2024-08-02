@@ -5,8 +5,6 @@
 
 import SwiftUI
 import metamask_ios_sdk
-import CryptoKit
-import BigInt
 extension Notification.Name {
     static let Event = Notification.Name("event")
     static let Connection = Notification.Name("connection")
@@ -74,44 +72,20 @@ struct ConnectView: View {
                 // 读取proof
                 
                 VStack {
-                    
-                   
-//                    if !proof.isEmpty {
-//                        ScrollView {
-//                                    Text("Proof data: \(proof.map { String($0) }.joined(separator: " "))")
-//                                        .padding()
-//                                }
-//                        } else {
-//                            Text("No proof data available")
-//                        }
-                   
-                    
-                    if calldata != ""{
-                        Text(calldata)
-                    }
-
                         if status{
                             Text("Claim Success!")
                         }
-                        
-                        
-                        
                             Section {
 
                                 if !status{
                                     Button{
                                         Task{
-    //                                        metaMaskSDK.clearSession()
-    //                                        metaMaskSDK.disconnect()
                                             await connectAndCallVerifyFunction()
                                         }
                                     }label:{
                                         Text("Claim")
-                                            
                                     }
-                                    
                                 }
-                                
                                 
                                 if showProgressView {
                                     ProgressView()
@@ -119,34 +93,12 @@ struct ConnectView: View {
                                         .progressViewStyle(CircularProgressViewStyle(tint: .black))
                                 }
                                 
-                                
                             } footer: {
                                 Text(connectAndSignResult)
                                     .modifier(TextCaption())
                             }
-                        
-
-                        
-//                            Section {
-//                                Button {
-//
-//                                } label: {
-//                                    Text("Clear Session and disconnect")
-//                                        .modifier(TextButton())
-//                                        .frame(maxWidth: .infinity, maxHeight: 32)
-//                                }
-//                                .modifier(ButtonStyle())
-//
-//                            }
-                        
-                        
-                            
-                        
                     
                     .font(.body)
-//                    .onReceive(NotificationCenter.default.publisher(for: .Connection)) { notification in
-//                        status = notification.userInfo?["value"] as? String ?? "Offline"
-//                    }
                     .onAppear {
                         showProgressView = false
                     }
@@ -156,13 +108,7 @@ struct ConnectView: View {
                     }
                     .tag(1)
             }
-           
         }
-        
-            
-        
-        
-        
     }
 
     func connectSDK() async {
@@ -180,33 +126,11 @@ struct ConnectView: View {
     }
     func connectAndCallVerifyFunction() async {
         showProgressView = true
-        
-//        var calldata : String
-//        构造calldata
-//        if let publicWitness = readFileFromDocumentsDirectory(fileName: "public_witness.bin"){
-//            publicwitnessCount = publicWitness.count
-//            var tempCalldata = Data()
-//            let functionSelector = "0x94e4398a"
-//           
-//            
-//
-//            
-//
-////            calldata = tempCalldata.map { String(format: "%02x", $0) }.joined()
-//            
-//
-//            
-//        }else{
-//            fatalError()
-//        }
        
-        
-
-        
         
         let transaction = Transaction(
             to: "0x73fdb44133ead4b38aba350df187de1f74626f7d",
-            from: metaMaskSDK.account, // this is initially empty before connection, will be populated with selected address once connected
+            from: metaMaskSDK.account,
             value: "0x0",
             data:calldata
         )
@@ -223,7 +147,7 @@ struct ConnectView: View {
         showProgressView = false
         print("transactionResult:\(transactionResult)")
         switch transactionResult {
-        case .success(let result):
+        case .success(_):
             // 处理成功结果
             status = true
         case .failure(let error):
@@ -241,45 +165,6 @@ struct ConnectView_Previews: PreviewProvider {
     }
 }
 
-func readFileFromBundle(resourceName: String, fileExtension: String) -> Data? {
-    // 获取文件的 URL
-    guard let fileURL = Bundle.main.url(forResource: resourceName, withExtension: fileExtension) else {
-        print("文件未找到：\(resourceName).\(fileExtension)")
-        return nil
-    }
-    
-    do {
-        // 读取文件内容
-        let fileData = try Data(contentsOf: fileURL)
-        return fileData
-    } catch {
-        print("无法读取文件：\(error.localizedDescription)")
-        return nil
-    }
-}
-
-//func copyProofToDocumentsDirectory() {
-//        let fileManager = FileManager.default
-//        let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-//
-//        let files = ["eddsa.proof"]
-//        for file in files {
-//            if let sourceURL = Bundle.main.url(forResource: file, withExtension: nil) {
-//                let targetURL = documentDirectory.appendingPathComponent(file)
-//                do {
-//                    if !fileManager.fileExists(atPath: targetURL.path) {
-//                        try fileManager.copyItem(at: sourceURL, to: targetURL)
-//                        print("\(file) 已成功复制到文档目录")
-//                    } else {
-//                        print("\(file) 已存在于文档目录")
-//                    }
-//                } catch {
-//                    print("无法复制文件 \(file): \(error.localizedDescription)")
-//                    fatalError()
-//                }
-//            }
-//        }
-//    }
 func readFileFromDocumentsDirectory(fileName: String) -> Data? {
         let fileManager = FileManager.default
         let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -294,35 +179,5 @@ func readFileFromDocumentsDirectory(fileName: String) -> Data? {
         }
     }
 
-func dataToUint256Array(_ data: Data, count: Int) -> [UInt256] {
-    var array: [UInt256] = []
-    for i in 0..<count {
-        let start = i * 32
-        let end = start + 32
-        let chunk = data[start..<end]
-        let uint256 = UInt256(data: chunk)
-        array.append(uint256)
-    }
-    return array
-}
 
-// uint256 类型的表示
-struct UInt256 {
-    var value: UInt64
 
-    init(data: Data) {
-        self.value = data.withUnsafeBytes { $0.load(as: UInt64.self) }
-    }
-
-    var data: Data {
-        var bigEndianValue = value.bigEndian
-        return Data(bytes: &bigEndianValue, count: MemoryLayout<UInt64>.size).prefix(32)
-    }
-}
-func encodeUint256Array(_ array: [UInt256]) -> Data {
-    var encoded = Data()
-    for uint256 in array {
-        encoded.append(uint256.data)
-    }
-    return encoded
-}

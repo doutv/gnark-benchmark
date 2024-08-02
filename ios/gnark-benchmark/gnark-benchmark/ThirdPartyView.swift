@@ -10,9 +10,6 @@ struct ThirdPartyView: View {
     @Binding var proofGenerated:Bool
     @Binding var claimClicked:Bool
     
-    
-    
-    
     @State private var errorMessage = ""
     @State private var showError = false
     @State private var showProgressView = false
@@ -21,7 +18,6 @@ struct ThirdPartyView: View {
         VStack {
             Text("Criteria: nationality not equal China")
                 .padding()
-            
             
                 Button("Prove") {
                     attribute = 2
@@ -34,35 +30,6 @@ struct ThirdPartyView: View {
                 .foregroundColor(.white)
                 .cornerRadius(8)
             
-            
-            
-            
-            
-//            if proofGenerated{
-//                Button("Claim") {
-//                    claimClicked = true
-//                    
-//                }
-//                .padding()
-//                .background(Color.blue)
-//                .foregroundColor(.white)
-//                .cornerRadius(8)
-//            }
-            
-            
-            
-            
-            
-//            Button("Connect to MetaMask") {
-//                Task {
-//                    await connectSDK()
-//                }
-//            }
-//            .padding()
-//            .background(Color.green)
-//            .foregroundColor(.white)
-//            .cornerRadius(8)
-            
             if showProgressView {
                 ProgressView()
                     .scaleEffect(1.5, anchor: .center)
@@ -73,7 +40,6 @@ struct ThirdPartyView: View {
                 Text("Error: \(errorMessage)")
                     .foregroundColor(.red)
             }
-            
             
         }
     }

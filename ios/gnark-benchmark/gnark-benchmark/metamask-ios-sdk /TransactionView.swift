@@ -77,7 +77,7 @@ struct TransactionView: View {
                             message: Text(errorMessage)
                         )
                     }
-                    .modifier(ButtonStyle())
+                    
 
                     if showProgressView {
                         ProgressView()

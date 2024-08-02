@@ -45,35 +45,20 @@ struct OkxView: View {
             Button("Prove") {
                 isRunning = true
                 print("directory.filePath:\(directory.filePath)")
-//                let setupStartTime = Date()
                 
                 DispatchQueue.global().async {
-//                    EddsaGroth16Setup(directory.filePath)
-//                    
-//                    let setupEndTime = Date()
-//                    DispatchQueue.main.async {
-//                        setupMessage = "Setup Time: \(setupEndTime.timeIntervalSince(setupStartTime)) seconds"
-//                    }
-//                    
-//                    
-//                    
                     let proveStartTime = Date()
                     
                     calldata = EddsaGroth16Prove(directory.filePath,Int64(attribute) ,Int64(op) ,Int64(value))
-
                   
                     let proveEndTime = Date()
                     proofGenerated = true
-//                    DispatchQueue.main.async {
-                        proveMessage = "Prove Time: \(proveEndTime.timeIntervalSince(proveStartTime)) seconds"
-                        isRunning = false
-//                    }
+                    proveMessage = "Prove Time: \(proveEndTime.timeIntervalSince(proveStartTime)) seconds"
+                    isRunning = false
+
                     if let fileData = readFileFromDocumentsDirectory(fileName: "eddsa.proof") {
-                                // 处理读取到的数据
-                                
-                    proof = fileData
+                        proof = fileData
                     } else {
-                        
                         fatalError()
                     }
                 }

@@ -11,12 +11,24 @@
 #include "Universe.objc.h"
 
 
-FOUNDATION_EXPORT void EddsaGroth16ProveAndVerify(NSString* _Nullable fileDir);
+@class EddsaDummyCircuit;
+
+@interface EddsaDummyCircuit : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+// skipped field DummyCircuit.A with unsupported type: github.com/consensys/gnark/frontend.Variable
+
+// skipped field DummyCircuit.C with unsupported type: github.com/consensys/gnark/frontend.Variable
+
+// skipped method DummyCircuit.Define with unsupported parameter or return types
+
+@end
+
+FOUNDATION_EXPORT void EddsaGroth16Prove(NSString* _Nullable fileDir);
 
 FOUNDATION_EXPORT void EddsaGroth16Setup(NSString* _Nullable fileDir);
-
-FOUNDATION_EXPORT void EddsaPlonkProveAndVerify(NSString* _Nullable fileDir);
-
-FOUNDATION_EXPORT void EddsaPlonkSetup(NSString* _Nullable fileDir);
 
 #endif

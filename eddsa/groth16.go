@@ -1,129 +1,153 @@
 package eddsa
 
 import (
-	"bytes"
 	"fmt"
-	"gnark-benchmark/utils"
 	"log"
-	"math/big"
-	"os"
-	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
-	"github.com/consensys/gnark/frontend/cs/r1cs"
+	"github.com/consensys/gnark-crypto/ecc/bn254/fr"
+	"github.com/consensys/gnark-crypto/ecc/bn254/fr/mimc"
+	"github.com/consensys/gnark/constraint"
+
+	"gnark-benchmark/utils"
+
+	"os"
+	"path/filepath"
 
 	"github.com/consensys/gnark/backend/groth16"
+	"github.com/consensys/gnark/backend/witness"
+	"github.com/consensys/gnark/frontend"
 )
 
-func groth16Setup(fileDir string) {
-	r1cs, err := compileCircuit(r1cs.NewBuilder)
-	if err != nil {
-		panic(err)
-	}
-	pk, vk, err := groth16.Setup(r1cs)
-	if err != nil {
-		panic(err)
-	}
-	// Write to file
-	utils.WriteToFile(pk, fileDir+"eddsa.zkey")
-	utils.WriteToFile(r1cs, fileDir+"eddsa.r1cs")
-	utils.WriteToFile(vk, fileDir+"eddsa.vkey")
-}
+func Groth16Prove(fileDir string) {
+	//read file
+	fmt.Printf("fmtprint")
+	log.Printf("log")
 
-func Groth16Prove(fileDir string, attribute int64, op int64, value int64) string {
-	proveStart := time.Now()
-	// Witness generation
-	start := time.Now()
-	witnessData, err := generateWitness(attribute, op, value)
-	if err != nil {
-		panic(err)
-	}
-	elapsed := time.Since(start)
-	log.Printf("Witness Generation: %d ms", elapsed.Milliseconds())
-
-	// Read files
-	start = time.Now()
 	r1cs := groth16.NewCS(ecc.BN254)
-	utils.ReadFromFile(r1cs, filepath.Join(os.Getenv("HOME"), "Documents", "eddsa.r1cs"))
-	elapsed = time.Since(start)
-	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
+	utils.ReadFromFile(r1cs, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.r1cs"))
 
-	start = time.Now()
 	pk := groth16.NewProvingKey(ecc.BN254)
-	utils.ReadFromFile(pk, filepath.Join(os.Getenv("HOME"), "Documents", "eddsa.zkey"))
-	elapsed = time.Since(start)
-	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
+	utils.ReadFromFile(pk, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.zkey"))
 
-	// Proof generation
-	start = time.Now()
-	proof, err := groth16.Prove(r1cs, pk, witnessData)
-	if err != nil {
-		panic(err)
-	}
-	elapsed = time.Since(start)
-	log.Printf("Prove: %d ms", elapsed.Milliseconds())
+	gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 1000)}
 
-	proveElapsed := time.Since(proveStart)
-	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
+	witnessData, _ := frontend.NewWitness(&gw1200k, ecc.BN254.ScalarField())
 
-	utils.WriteToFile(proof, filepath.Join(os.Getenv("HOME"), "Documents", "eddsa.proof"))
+	start := time.Now()
 
-	buf := bytes.Buffer{}
+	groth16.Prove(r1cs, pk, witnessData)
+	fmt.Printf("prove time: %+v\n", time.Since(start))
 
-	_, err = proof.WriteRawTo(&buf)
-	b := buf.Bytes()
-	var p [8]string
+	//end
 
-	for i := 0; i < 8; i++ {
-		p[i] = fmt.Sprintf("%064x", new(big.Int).SetBytes(b[32*i:32*(i+1)]))
+	// gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
+	// witnessData, err := frontend.NewWitness(&gw1200k, ecc.BN254.ScalarField())
 
-	}
+	// cs := groth16.NewCS(ecc.BN254)
+	// utils.ReadFromFile(cs, fileDir+"eddsa.r1cs")
 
-	serialized_proof := strings.Join(p[:], "")
+	// pk := groth16.NewProvingKey(ecc.BN254)
 
-	public_witness, _ := witnessData.Public()
-	serialized_pubwitness, _ := public_witness.MarshalBinary()
-	pubwitness_string := fmt.Sprintf("%x", serialized_pubwitness)
+	// utils.UnsafeReadFromFile(pk, fileDir+"eddsa.zkey")
 
-	println("before len(pubwitness_string):%d", len(pubwitness_string))
+	// var pkbuffer bytes.Buffer
+	// pkn, err := pk.WriteTo(&pkbuffer)
+	// if err != nil {
+	//  panic(err)
+	// }
+	// var r1csbuffer bytes.Buffer
+	// r1csn, err := cs.WriteTo(&r1csbuffer)
+	// if err != nil {
+	//  panic(err)
+	// }
 
-	fixedLength := 640
-	if len(pubwitness_string) < fixedLength {
-		pubwitness_string = strings.Repeat("0", fixedLength-len(pubwitness_string)) + pubwitness_string
-	} else if len(pubwitness_string) > fixedLength {
-		pubwitness_string = pubwitness_string[len(pubwitness_string)-fixedLength:]
-	}
-	println("before len(pubwitness_string):%d", len(pubwitness_string))
+	// log.Printf("end setup. size: %vmb, pk: %vmb constrain: %v mb", (float64(pkn+r1csn))/(1024.0*1024), (float64(pkn))/(1024.0*1024), (float64(r1csn))/(1024.0*1024))
 
-	calldata := "0xae093432" + serialized_proof + pubwitness_string
+	// // 2. Proof creation
+	// groth16.Prove(cs, pk, witnessData)
+	// if err != nil {
+	//  panic(err)
+	// }
 
-	println("calldata" + calldata)
-	println("calldata.len:%d", len(calldata))
-	println("len(serialized_proof):%d", len(serialized_proof))
-	println("len(pubwitness_string):%d", len(pubwitness_string))
+	// start = time.Now()
 
-	// Proof verification
+	// log.Println("start verify")
 	// publicWitness, err := witnessData.Public()
 	// if err != nil {
-	// 	panic(err)
+	//  panic(err)
 	// }
-	// vk := groth16.NewVerifyingKey(ecc.BN254)
-	// utils.ReadFromFile(vk, fileDir+"eddsa.vkey")
+	// // 3. Proof verification
 	// err = groth16.Verify(proof, vk, publicWitness)
+	// if err != nil {
+	//  panic(err)
+	// }
+	// log.Println("end verify")
+}
+
+func generateMimcHash(seed uint64, number int) []byte {
+	var hFunc = mimc.NewMiMC()
+
+	var t fr.Element
+	t.SetUint64(seed)
+	var b = t.Bytes()
+	var bb = b[:]
+	for i := 0; i < number; i++ {
+		hFunc.Reset()
+		hFunc.Write(bb)
+		bb = hFunc.Sum(nil)
+	}
+
+	return bb
+}
+func generateLoadWitness(newBuilder frontend.NewBuilder, circuit frontend.Circuit, witness frontend.Circuit) (
+	constraint.ConstraintSystem, witness.Witness, error) {
+
+	witnessData, err := frontend.NewWitness(witness, ecc.BN254.ScalarField())
+	if err != nil {
+		panic(err)
+	}
+
+	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, circuit)
+	if err != nil {
+		panic(err)
+	}
+
+	return r1cs, witnessData, nil
+}
+func Groth16Setup(fileDir string) {
+	// start := time.Now()
+
+	// // cs, witnessData, err := generateWitness(r1cs.NewBuilder)
+	// gc1200k := DummyCircuit{}
+	// gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
+	// cs, _, err := generateLoadWitness(r1cs.NewBuilder, &gc1200k, &gw1200k)
+
 	// if err != nil {
 	// 	panic(err)
 	// }
-	return calldata
+	// // fmt.Printf("%+v\n", witnessData)
+	// fmt.Printf("generate witness %v\n", time.Since(start))
+	// start = time.Now()
+	// // 1. One time setup
+	// pk, vk, err := groth16.Setup(cs)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// // Write to file
+	// utils.WriteToFile(pk, fileDir+"eddsa.zkey")
+	// utils.WriteToFile(cs, fileDir+"eddsa.r1cs")
+	// utils.WriteToFile(vk, fileDir+"eddsa.vkey")
+
+	// r1cs := groth16.NewCS(ecc.BN254)
+	// utils.ReadFromFile(r1cs, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.r1cs"))
+
+	// pk := groth16.NewProvingKey(ecc.BN254)
+	// utils.ReadFromFile(pk, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.zkey"))
+
+	// gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
+
+	// witnessData, _ := frontend.NewWitness(&gw1200k, ecc.BN254.ScalarField())
 
 }
-
-// func readFile(filename string) ([]byte, error) {
-// 	path := filepath.Join(os.Getenv("HOME"), "Documents", filename)
-// 	data, err := os.ReadFile(path)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return data, nil
-// }

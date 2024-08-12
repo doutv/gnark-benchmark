@@ -25,6 +25,9 @@
 		26A61A3A2C5B3B4800B65A18 /* BigInt in Frameworks */ = {isa = PBXBuildFile; productRef = 26A61A392C5B3B4800B65A18 /* BigInt */; };
 		26A61A3C2C5B3B6D00B65A18 /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = 26A61A3B2C5B3B6D00B65A18 /* Crypto */; };
 		26A61A3E2C5B3B6D00B65A18 /* _CryptoExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 26A61A3D2C5B3B6D00B65A18 /* _CryptoExtras */; };
+		26C82DAD2C69C11C00B0DB62 /* dummy.r1cs in Resources */ = {isa = PBXBuildFile; fileRef = 26C82DAA2C69C11C00B0DB62 /* dummy.r1cs */; };
+		26C82DAE2C69C11C00B0DB62 /* dummy.zkey in Resources */ = {isa = PBXBuildFile; fileRef = 26C82DAB2C69C11C00B0DB62 /* dummy.zkey */; };
+		26C82DAF2C69C11C00B0DB62 /* dummy.vkey in Resources */ = {isa = PBXBuildFile; fileRef = 26C82DAC2C69C11C00B0DB62 /* dummy.vkey */; };
 		5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5095FDC02C3BF18C00774FC1 /* Assets.xcassets */; };
 		5095FDC42C3BF18C00774FC1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5095FDC32C3BF18C00774FC1 /* Preview Assets.xcassets */; };
 		5095FDCE2C3BF18C00774FC1 /* gnark_benchmarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5095FDCD2C3BF18C00774FC1 /* gnark_benchmarkTests.swift */; };
@@ -81,6 +84,9 @@
 		267E2A222C58B60200F17594 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		267E2A282C58B60200F17594 /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
 		26A61A2F2C58DA5E00B65A18 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		26C82DAA2C69C11C00B0DB62 /* dummy.r1cs */ = {isa = PBXFileReference; lastKnownFileType = file; name = dummy.r1cs; path = ../../../dummy1200k/dummy.r1cs; sourceTree = "<group>"; };
+		26C82DAB2C69C11C00B0DB62 /* dummy.zkey */ = {isa = PBXFileReference; lastKnownFileType = file; name = dummy.zkey; path = ../../../dummy1200k/dummy.zkey; sourceTree = "<group>"; };
+		26C82DAC2C69C11C00B0DB62 /* dummy.vkey */ = {isa = PBXFileReference; lastKnownFileType = file; name = dummy.vkey; path = ../../../dummy1200k/dummy.vkey; sourceTree = "<group>"; };
 		5095FDB92C3BF18B00774FC1 /* gnark-benchmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "gnark-benchmark.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5095FDC02C3BF18C00774FC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5095FDC32C3BF18C00774FC1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -172,6 +178,9 @@
 				2667543F2C57408E0014BF7C /* OkxView.swift */,
 				267A3E2F2C5BA270009A9A6D /* eddsa.r1cs */,
 				267A3E2D2C5BA270009A9A6D /* eddsa.vkey */,
+				26C82DAA2C69C11C00B0DB62 /* dummy.r1cs */,
+				26C82DAC2C69C11C00B0DB62 /* dummy.vkey */,
+				26C82DAB2C69C11C00B0DB62 /* dummy.zkey */,
 				267A3E2E2C5BA270009A9A6D /* eddsa.zkey */,
 			);
 			path = "gnark-benchmark";
@@ -329,10 +338,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				267E2A352C58B60200F17594 /* LaunchScreen.xib in Resources */,
+				26C82DAE2C69C11C00B0DB62 /* dummy.zkey in Resources */,
 				267E2A332C58B60200F17594 /* Images.xcassets in Resources */,
+				26C82DAD2C69C11C00B0DB62 /* dummy.r1cs in Resources */,
 				267A3E322C5BA270009A9A6D /* eddsa.r1cs in Resources */,
 				267E2A362C58B60200F17594 /* Main.storyboard in Resources */,
 				5095FDC42C3BF18C00774FC1 /* Preview Assets.xcassets in Resources */,
+				26C82DAF2C69C11C00B0DB62 /* dummy.vkey in Resources */,
 				267A3E302C5BA270009A9A6D /* eddsa.vkey in Resources */,
 				267A3E312C5BA270009A9A6D /* eddsa.zkey in Resources */,
 				5095FDC12C3BF18C00774FC1 /* Assets.xcassets in Resources */,

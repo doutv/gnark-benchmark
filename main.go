@@ -14,14 +14,12 @@ func main() {
 		// eddsa.PlonkSetup("")
 		// eddsa.PlonkProveAndVerify("")
 	} else {
-		attribute := 2
-		op := 1
-		value := 1
+
 		// println("------Groth16 ECDSA Secp256k1------")
 		// ecdsa.groth16Setup("")
 		// ecdsa.Groth16Prove("")
 		println("------Groth16 EdDSA BN254------")
 		// eddsa.groth16Setup("")
-		eddsa.Groth16Prove("", int64(attribute), int64(op), int64(value))
+		eddsa.Groth16Prove("")
 	}
 }

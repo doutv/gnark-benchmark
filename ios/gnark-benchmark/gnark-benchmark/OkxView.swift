@@ -49,18 +49,18 @@ struct OkxView: View {
                 DispatchQueue.global().async {
                     let proveStartTime = Date()
                     
-                    calldata = EddsaGroth16Prove(directory.filePath,Int64(attribute) ,Int64(op) ,Int64(value))
+                    EddsaGroth16Prove(directory.filePath)
                   
                     let proveEndTime = Date()
                     proofGenerated = true
                     proveMessage = "Prove Time: \(proveEndTime.timeIntervalSince(proveStartTime)) seconds"
                     isRunning = false
 
-                    if let fileData = readFileFromDocumentsDirectory(fileName: "eddsa.proof") {
-                        proof = fileData
-                    } else {
-                        fatalError()
-                    }
+//                    if let fileData = readFileFromDocumentsDirectory(fileName: "dummy.proof") {
+//                        proof = fileData
+//                    } else {
+//                        fatalError()
+//                    }
                 }
             }
             .padding()

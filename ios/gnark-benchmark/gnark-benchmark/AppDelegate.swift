@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let fileManager = FileManager.default
             let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
 
-            let files = ["eddsa.r1cs", "eddsa.zkey", "eddsa.vkey"]
+            let files = ["dummy.r1cs", "dummy.zkey", "dummy.vkey"]
             for file in files {
                 if let sourceURL = Bundle.main.url(forResource: file, withExtension: nil) {
                     let targetURL = documentDirectory.appendingPathComponent(file)

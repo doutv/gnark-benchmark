@@ -31,7 +31,7 @@ func Groth16Prove(fileDir string) {
 	pk := groth16.NewProvingKey(ecc.BN254)
 	utils.ReadFromFile(pk, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.zkey"))
 
-	gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 1000)}
+	gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
 
 	witnessData, _ := frontend.NewWitness(&gw1200k, ecc.BN254.ScalarField())
 

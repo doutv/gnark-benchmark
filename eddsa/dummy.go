@@ -14,7 +14,7 @@ func (circuit *DummyCircuit) Define(api frontend.API) error {
 	f, _ := mimc.NewMiMC(api)
 	h := circuit.A
 	// 3636 \approx 1.2M constraints
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 3636; i++ {
 		f.Reset()
 		f.Write(h)
 		h = f.Sum()

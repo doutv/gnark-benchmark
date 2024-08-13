@@ -65,7 +65,7 @@ func Groth16Test() {
 	pk := groth16.NewProvingKey(ecc.BN254)
 	ReadFromFile(pk, "dummy.zkey")
 
-	gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 1000)}
+	gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
 
 	witnessData, _ := frontend.NewWitness(&gw1200k, ecc.BN254.ScalarField())
 

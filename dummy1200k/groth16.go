@@ -18,7 +18,7 @@ import (
 const circuitName = "dummy1200k"
 
 func Groth16Setup(fileDir string) {
-	circuit := DummyCircuit{}
+	circuit := dummyCircuit{}
 	cs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, &circuit)
 	if err != nil {
 		panic(err)
@@ -38,7 +38,7 @@ func Groth16Prove(fileDir string) {
 
 	// Witness generation
 	start := time.Now()
-	gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
+	gw1200k := dummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
 	witnessData, err := frontend.NewWitness(&gw1200k, ecc.BN254.ScalarField())
 	if err != nil {
 		panic(err)

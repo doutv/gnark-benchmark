@@ -5,13 +5,13 @@ import (
 	"github.com/consensys/gnark/std/hash/mimc"
 )
 
-type DummyCircuit struct {
+type dummyCircuit struct {
 	A frontend.Variable `gnark:"a,secret"`
 	C frontend.Variable `gnark:"c,public"`
 }
 
 // 1200k constraints dummy circuit
-func (circuit *DummyCircuit) Define(api frontend.API) error {
+func (circuit *dummyCircuit) Define(api frontend.API) error {
 	f, _ := mimc.NewMiMC(api)
 	h := circuit.A
 	// 3636 \approx 1.2M constraints

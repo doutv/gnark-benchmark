@@ -7,7 +7,7 @@ local-plonk:
 	go run main.go plonk
 	
 android:
-	gomobile bind --target android -androidapi 21 -o ./android/app/libs/gnark.aar ./ecdsa ./eddsa
+	gomobile bind --target android -androidapi 21 -o ./android/app/libs/gnark.aar ./ecdsa ./eddsa ./dummy1200k
 	# Open Android Studio
 	open android -a Android\ Studio
 

@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"math/big"
 	"math/rand"
-	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc/bn254/fr/mimc"
@@ -25,12 +23,8 @@ func panicIfErr(err error) {
 		panic(err)
 	}
 }
-func generateWitness(attribute int64, op int64, value int64) (witness.Witness, error) {
-	//age,gender,natioinality
-	//gender:0 female,1 male
-	//nationality,0 America,1 China
-	//user info先写死: 18,1,0
-	attributes := []int{18, 1, 0}
+func generateWitness() (witness.Witness, error) {
+	attributes := []int{1, 2, 3}
 	fields := make([][]byte, len(attributes))
 
 	curve := tedwards.BN254
@@ -75,9 +69,9 @@ func generateWitness(attribute int64, op int64, value int64) (witness.Witness, e
 	fmt.Println(checkSig)
 
 	// calculate claimHash
-	claimAttributeBytes := convertToBytes(*big.NewInt(attribute), snarkField)
-	claimOperatorBytes := convertToBytes(*big.NewInt(op), snarkField)
-	claimValueBytes := convertToBytes(*big.NewInt(value), snarkField)
+	claimAttributeBytes := convertToBytes(*big.NewInt(1), snarkField)
+	claimOperatorBytes := convertToBytes(*big.NewInt(1), snarkField)
+	claimValueBytes := convertToBytes(*big.NewInt(1), snarkField)
 
 	hFunc.Reset()
 	hFunc.Write(claimAttributeBytes)
@@ -108,23 +102,24 @@ func generateWitness(attribute int64, op int64, value int64) (witness.Witness, e
 	witnessCircuit.Signature.Assign(curve, signature)
 
 	witnessData, err := frontend.NewWitness(&witnessCircuit, ecc.BN254.ScalarField())
-	if err != nil {
-		panic(err)
-	}
-
-	pubw, _ := witnessData.Public()
-
-	marshaled_pubw, err := pubw.MarshalBinary()
-	if err != nil {
-		panic(err)
-	}
-
-	err = os.WriteFile(filepath.Join(os.Getenv("HOME"), "Documents", "public_witness.bin"), marshaled_pubw, 0644)
-	if err != nil {
-		panic(err)
-	}
-
 	panicIfErr(err)
+
+	// write public witness to file
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// pubw, _ := witnessData.Public()
+
+	// marshaled_pubw, err := pubw.MarshalBinary()
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// err = os.WriteFile(filepath.Join(os.Getenv("HOME"), "Documents", "public_witness.bin"), marshaled_pubw, 0644)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	return witnessData, nil
 }

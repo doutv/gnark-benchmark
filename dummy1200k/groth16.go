@@ -28,9 +28,9 @@ func Groth16Setup(fileDir string) {
 		panic(err)
 	}
 	// Write to file
-	utils.WriteToFile(pk1, fileDir + circuitName + ".zkey")
-	utils.WriteToFile(cs, fileDir + circuitName + ".r1cs")
-	utils.WriteToFile(vk, fileDir + circuitName + ".vkey")
+	utils.WriteToFile(pk1, fileDir+circuitName+".zkey")
+	utils.WriteToFile(cs, fileDir+circuitName+".r1cs")
+	utils.WriteToFile(vk, fileDir+circuitName+".vkey")
 }
 
 func Groth16Prove(fileDir string) {
@@ -49,13 +49,13 @@ func Groth16Prove(fileDir string) {
 	// Read files
 	start = time.Now()
 	r1cs := groth16.NewCS(ecc.BN254)
-	utils.ReadFromFile(r1cs, fileDir + circuitName + ".r1cs")
+	utils.ReadFromFile(r1cs, fileDir+circuitName+".r1cs")
 	elapsed = time.Since(start)
 	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
 	start = time.Now()
 	pk := groth16.NewProvingKey(ecc.BN254)
-	utils.UnsafeReadFromFile(pk, fileDir + circuitName + ".zkey")
+	utils.UnsafeReadFromFile(pk, fileDir+circuitName+".zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
@@ -70,8 +70,8 @@ func Groth16Prove(fileDir string) {
 
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
-	
-	utils.WriteToFile(proof, fileDir + circuitName + ".proof")
+
+	utils.WriteToFile(proof, fileDir+circuitName+".proof")
 }
 
 func generateMimcHash(seed uint64, number int) []byte {

@@ -1,6 +1,7 @@
 package eddsa
 
 import (
+	"encoding/json"
 	"gnark-benchmark/utils"
 	"time"
 
@@ -27,12 +28,16 @@ func Groth16Setup(fileDir string) {
 	utils.WriteToFile(vk, fileDir+"eddsa.vkey")
 }
 
-
-func Groth16Prove(fileDir string) {
+func Groth16Prove(fileDir string, attributesJson []byte) {
 	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()
-	witnessData, err := generateWitness()
+	var attributes Attributes
+	err := json.Unmarshal(attributesJson, &attributes)
+	if err != nil {
+		panic(err)
+	}
+	witnessData, err := generateWitness(attributes.Attributes)
 	if err != nil {
 		panic(err)
 	}
@@ -63,7 +68,7 @@ func Groth16Prove(fileDir string) {
 
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
-	
+
 	utils.WriteToFile(proof, fileDir+"eddsa.proof")
 	// Proof verification
 	// publicWitness, err := witnessData.Public()

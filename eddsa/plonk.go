@@ -1,6 +1,7 @@
 package eddsa
 
 import (
+	"encoding/json"
 	"gnark-benchmark/utils"
 	"time"
 
@@ -35,9 +36,15 @@ func PlonkSetup(fileDir string) {
 	utils.WriteToFile(vk, fileDir+"eddsa.plonk.vkey")
 }
 
-func PlonkProve(fileDir string) {
+func PlonkProve(fileDir string, attributesJson []byte) {
 	proveStart := time.Now()
-	witnessData, err := generateWitness()
+	var attributes Attributes
+	err := json.Unmarshal(attributesJson, &attributes)
+	if err != nil {
+		panic(err)
+	}
+	log.Printf("Attributes: %v", attributes)
+	witnessData, err := generateWitness(attributes.Attributes)
 	if err != nil {
 		panic(err)
 	}

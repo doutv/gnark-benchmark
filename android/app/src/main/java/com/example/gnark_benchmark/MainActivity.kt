@@ -1,43 +1,36 @@
 package com.example.gnark_benchmark
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.gnark_benchmark.ui.theme.GnarkbenchmarkTheme
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStreamReader
-import ecdsa.Ecdsa
-import eddsa.Eddsa
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
-import android.content.Context
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.gnark_benchmark.ui.theme.GnarkbenchmarkTheme
+import ecdsa.Ecdsa
+import eddsa.Eddsa
+import kotlinx.coroutines.launch
 
 // Other imports remain the same
 
@@ -46,8 +39,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GnarkbenchmarkTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    BenchmarkComponent(applicationContext.filesDir.toString())
+                Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+                    BenchmarkComponent(
+                        applicationContext.filesDir.toString(),
+                        modifier = Modifier.padding(paddingValues)
+                    )
                 }
             }
         }
@@ -55,7 +51,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun BenchmarkComponent(fileDir: String) {
+fun BenchmarkComponent(fileDir: String, modifier: Modifier = Modifier) {
     val setupTime = remember { mutableStateOf("Not started") }
     val proveAndVerifyTime = remember { mutableStateOf("Not started") }
     val selectedAlgorithm = remember { mutableStateOf("EdDSA") }
@@ -64,9 +60,11 @@ fun BenchmarkComponent(fileDir: String) {
     val algorithms = listOf("EdDSA", "ECDSA")
     val systems = listOf("Groth16", "Plonk")
 
-    Column(modifier = Modifier
-        .padding(top = 200.dp)
-        .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier
+            .padding(top = 200.dp)
+            .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         // Algorithm Selector
         DropdownMenuComponent("Select Algorithm", selectedAlgorithm.value, algorithms) { selected ->
             selectedAlgorithm.value = selected
@@ -106,7 +104,8 @@ fun BenchmarkComponent(fileDir: String) {
                     else -> Log.e("BenchmarkComponent", "Invalid selection")
                 }
                 val proveAndVerifyEndTime = System.nanoTime()
-                proveAndVerifyTime.value = "Prove and Verify: ${(proveAndVerifyEndTime - proveAndVerifyStartTime) / 1_000_000} ms"
+                proveAndVerifyTime.value =
+                    "Prove and Verify: ${(proveAndVerifyEndTime - proveAndVerifyStartTime) / 1_000_000} ms"
             }
         }) {
             Text("Prove and Verify")
@@ -116,25 +115,45 @@ fun BenchmarkComponent(fileDir: String) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownMenuComponent(label: String, selectedItem: String, items: List<String>, onItemSelected: (String) -> Unit) {
+fun DropdownMenuComponent(
+    label: String,
+    selectedItem: String,
+    items: List<String>,
+    onItemSelected: (String) -> Unit
+) {
     var expanded: Boolean by remember { mutableStateOf(false) }
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentSize(Alignment.TopStart)) {
-        Text(selectedItem, modifier = Modifier
-            .fillMaxWidth()
-            .clickable { expanded = true })
-        DropdownMenu(
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = it }
+    ) {
+        TextField(
+            // The `menuAnchor` modifier must be passed to the text field to handle
+            // expanding/collapsing the menu on click. A read-only text field has
+            // the anchor type `PrimaryNotEditable`.
+            modifier = Modifier.menuAnchor(),
+            value = selectedItem,
+            onValueChange = {},
+            readOnly = true,
+            singleLine = true,
+            label = { Text(text = label) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
+        )
+        ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.fillMaxWidth()
+            onDismissRequest = { expanded = false }
         ) {
-            items.forEach { label ->
-                DropdownMenuItem(text = { Text(text = label) }, onClick = {
-                        onItemSelected(label)
+            items.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(item, style = MaterialTheme.typography.bodyLarge) },
+                    onClick = {
+                        onItemSelected(item)
                         expanded = false
-                    })
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
             }
         }
     }

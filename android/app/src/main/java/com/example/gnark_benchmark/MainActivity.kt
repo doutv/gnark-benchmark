@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.gnark_benchmark.ui.theme.GnarkbenchmarkTheme
+import dummy1200k.Dummy1200k
 import ecdsa.Ecdsa
 import eddsa.Eddsa
 import kotlinx.coroutines.launch
@@ -54,10 +55,10 @@ class MainActivity : ComponentActivity() {
 fun BenchmarkComponent(fileDir: String, modifier: Modifier = Modifier) {
     val setupTime = remember { mutableStateOf("Not started") }
     val proveAndVerifyTime = remember { mutableStateOf("Not started") }
-    val selectedAlgorithm = remember { mutableStateOf("EdDSA") }
+    val selectedAlgorithm = remember { mutableStateOf("Dummy 1200k") }
     val selectedSystem = remember { mutableStateOf("Groth16") }
     val coroutineScope = rememberCoroutineScope()
-    val algorithms = listOf("EdDSA", "ECDSA")
+    val algorithms = listOf("Dummy 1200k", "EdDSA", "ECDSA")
     val systems = listOf("Groth16", "Plonk")
 
     Column(
@@ -78,6 +79,7 @@ fun BenchmarkComponent(fileDir: String, modifier: Modifier = Modifier) {
             coroutineScope.launch {
                 val setupStartTime = System.nanoTime()
                 when (selectedAlgorithm.value to selectedSystem.value) {
+                    "Dummy 1200k" to "Groth16" -> Dummy1200k.groth16Setup(fileDir)
                     "ECDSA" to "Groth16" -> Ecdsa.groth16Setup(fileDir)
                     "ECDSA" to "Plonk" -> Ecdsa.plonkSetup(fileDir)
                     "EdDSA" to "Groth16" -> Eddsa.groth16Setup(fileDir)
@@ -97,10 +99,11 @@ fun BenchmarkComponent(fileDir: String, modifier: Modifier = Modifier) {
             coroutineScope.launch {
                 val proveAndVerifyStartTime = System.nanoTime()
                 when (selectedAlgorithm.value to selectedSystem.value) {
-                    "ECDSA" to "Groth16" -> Ecdsa.groth16ProveAndVerify(fileDir)
-                    "ECDSA" to "Plonk" -> Ecdsa.plonkProveAndVerify(fileDir)
-                    "EdDSA" to "Groth16" -> Eddsa.groth16ProveAndVerify(fileDir)
-                    "EdDSA" to "Plonk" -> Eddsa.plonkProveAndVerify(fileDir)
+                    "Dummy 1200k" to "Groth16" -> Dummy1200k.groth16Prove(fileDir)
+                    "ECDSA" to "Groth16" -> Ecdsa.groth16Prove(fileDir)
+                    "ECDSA" to "Plonk" -> Ecdsa.plonkProve(fileDir)
+                    "EdDSA" to "Groth16" -> Eddsa.groth16Prove(fileDir)
+//                    "EdDSA" to "Plonk" -> Eddsa.plonkSetup(fileDir)
                     else -> Log.e("BenchmarkComponent", "Invalid selection")
                 }
                 val proveAndVerifyEndTime = System.nanoTime()

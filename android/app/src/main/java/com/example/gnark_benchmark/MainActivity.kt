@@ -31,18 +31,25 @@ import com.example.gnark_benchmark.ui.theme.GnarkbenchmarkTheme
 import dummy1200k.Dummy1200k
 import ecdsa.Ecdsa
 import eddsa.Eddsa
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 // Other imports remain the same
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val fileDir =
+            getExternalFilesDir(null)?.absolutePath?.toString().orEmpty().removeSuffix("/") + "/"
         setContent {
             GnarkbenchmarkTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
                     BenchmarkComponent(
-                        applicationContext.filesDir.toString(),
+                        fileDir,
                         modifier = Modifier.padding(paddingValues)
                     )
                 }
@@ -51,15 +58,27 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+interface SelectableItem {
+    val text: String
+}
+
+enum class Algorithm(override val text: String) : SelectableItem {
+    Dummy1200k("Dummy 1200k"), ECDSA("ECDSA"), EdDSA("EdDSA")
+}
+
+enum class System(override val text: String) : SelectableItem {
+    Groth16("Groth16"), Plonk("Plonk")
+}
+
 @Composable
 fun BenchmarkComponent(fileDir: String, modifier: Modifier = Modifier) {
     val setupTime = remember { mutableStateOf("Not started") }
     val proveAndVerifyTime = remember { mutableStateOf("Not started") }
-    val selectedAlgorithm = remember { mutableStateOf("Dummy 1200k") }
-    val selectedSystem = remember { mutableStateOf("Groth16") }
+    val selectedAlgorithm = remember { mutableStateOf(Algorithm.entries.first()) }
+    val selectedSystem = remember { mutableStateOf(System.entries.first()) }
     val coroutineScope = rememberCoroutineScope()
-    val algorithms = listOf("Dummy 1200k", "EdDSA", "ECDSA")
-    val systems = listOf("Groth16", "Plonk")
+    val algorithms = Algorithm.entries
+    val systems = System.entries
 
     Column(
         modifier = modifier
@@ -77,16 +96,26 @@ fun BenchmarkComponent(fileDir: String, modifier: Modifier = Modifier) {
         Button(onClick = {
             setupTime.value = "Setting up..."
             coroutineScope.launch {
-                val setupStartTime = System.nanoTime()
+                val setupStartTime = java.lang.System.nanoTime()
                 when (selectedAlgorithm.value to selectedSystem.value) {
-                    "Dummy 1200k" to "Groth16" -> Dummy1200k.groth16Setup(fileDir)
-                    "ECDSA" to "Groth16" -> Ecdsa.groth16Setup(fileDir)
-                    "ECDSA" to "Plonk" -> Ecdsa.plonkSetup(fileDir)
-                    "EdDSA" to "Groth16" -> Eddsa.groth16Setup(fileDir)
-                    "EdDSA" to "Plonk" -> Eddsa.plonkSetup(fileDir)
+                    Algorithm.Dummy1200k to System.Groth16 ->
+                        withContext(Dispatchers.Default) { Dummy1200k.groth16Setup(fileDir) }
+
+                    Algorithm.ECDSA to System.Groth16 ->
+                        withContext(Dispatchers.Default) { Ecdsa.groth16Setup(fileDir) }
+
+                    Algorithm.ECDSA to System.Plonk ->
+                        withContext(Dispatchers.Default) { Ecdsa.plonkSetup(fileDir) }
+
+                    Algorithm.EdDSA to System.Groth16 ->
+                        withContext(Dispatchers.Default) { Eddsa.groth16Setup(fileDir) }
+
+                    Algorithm.EdDSA to System.Groth16 ->
+                        withContext(Dispatchers.Default) { Eddsa.plonkSetup(fileDir) }
+
                     else -> Log.e("BenchmarkComponent", "Invalid selection")
                 }
-                val setupEndTime = System.nanoTime()
+                val setupEndTime = java.lang.System.nanoTime()
                 setupTime.value = "Setup: ${(setupEndTime - setupStartTime) / 1_000_000} ms"
             }
         }) {
@@ -97,16 +126,50 @@ fun BenchmarkComponent(fileDir: String, modifier: Modifier = Modifier) {
         Button(onClick = {
             proveAndVerifyTime.value = "Proving..."
             coroutineScope.launch {
-                val proveAndVerifyStartTime = System.nanoTime()
+                val proveAndVerifyStartTime = java.lang.System.nanoTime()
                 when (selectedAlgorithm.value to selectedSystem.value) {
-                    "Dummy 1200k" to "Groth16" -> Dummy1200k.groth16Prove(fileDir)
-                    "ECDSA" to "Groth16" -> Ecdsa.groth16Prove(fileDir)
-                    "ECDSA" to "Plonk" -> Ecdsa.plonkProve(fileDir)
-                    "EdDSA" to "Groth16" -> Eddsa.groth16Prove(fileDir)
-//                    "EdDSA" to "Plonk" -> Eddsa.plonkSetup(fileDir)
+                    Algorithm.Dummy1200k to System.Groth16 ->
+                        withContext(Dispatchers.Default) { Dummy1200k.groth16Prove(fileDir) }
+
+                    Algorithm.ECDSA to System.Groth16 -> withContext(Dispatchers.Default) {
+                        val credential = KycCredential(
+                            credential = 12UL,
+                            age = 18UL,
+                            gender = 1UL,
+                            nation = 0b10UL,
+                            expireTime = 123UL,
+                        )
+                        val credentialJson = Json.encodeToString(credential).encodeToByteArray()
+                        Ecdsa.groth16Prove(fileDir, credentialJson)
+                    }
+
+                    Algorithm.ECDSA to System.Plonk -> withContext(Dispatchers.Default) {
+                        val credential = KycCredential(
+                            credential = 12UL,
+                            age = 18UL,
+                            gender = 1UL,
+                            nation = 0b10UL,
+                            expireTime = 123UL,
+                        )
+                        val credentialJson = Json.encodeToString(credential).encodeToByteArray()
+                        Ecdsa.plonkProve(fileDir, credentialJson)
+                    }
+
+                    Algorithm.EdDSA to System.Groth16 -> withContext(Dispatchers.Default) {
+                        val attributes = Attributes(intArrayOf(1, 2, 3))
+                        val attributesJson = Json.encodeToString(attributes).encodeToByteArray()
+                        Eddsa.groth16Prove(fileDir, attributesJson)
+                    }
+
+                    Algorithm.EdDSA to System.Groth16 -> withContext(Dispatchers.Default) {
+                        val attributes = Attributes(intArrayOf(1, 2, 3))
+                        val attributesJson = Json.encodeToString(attributes).encodeToByteArray()
+                        Eddsa.plonkProve(fileDir, attributesJson)
+                    }
+
                     else -> Log.e("BenchmarkComponent", "Invalid selection")
                 }
-                val proveAndVerifyEndTime = System.nanoTime()
+                val proveAndVerifyEndTime = java.lang.System.nanoTime()
                 proveAndVerifyTime.value =
                     "Prove and Verify: ${(proveAndVerifyEndTime - proveAndVerifyStartTime) / 1_000_000} ms"
             }
@@ -120,11 +183,11 @@ fun BenchmarkComponent(fileDir: String, modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownMenuComponent(
+fun <T : SelectableItem> DropdownMenuComponent(
     label: String,
-    selectedItem: String,
-    items: List<String>,
-    onItemSelected: (String) -> Unit
+    selectedItem: T,
+    items: List<T>,
+    onItemSelected: (T) -> Unit
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
@@ -136,7 +199,7 @@ fun DropdownMenuComponent(
             // expanding/collapsing the menu on click. A read-only text field has
             // the anchor type `PrimaryNotEditable`.
             modifier = Modifier.menuAnchor(),
-            value = selectedItem,
+            value = selectedItem.text,
             onValueChange = {},
             readOnly = true,
             singleLine = true,
@@ -150,7 +213,7 @@ fun DropdownMenuComponent(
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(item, style = MaterialTheme.typography.bodyLarge) },
+                    text = { Text(item.text, style = MaterialTheme.typography.bodyLarge) },
                     onClick = {
                         onItemSelected(item)
                         expanded = false
@@ -161,3 +224,28 @@ fun DropdownMenuComponent(
         }
     }
 }
+
+@Serializable
+data class Attributes(val attributes: IntArray) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Attributes
+
+        return attributes.contentEquals(other.attributes)
+    }
+
+    override fun hashCode(): Int {
+        return attributes.contentHashCode()
+    }
+}
+
+@Serializable
+data class KycCredential(
+    val credential: ULong,
+    val age: ULong,
+    val gender: ULong,
+    val nation: ULong,
+    val expireTime: ULong,
+)

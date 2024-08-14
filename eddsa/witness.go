@@ -23,8 +23,7 @@ func panicIfErr(err error) {
 		panic(err)
 	}
 }
-func generateWitness() (witness.Witness, error) {
-	attributes := []int{1, 2, 3}
+func generateWitness(attributes []int) (witness.Witness, error) {
 	fields := make([][]byte, len(attributes))
 
 	curve := tedwards.BN254

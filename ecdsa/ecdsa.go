@@ -2,6 +2,7 @@ package ecdsa
 
 import (
 	"crypto/rand"
+	"encoding/json"
 	"gnark-benchmark/utils"
 	"hash"
 	"time"
@@ -87,16 +88,16 @@ func (circuit *kycCircuit) Define(api frontend.API) error {
 	return nil
 }
 
-type kycCredential struct {
-	Credential uint64
-	Age        uint64
-	Gender     uint64
-	Nation     uint64
-	Expirtime  uint64
+type KycCredential struct {
+	Credential uint64 `json:"credential"`
+	Age        uint64 `json:"age"`
+	Gender     uint64 `json:"gender"`
+	Nation     uint64 `json:"nation"`
+	ExpireTime uint64 `json:"expireTime"`
 }
 
 // Sign signs a transaction
-func (t *kycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecdsa.Signature, []byte, error) {
+func (t *KycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecdsa.Signature, []byte, error) {
 
 	h.Reset()
 
@@ -121,9 +122,9 @@ func (t *kycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecd
 	b = nation.Bytes()
 	_, _ = h.Write(b[:])
 
-	var expirTime fr.Element
-	expirTime.SetUint64(t.Expirtime)
-	b = expirTime.Bytes()
+	var expireTime fr.Element
+	expireTime.SetUint64(t.ExpireTime)
+	b = expireTime.Bytes()
 	_, _ = h.Write(b[:])
 
 	msg := h.Sum(nil)
@@ -139,7 +140,6 @@ func (t *kycCredential) Sign(priv *secp_ecdsa.PrivateKey, h hash.Hash) (secp_ecd
 	return sig, msg, nil
 }
 
-
 func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, error) {
 	circuit := kycCircuit{}
 	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
@@ -149,13 +149,12 @@ func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem
 	return r1cs, nil
 }
 
-func generateWitness() (witness.Witness, error) {
+func generateWitness(credential KycCredential) (witness.Witness, error) {
 	hFunc := secp_mimc.NewMiMC()
 	// generate parameters
 	privKey, _ := secp_ecdsa.GenerateKey(rand.Reader)
 
 	// sign
-	credential := kycCredential{Credential: 12, Age: 18, Gender: 1, Nation: 0b10, Expirtime: 123}
 	sigBin, _, err := credential.Sign(privKey, hFunc)
 	if err != nil {
 		panic(err)
@@ -171,7 +170,7 @@ func generateWitness() (witness.Witness, error) {
 			R: emulated.ValueOf[emulated.Secp256k1Fr](r),
 			S: emulated.ValueOf[emulated.Secp256k1Fr](s),
 		},
-		Credential: credential.Credential, Age: credential.Age, Gender: credential.Gender, Nation: credential.Nation, ExpireTime: credential.Expirtime,
+		Credential: credential.Credential, Age: credential.Age, Gender: credential.Gender, Nation: credential.Nation, ExpireTime: credential.ExpireTime,
 		MinAge: 1,
 		MaxAge: 60,
 		//isMale: 1,
@@ -205,11 +204,16 @@ func Groth16Setup(fileDir string) {
 	utils.WriteToFile(vk, fileDir+"ecdsa.vkey")
 }
 
-func Groth16Prove(fileDir string) {
+func Groth16Prove(fileDir string, credentialJson []byte) {
 	proveStart := time.Now()
 	// Witness generation
 	start := time.Now()
-	witnessData, err := generateWitness()
+	var credential KycCredential
+	err := json.Unmarshal(credentialJson, &credential)
+	if err != nil {
+		panic(err)
+	}
+	witnessData, err := generateWitness(credential)
 	if err != nil {
 		panic(err)
 	}
@@ -225,7 +229,7 @@ func Groth16Prove(fileDir string) {
 
 	start = time.Now()
 	pk := groth16.NewProvingKey(ecc.BN254)
-	
+
 	utils.UnsafeReadFromFile(pk, fileDir+"ecdsa.zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
@@ -241,7 +245,7 @@ func Groth16Prove(fileDir string) {
 
 	proveElapsed := time.Since(proveStart)
 	log.Printf("Total Prove time: %d ms", proveElapsed.Milliseconds())
-	
+
 	utils.WriteToFile(proof, fileDir+"ecdsa.proof")
 	// Proof verification
 	// publicWitness, err := witnessData.Public()
@@ -276,9 +280,14 @@ func PlonkSetup(fileDir string) {
 	utils.WriteToFile(vk, fileDir+"ecdsa.plonk.vkey")
 }
 
-func PlonkProve(fileDir string) {
+func PlonkProve(fileDir string, credentialJson []byte) {
 	proveStart := time.Now()
-	witnessData, err := generateWitness()
+	var credential KycCredential
+	err := json.Unmarshal(credentialJson, &credential)
+	if err != nil {
+		panic(err)
+	}
+	witnessData, err := generateWitness(credential)
 	if err != nil {
 		panic(err)
 	}

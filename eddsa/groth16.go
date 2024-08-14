@@ -1,44 +1,34 @@
 package eddsa
 
 import (
-	"fmt"
-	"log"
-	"time"
-
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fr"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fr/mimc"
 	"github.com/consensys/gnark/constraint"
 
-	"gnark-benchmark/utils"
-
-	"os"
-	"path/filepath"
-
-	"github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/backend/witness"
 	"github.com/consensys/gnark/frontend"
 )
 
 func Groth16Prove(fileDir string) {
 	//read file
-	fmt.Printf("fmtprint")
-	log.Printf("log")
+	// fmt.Printf("fmtprint")
+	// log.Printf("log")
 
-	r1cs := groth16.NewCS(ecc.BN254)
-	utils.ReadFromFile(r1cs, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.r1cs"))
+	// r1cs := groth16.NewCS(ecc.BN254)
+	// utils.ReadFromFile(r1cs, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.r1cs"))
 
-	pk := groth16.NewProvingKey(ecc.BN254)
-	utils.ReadFromFile(pk, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.zkey"))
+	// pk := groth16.NewProvingKey(ecc.BN254)
+	// utils.ReadFromFile(pk, filepath.Join(os.Getenv("HOME"), "Documents", "dummy.zkey"))
 
-	gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
+	// gw1200k := DummyCircuit{A: 3, C: generateMimcHash(3, 3636)}
 
-	witnessData, _ := frontend.NewWitness(&gw1200k, ecc.BN254.ScalarField())
+	// witnessData, _ := frontend.NewWitness(&gw1200k, ecc.BN254.ScalarField())
 
-	start := time.Now()
+	// start := time.Now()
 
-	groth16.Prove(r1cs, pk, witnessData)
-	fmt.Printf("prove time: %+v\n", time.Since(start))
+	// groth16.Prove(r1cs, pk, witnessData)
+	// fmt.Printf("prove time: %+v\n", time.Since(start))
 
 	//end
 

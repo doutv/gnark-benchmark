@@ -1,4 +1,4 @@
-package main
+package dummy1200k
 
 import (
 	"github.com/consensys/gnark/frontend"
@@ -10,6 +10,7 @@ type DummyCircuit struct {
 	C frontend.Variable `gnark:"c,public"`
 }
 
+// 1200k constraints dummy circuit
 func (circuit *DummyCircuit) Define(api frontend.API) error {
 	f, _ := mimc.NewMiMC(api)
 	h := circuit.A

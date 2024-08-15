@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"gnark-benchmark/dummy1200k"
 	"gnark-benchmark/ecdsa"
 	"gnark-benchmark/eddsa"
 	"os"

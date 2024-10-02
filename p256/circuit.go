@@ -6,7 +6,7 @@ import (
 	"github.com/consensys/gnark/std/math/emulated"
 )
 
-const NumSignatures = 10
+const NumSignatures = 100
 type EcdsaCircuit[T, S emulated.FieldParams] struct {
 	Sig [NumSignatures]Signature[S]
 	Msg [NumSignatures]emulated.Element[S]

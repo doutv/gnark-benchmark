@@ -1,12 +1,14 @@
 package main
 
 import (
-	"gnark-benchmark/sha2"
+	"gnark-benchmark/sha3"
 )
 
 func main() {
-	sha2.Groth16Setup("")
-	sha2.Groth16Prove("")
+	sha3.Groth16Setup("")
+	sha3.Groth16Prove("")
+	// sha2.Groth16Setup("")
+	// sha2.Groth16Prove("")
 	// p256.Groth16Setup("")
 	// p256.Groth16Prove("")
 	// attributes, err := json.Marshal(eddsa.Attributes{Attributes: []int{1, 2, 3}})

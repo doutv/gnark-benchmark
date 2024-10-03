@@ -4,11 +4,11 @@ import (
 	cryptoecdsa "crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"fmt"
 	"gnark-benchmark/utils"
 	"log"
 	"math/big"
 	"os"
-	"slices"
 	"strconv"
 	"time"
 
@@ -26,6 +26,7 @@ import (
 )
 
 const NumSignatures = 1
+
 var circuitName string
 
 func init() {
@@ -77,10 +78,8 @@ func generateWitness() (witness.Witness, error) {
 		}
 
 		// hashIn += Pub[i].X + Pub[i].Y + Msg[i]
-		pubX := publicKey.X.Bytes() // Big endian
-		slices.Reverse(pubX)
-		pubY := publicKey.Y.Bytes() // Big endian
-		slices.Reverse(pubY)
+		pubX := publicKey.X.Bytes()
+		pubY := publicKey.Y.Bytes()
 		hashIn = append(hashIn, pubX[:]...)
 		hashIn = append(hashIn, pubY[:]...)
 		hashIn = append(hashIn, msgHash[:]...)
@@ -97,6 +96,18 @@ func generateWitness() (witness.Witness, error) {
 	}
 	hashOut := sha3.Sum256(hashIn)
 	copy(witness.Commitment[:], uints.NewU8Array(hashOut[:]))
+	// Print hashIn in the desired format
+	fmt.Print("hashIn {")
+	for i, b := range hashIn {
+		if i > 0 {
+			fmt.Print(", ")
+		}
+		if i % 8 == 0 {
+			fmt.Println()
+		}
+		fmt.Printf("%d_Val: %d", i, b)
+	}
+	fmt.Println("}")
 
 	witnessData, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
 	if err != nil {
@@ -179,10 +190,10 @@ func Groth16Prove(fileDir string) {
 }
 
 func genRandomBytes(size int) ([]byte, error) {
-    blk := make([]byte, size)
-    _, err := rand.Read(blk)
-    if err != nil {
-        return nil, err
-    }
-    return blk, nil
+	blk := make([]byte, size)
+	_, err := rand.Read(blk)
+	if err != nil {
+		return nil, err
+	}
+	return blk, nil
 }

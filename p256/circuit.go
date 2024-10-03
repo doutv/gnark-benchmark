@@ -22,7 +22,7 @@ func (c *EcdsaCircuit[T, S]) Define(api frontend.API) error {
 		c.Pub[i].Verify(api, sw_emulated.GetCurveParams[T](), &c.Msg[i], &c.Sig[i])
 	}
 	// SHA-3 (Keccak256) Commit to all signatures
-	h, err := sha3.New256(api)
+	h, err := sha3.NewLegacyKeccak256(api)
 	if err != nil {
 		return err
 	}

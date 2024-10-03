@@ -57,7 +57,7 @@ func generateWitness() (witness.Witness, error) {
 		if err != nil {
 			panic(err)
 		}
-		msgHash := sha3.New256().Sum(msg)
+		msgHash := keccak256(msg)
 		sigBin, _ := privKey.Sign(rand.Reader, msgHash[:], nil)
 
 		// Try verify
@@ -81,6 +81,9 @@ func generateWitness() (witness.Witness, error) {
 		// hashIn += Pub[i].X + Pub[i].Y + Msg[i]
 		pubX := publicKey.X.Bytes()
 		pubY := publicKey.Y.Bytes()
+		println("pubX: ", pubX)
+		println("pubY: ", pubY)
+		println("msgHash: ", msgHash[:])
 		hashIn = append(hashIn, pubX[:]...)
 		hashIn = append(hashIn, pubY[:]...)
 		hashIn = append(hashIn, msgHash[:]...)
@@ -95,7 +98,7 @@ func generateWitness() (witness.Witness, error) {
 			Y: emulated.ValueOf[emulated.P256Fp](publicKey.Y),
 		}
 	}
-	hashOut := sha3.New256().Sum(hashIn)
+	hashOut := keccak256(hashIn)
 	copy(witness.Commitment[:], uints.NewU8Array(hashOut[:]))
 
 	witnessData, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
@@ -148,7 +151,8 @@ func Groth16Prove(fileDir string) {
 
 	// Proof generation
 	start = time.Now()
-	proof, err := groth16.Prove(r1cs, pk, witnessData, solidity.WithProverTargetSolidityVerifier(backend.GROTH16))
+	proverOption := solidity.WithProverTargetSolidityVerifier(backend.GROTH16)
+	proof, err := groth16.Prove(r1cs, pk, witnessData, proverOption)
 	if err != nil {
 		panic(err)
 	}
@@ -166,7 +170,9 @@ func Groth16Prove(fileDir string) {
 	}
 	vk := groth16.NewVerifyingKey(ecc.BN254)
 	utils.ReadFromFile(vk, fileDir+circuitName+".vkey")
-	err = groth16.Verify(proof, vk, publicWitness)
+	println("proof: ", proof)
+	println("public input: ", publicWitness)
+	err = groth16.Verify(proof, vk, publicWitness, solidity.WithVerifierTargetSolidityVerifier(backend.GROTH16))
 	if err != nil {
 		panic(err)
 	}
@@ -185,4 +191,11 @@ func genRandomBytes(size int) ([]byte, error) {
 		return nil, err
 	}
 	return blk, nil
+}
+
+func keccak256(data []byte) (digest [32]byte) {
+	h := sha3.NewLegacyKeccak256()
+	h.Write(data)
+	h.Sum(digest[:0])
+	return
 }

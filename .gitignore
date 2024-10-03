@@ -4,4 +4,8 @@ gnark
 *.r1cs
 *.zkey
 *.vkey
+<<<<<<< Updated upstream
 build
+=======
+.vscode
+>>>>>>> Stashed changes

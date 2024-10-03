@@ -13,13 +13,11 @@ require (
 require (
 	github.com/bits-and-blooms/bitset v1.14.3 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
-	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/consensys/bavard v0.1.22 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/google/pprof v0.0.0-20241001023024-f4c0cfd0cf1d // indirect
-	github.com/ianlancetaylor/demangle v0.0.0-20240312041847-bd984b5ce465 // indirect
-	github.com/ingonyama-zk/icicle v1.10.1 // indirect
-	github.com/ingonyama-zk/iciclegnark v0.1.1 // indirect
+	github.com/ingonyama-zk/icicle v0.0.0-20230928131117-97f0079e5c71 // indirect
+	github.com/ingonyama-zk/iciclegnark v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
@@ -31,3 +29,5 @@ require (
 	golang.org/x/sys v0.25.0 // indirect
 	rsc.io/tmplfunc v0.0.3 // indirect
 )
+
+replace github.com/consensys/gnark => github.com/wwared/gnark v0.0.0-20240612163054-186e9de8321f

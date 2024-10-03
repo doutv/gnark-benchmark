@@ -8,11 +8,11 @@ import (
 	"gnark-benchmark/utils"
 	"log"
 	"math/big"
-	"os"
 	"strconv"
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
+	"github.com/consensys/gnark/backend"
 	"github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/backend/witness"
 	"github.com/consensys/gnark/constraint"
@@ -24,6 +24,7 @@ import (
 )
 
 const NumSignatures = 128
+
 var circuitName string
 
 func init() {
@@ -134,7 +135,7 @@ func Groth16Prove(fileDir string) {
 
 	// Proof generation
 	start = time.Now()
-	proof, err := groth16.Prove(r1cs, pk, witnessData)
+	proof, err := groth16.Prove(r1cs, pk, witnessData, backend.WithIcicleAcceleration())
 	if err != nil {
 		panic(err)
 	}
@@ -156,19 +157,13 @@ func Groth16Prove(fileDir string) {
 	if err != nil {
 		panic(err)
 	}
-	// Export Solidity verifier
-	f, _ := os.Create(fileDir + circuitName + "Verifier.sol")
-	err = vk.ExportSolidity(f)
-	if err != nil {
-		panic(err)
-	}
 }
 
 func genRandomBytes(size int) ([]byte, error) {
-    blk := make([]byte, size)
-    _, err := rand.Read(blk)
-    if err != nil {
-        return nil, err
-    }
-    return blk, nil
+	blk := make([]byte, size)
+	_, err := rand.Read(blk)
+	if err != nil {
+		return nil, err
+	}
+	return blk, nil
 }

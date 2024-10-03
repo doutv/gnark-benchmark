@@ -8,6 +8,8 @@ import (
 	"gnark-benchmark/utils"
 	"log"
 	"math/big"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
@@ -21,7 +23,12 @@ import (
 	"golang.org/x/crypto/cryptobyte/asn1"
 )
 
-const circuitName = "p256"
+const NumSignatures = 128
+var circuitName string
+
+func init() {
+	circuitName = "p256-" + strconv.Itoa(NumSignatures)
+}
 
 func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, error) {
 	circuit := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
@@ -33,47 +40,51 @@ func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem
 }
 
 func generateWitness() (witness.Witness, error) {
-	// generate parameters
-	privKey, _ := cryptoecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	publicKey := privKey.PublicKey
-
-	// sign
-	msg := []byte("testing ECDSA (pre-hashed)")
-	msgHash := sha256.Sum256(msg)
-	sigBin, _ := privKey.Sign(rand.Reader, msgHash[:], nil)
-
-	// check that the signature is correct
-	var (
-		r, s  = &big.Int{}, &big.Int{}
-		inner cryptobyte.String
-	)
-	input := cryptobyte.String(sigBin)
-	if !input.ReadASN1(&inner, asn1.SEQUENCE) ||
-		!input.Empty() ||
-		!inner.ReadASN1Integer(r) ||
-		!inner.ReadASN1Integer(s) ||
-		!inner.Empty() {
-		panic("invalid sig")
-	}
-	flag := cryptoecdsa.Verify(&publicKey, msgHash[:], r, s)
-	if !flag {
-		println("can't verify signature")
-	}
-
-	circuit := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
+	witness := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
 	for i := 0; i < NumSignatures; i++ {
-		circuit.Sig[i] = Signature[emulated.P256Fr]{
+		// Keygen
+		privKey, _ := cryptoecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+		publicKey := privKey.PublicKey
+
+		// Sign
+		msg, err := genRandomBytes(i + 20)
+		if err != nil {
+			panic(err)
+		}
+		msgHash := sha256.Sum256(msg)
+		sigBin, _ := privKey.Sign(rand.Reader, msgHash[:], nil)
+
+		// Try verify
+		var (
+			r, s  = &big.Int{}, &big.Int{}
+			inner cryptobyte.String
+		)
+		input := cryptobyte.String(sigBin)
+		if !input.ReadASN1(&inner, asn1.SEQUENCE) ||
+			!input.Empty() ||
+			!inner.ReadASN1Integer(r) ||
+			!inner.ReadASN1Integer(s) ||
+			!inner.Empty() {
+			panic("invalid sig")
+		}
+		flag := cryptoecdsa.Verify(&publicKey, msgHash[:], r, s)
+		if !flag {
+			println("can't verify signature")
+		}
+
+		// Assign to circuit witness
+		witness.Sig[i] = Signature[emulated.P256Fr]{
 			R: emulated.ValueOf[emulated.P256Fr](r),
 			S: emulated.ValueOf[emulated.P256Fr](s),
 		}
-		circuit.Msg[i] = emulated.ValueOf[emulated.P256Fr](msgHash[:])
-		circuit.Pub[i] = PublicKey[emulated.P256Fp, emulated.P256Fr]{
+		witness.Msg[i] = emulated.ValueOf[emulated.P256Fr](msgHash[:])
+		witness.Pub[i] = PublicKey[emulated.P256Fp, emulated.P256Fr]{
 			X: emulated.ValueOf[emulated.P256Fp](publicKey.X),
 			Y: emulated.ValueOf[emulated.P256Fp](publicKey.Y),
 		}
 	}
 
-	witnessData, err := frontend.NewWitness(&circuit, ecc.BN254.ScalarField())
+	witnessData, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
 	if err != nil {
 		panic(err)
 	}
@@ -135,14 +146,29 @@ func Groth16Prove(fileDir string) {
 
 	utils.WriteToFile(proof, fileDir+circuitName+".proof")
 	// Proof verification
-	// publicWitness, err := witnessData.Public()
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// vk := groth16.NewVerifyingKey(ecc.BN254)
-	// utils.ReadFromFile(vk, fileDir+circuitName+".vkey")
-	// err = groth16.Verify(proof, vk, publicWitness)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	publicWitness, err := witnessData.Public()
+	if err != nil {
+		panic(err)
+	}
+	vk := groth16.NewVerifyingKey(ecc.BN254)
+	utils.ReadFromFile(vk, fileDir+circuitName+".vkey")
+	err = groth16.Verify(proof, vk, publicWitness)
+	if err != nil {
+		panic(err)
+	}
+	// Export Solidity verifier
+	f, _ := os.Create(fileDir + circuitName + "Verifier.sol")
+	err = vk.ExportSolidity(f)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func genRandomBytes(size int) ([]byte, error) {
+    blk := make([]byte, size)
+    _, err := rand.Read(blk)
+    if err != nil {
+        return nil, err
+    }
+    return blk, nil
 }

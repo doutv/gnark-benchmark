@@ -4,3 +4,4 @@ gnark
 *.r1cs
 *.zkey
 *.vkey
+build

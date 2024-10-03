@@ -25,7 +25,9 @@ make ios
 
 # Android Studio app
 make android
-# Android Run binary executable in adb shell 
+# Android Run binary executable in adb shell
 make android-groth16
 make android-plonk
 ```
+
+export LD_LIBRARY_PATH=/opt/icicle/

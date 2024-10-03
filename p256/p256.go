@@ -4,7 +4,6 @@ import (
 	cryptoecdsa "crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"fmt"
 	"gnark-benchmark/utils"
 	"log"
 	"math/big"
@@ -13,7 +12,9 @@ import (
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
+	"github.com/consensys/gnark/backend"
 	"github.com/consensys/gnark/backend/groth16"
+	"github.com/consensys/gnark/backend/solidity"
 	"github.com/consensys/gnark/backend/witness"
 	"github.com/consensys/gnark/constraint"
 	"github.com/consensys/gnark/frontend"
@@ -56,7 +57,7 @@ func generateWitness() (witness.Witness, error) {
 		if err != nil {
 			panic(err)
 		}
-		msgHash := sha3.Sum256(msg)
+		msgHash := sha3.New256().Sum(msg)
 		sigBin, _ := privKey.Sign(rand.Reader, msgHash[:], nil)
 
 		// Try verify
@@ -94,20 +95,8 @@ func generateWitness() (witness.Witness, error) {
 			Y: emulated.ValueOf[emulated.P256Fp](publicKey.Y),
 		}
 	}
-	hashOut := sha3.Sum256(hashIn)
+	hashOut := sha3.New256().Sum(hashIn)
 	copy(witness.Commitment[:], uints.NewU8Array(hashOut[:]))
-	// Print hashIn in the desired format
-	fmt.Print("hashIn {")
-	for i, b := range hashIn {
-		if i > 0 {
-			fmt.Print(", ")
-		}
-		if i % 8 == 0 {
-			fmt.Println()
-		}
-		fmt.Printf("%d_Val: %d", i, b)
-	}
-	fmt.Println("}")
 
 	witnessData, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
 	if err != nil {
@@ -159,7 +148,7 @@ func Groth16Prove(fileDir string) {
 
 	// Proof generation
 	start = time.Now()
-	proof, err := groth16.Prove(r1cs, pk, witnessData)
+	proof, err := groth16.Prove(r1cs, pk, witnessData, solidity.WithProverTargetSolidityVerifier(backend.GROTH16))
 	if err != nil {
 		panic(err)
 	}

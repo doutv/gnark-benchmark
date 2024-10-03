@@ -41,25 +41,21 @@ func (c *EcdsaCircuit[T, S]) Define(api frontend.API) error {
 		// Pay attention to the ordering!
 		for j := len(c.Pub[i].X.Limbs) - 1; j >= 0; j-- {
 			pubXLimb := uapi.UnpackMSB(uapi.ValueOf(c.Pub[i].X.Limbs[j]))
-			api.Println(pubXLimb)
 			hashIn = append(hashIn, pubXLimb[:]...)
 		}
 		// hashIn += Pub[i].Y
 		for j := len(c.Pub[i].X.Limbs) - 1; j >= 0; j-- {
 			pubYLimb := uapi.UnpackMSB(uapi.ValueOf(c.Pub[i].Y.Limbs[j]))
-			api.Println(pubYLimb)
 			hashIn = append(hashIn, pubYLimb[:]...)
 		}
 		// hashIn += Msg[i]
 		for j := len(c.Msg[i].Limbs) - 1; j >= 0; j-- {
 			msgLimb := uapi.UnpackMSB(uapi.ValueOf(c.Msg[i].Limbs[j]))
 			hashIn = append(hashIn, msgLimb[:]...)
-			api.Println(msgLimb)
 		}
 	}
 	h.Write(hashIn)
 	res := h.Sum()
-	api.Println("hashIn", hashIn)
 
 	for i := range c.Commitment {
 		uapi.ByteAssertEq(c.Commitment[i], res[i])

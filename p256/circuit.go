@@ -3,15 +3,17 @@ package p256
 import (
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/std/algebra/emulated/sw_emulated"
+	"github.com/consensys/gnark/std/hash/sha3"
 	"github.com/consensys/gnark/std/math/emulated"
+	"github.com/consensys/gnark/std/math/uints"
 )
 
 type EcdsaCircuit[T, S emulated.FieldParams] struct {
-	// Commitment [32]uints.U8 `gnark:",public"` // Commit(Sig[0], Msg[0], Sig[1], Msg[1], ...)
+	Commitment [32]uints.U8 `gnark:",public"` // Commit(Pub[0], Msg[0], Sig[1], Msg[1], ...)
 
-	Sig [NumSignatures]Signature[S] `gnark:",secret"`
+	Pub [NumSignatures]PublicKey[T, S]     `gnark:",secret"`
 	Msg [NumSignatures]emulated.Element[S] `gnark:",secret"`
-	Pub [NumSignatures]PublicKey[T, S] `gnark:",secret"`
+	Sig [NumSignatures]Signature[S]        `gnark:",secret"`
 }
 
 func (c *EcdsaCircuit[T, S]) Define(api frontend.API) error {
@@ -20,25 +22,39 @@ func (c *EcdsaCircuit[T, S]) Define(api frontend.API) error {
 		c.Pub[i].Verify(api, sw_emulated.GetCurveParams[T](), &c.Msg[i], &c.Sig[i])
 	}
 	// SHA-3 (Keccak256) Commit to all signatures
-	// h, err := sha3.New256(api)
-	// if err != nil {
-	// 	return err
-	// }
-	// uapi, err := uints.New[uints.U64](api)
-	// if err != nil {
-	// 	return err
-	// }
+	h, err := sha3.New256(api)
+	if err != nil {
+		return err
+	}
+	uapi, err := uints.New[uints.U64](api)
+	if err != nil {
+		return err
+	}
 
-	// for i := 0; i < NumSignatures; i++ {
-	// 	h.Write(c.Sig[i].R)
-	// 	h.Write(c.Sig[i].S)
-	// 	h.Write(c.Msg[i])
-	// }
-	// res := h.Sum()
+	var tInstance T
+	var sInstance S
+	perSignatureHashSize := 2*tInstance.NbLimbs() + sInstance.NbLimbs()
 
-	// for i := range c.Commitment {
-	// 	uapi.ByteAssertEq(c.Commitment[i], res[i])
-	// }
+	hashIn := make([]uints.U8, 0, NumSignatures*perSignatureHashSize)
+	for i := 0; i < NumSignatures; i++ {
+		// hashIn += Pub[i].X + Pub[i].Y + Msg[i]
+		for j := range tInstance.NbLimbs() {
+			pubXLimb := uapi.ValueOf(c.Pub[i].X.Limbs[j])
+			hashIn = append(hashIn, pubXLimb[:]...)
+			pubYLimb := uapi.ValueOf(c.Pub[i].Y.Limbs[j])
+			hashIn = append(hashIn, pubYLimb[:]...)
+		}
+		for j := range sInstance.NbLimbs() {
+			msgLimb := uapi.ValueOf(c.Msg[i].Limbs[j])
+			hashIn = append(hashIn, msgLimb[:]...)
+		}
+	}
+	h.Write(hashIn)
+	res := h.Sum()
+
+	for i := range c.Commitment {
+		uapi.ByteAssertEq(c.Commitment[i], res[i])
+	}
 	return nil
 }
 

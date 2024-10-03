@@ -4,11 +4,11 @@ import (
 	cryptoecdsa "crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/sha256"
 	"gnark-benchmark/utils"
 	"log"
 	"math/big"
 	"os"
+	"slices"
 	"strconv"
 	"time"
 
@@ -19,11 +19,13 @@ import (
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/consensys/gnark/std/math/emulated"
+	"github.com/consensys/gnark/std/math/uints"
 	"golang.org/x/crypto/cryptobyte"
 	"golang.org/x/crypto/cryptobyte/asn1"
+	"golang.org/x/crypto/sha3"
 )
 
-const NumSignatures = 128
+const NumSignatures = 1
 var circuitName string
 
 func init() {
@@ -41,6 +43,8 @@ func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem
 
 func generateWitness() (witness.Witness, error) {
 	witness := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
+	perSignatureHashSize := 2*emulated.P256Fp{}.NbLimbs() + emulated.P256Fr{}.NbLimbs()
+	hashIn := make([]byte, 0, NumSignatures*perSignatureHashSize)
 	for i := 0; i < NumSignatures; i++ {
 		// Keygen
 		privKey, _ := cryptoecdsa.GenerateKey(elliptic.P256(), rand.Reader)
@@ -51,7 +55,7 @@ func generateWitness() (witness.Witness, error) {
 		if err != nil {
 			panic(err)
 		}
-		msgHash := sha256.Sum256(msg)
+		msgHash := sha3.Sum256(msg)
 		sigBin, _ := privKey.Sign(rand.Reader, msgHash[:], nil)
 
 		// Try verify
@@ -72,6 +76,14 @@ func generateWitness() (witness.Witness, error) {
 			println("can't verify signature")
 		}
 
+		// hashIn += Pub[i].X + Pub[i].Y + Msg[i]
+		pubX := publicKey.X.Bytes() // Big endian
+		slices.Reverse(pubX)
+		pubY := publicKey.Y.Bytes() // Big endian
+		slices.Reverse(pubY)
+		hashIn = append(hashIn, pubX[:]...)
+		hashIn = append(hashIn, pubY[:]...)
+		hashIn = append(hashIn, msgHash[:]...)
 		// Assign to circuit witness
 		witness.Sig[i] = Signature[emulated.P256Fr]{
 			R: emulated.ValueOf[emulated.P256Fr](r),
@@ -83,6 +95,8 @@ func generateWitness() (witness.Witness, error) {
 			Y: emulated.ValueOf[emulated.P256Fp](publicKey.Y),
 		}
 	}
+	hashOut := sha3.Sum256(hashIn)
+	copy(witness.Commitment[:], uints.NewU8Array(hashOut[:]))
 
 	witnessData, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
 	if err != nil {

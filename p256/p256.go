@@ -4,6 +4,7 @@ import (
 	cryptoecdsa "crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"encoding/hex"
 	"gnark-benchmark/utils"
 	"log"
 	"math/big"
@@ -81,9 +82,9 @@ func generateWitness() (witness.Witness, error) {
 		// hashIn += Pub[i].X + Pub[i].Y + Msg[i]
 		pubX := publicKey.X.Bytes()
 		pubY := publicKey.Y.Bytes()
-		println("pubX: ", pubX)
-		println("pubY: ", pubY)
-		println("msgHash: ", msgHash[:])
+		println("pubX: ", hex.EncodeToString(pubX))
+		println("pubY: ", hex.EncodeToString(pubY))
+		println("msgHash: ", hex.EncodeToString(msgHash[:]))
 		hashIn = append(hashIn, pubX[:]...)
 		hashIn = append(hashIn, pubY[:]...)
 		hashIn = append(hashIn, msgHash[:]...)
@@ -99,6 +100,7 @@ func generateWitness() (witness.Witness, error) {
 		}
 	}
 	hashOut := keccak256(hashIn)
+	println("hashOut: ", hex.EncodeToString(hashOut[:]))
 	copy(witness.Commitment[:], uints.NewU8Array(hashOut[:]))
 
 	witnessData, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
@@ -170,8 +172,28 @@ func Groth16Prove(fileDir string) {
 	}
 	vk := groth16.NewVerifyingKey(ecc.BN254)
 	utils.ReadFromFile(vk, fileDir+circuitName+".vkey")
-	println("proof: ", proof)
-	println("public input: ", publicWitness)
+
+	// proof to hex
+	_proof, ok := proof.(interface{ MarshalSolidity() []byte })
+	if !ok {
+		panic("proof does not implement MarshalSolidity()")
+	}
+	proofBytes := _proof.MarshalSolidity()
+	println("len(proof) =", len(proofBytes))
+	printUint256(proofBytes)
+
+	publicInput, err := publicWitness.MarshalBinary()
+	if err != nil {
+		panic(err)
+	}
+	// https://github.com/Consensys/gnark/blob/dc04a1d3b221dbe7571b5a8394b55d02c2872700/test/assert_solidity.go#L78-L83
+	// that's quite dirty...
+	// first 4 bytes -> nbPublic
+	// next 4 bytes -> nbSecret
+	// next 4 bytes -> nb elements in the vector (== nbPublic + nbSecret)
+	publicInput = publicInput[12:]
+	println("len(publicInput) =", len(publicInput))
+	printUint256(publicInput)
 	err = groth16.Verify(proof, vk, publicWitness, solidity.WithVerifierTargetSolidityVerifier(backend.GROTH16))
 	if err != nil {
 		panic(err)
@@ -198,4 +220,11 @@ func keccak256(data []byte) (digest [32]byte) {
 	h.Write(data)
 	h.Sum(digest[:0])
 	return
+}
+
+func printUint256(data []byte) {
+	// println(hex.EncodeToString(data))
+	for i := 0; i < len(data); i += 32 {
+		println(hex.EncodeToString(data[i : i+32]))
+	}
 }

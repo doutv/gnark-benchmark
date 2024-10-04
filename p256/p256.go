@@ -10,6 +10,7 @@ import (
 	"math/big"
 	"os"
 	"strconv"
+	"testing"
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
@@ -22,6 +23,7 @@ import (
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/consensys/gnark/std/math/emulated"
 	"github.com/consensys/gnark/std/math/uints"
+	"github.com/consensys/gnark/test"
 	"golang.org/x/crypto/cryptobyte"
 	"golang.org/x/crypto/cryptobyte/asn1"
 	"golang.org/x/crypto/sha3"
@@ -44,7 +46,7 @@ func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem
 	return r1cs, nil
 }
 
-func generateWitness() (witness.Witness, error) {
+func generateWitnessCircuit() (EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]) {
 	witness := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
 	perSignatureHashSize := 2*emulated.P256Fp{}.NbLimbs() + emulated.P256Fr{}.NbLimbs()
 	hashIn := make([]byte, 0, NumSignatures*perSignatureHashSize)
@@ -102,7 +104,11 @@ func generateWitness() (witness.Witness, error) {
 	hashOut := keccak256(hashIn)
 	println("hashOut: ", hex.EncodeToString(hashOut[:]))
 	copy(witness.Commitment[:], uints.NewU8Array(hashOut[:]))
+	return witness
+}
 
+func generateWitness() (witness.Witness, error) {
+	witness := generateWitnessCircuit()
 	witnessData, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
 	if err != nil {
 		panic(err)
@@ -223,8 +229,15 @@ func keccak256(data []byte) (digest [32]byte) {
 }
 
 func printUint256(data []byte) {
-	// println(hex.EncodeToString(data))
-	for i := 0; i < len(data); i += 32 {
-		println(hex.EncodeToString(data[i : i+32]))
-	}
+	println(hex.EncodeToString(data))
+	// for i := 0; i < len(data); i += 32 {
+	// 	println(hex.EncodeToString(data[i : i+32]))
+	// }
+}
+
+func TestP256(t *testing.T) {
+	assert := test.NewAssert(t)
+	witnessCircuit := generateWitnessCircuit()
+	circuit := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
+	assert.CheckCircuit(&circuit, test.WithValidAssignment(&witnessCircuit), test.WithBackends(backend.GROTH16), test.WithCurves(ecc.BN254))
 }

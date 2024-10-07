@@ -6,8 +6,7 @@ Run Gnark solidity verifier test
 ```bash
 # 1. Install https://github.com/Consensys/gnark-solidity-checker
 # 2. Run go test with tags
-cd p256
-go test -timeout 10m -tags solccheck,prover_checks -test.v
+go test ./p256 -timeout 10m -tags solccheck,prover_checks -test.v
 ```
 
 ## Mobile

@@ -21,7 +21,6 @@ import (
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/consensys/gnark/std/math/emulated"
-	"github.com/consensys/gnark/std/math/uints"
 	"golang.org/x/crypto/cryptobyte"
 	"golang.org/x/crypto/cryptobyte/asn1"
 	"golang.org/x/crypto/sha3"
@@ -82,9 +81,9 @@ func generateWitnessCircuit() (EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]) {
 		// hashIn += Pub[i].X + Pub[i].Y + Msg[i]
 		pubX := publicKey.X.Bytes()
 		pubY := publicKey.Y.Bytes()
-		println("pubX: ", hex.EncodeToString(pubX))
-		println("pubY: ", hex.EncodeToString(pubY))
-		println("msgHash: ", hex.EncodeToString(msgHash[:]))
+		println("pubX:", hex.EncodeToString(pubX))
+		println("pubY:", hex.EncodeToString(pubY))
+		println("msgHash:", hex.EncodeToString(msgHash[:]))
 		hashIn = append(hashIn, pubX[:]...)
 		hashIn = append(hashIn, pubY[:]...)
 		hashIn = append(hashIn, msgHash[:]...)
@@ -100,8 +99,9 @@ func generateWitnessCircuit() (EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]) {
 		}
 	}
 	hashOut := keccak256(hashIn)
-	println("hashOut: ", hex.EncodeToString(hashOut[:]))
-	copy(witness.Commitment[:], uints.NewU8Array(hashOut[:]))
+	hashOut[0] = 0 // ignore the first byte, since BN254 order < uint256
+	println("hashOut:", hex.EncodeToString(hashOut[:]))
+	witness.Commitment = hashOut[:]
 	return witness
 }
 

@@ -9,7 +9,7 @@ import (
 )
 
 type EcdsaCircuit[T, S emulated.FieldParams] struct {
-	Commitment [32]uints.U8 `gnark:",public"` // Hash(Pub[0], Msg[0], Sig[1], Msg[1], ...)
+	Commitment frontend.Variable `gnark:",public"` // Keccak256(Pub[0], Msg[0], Sig[1], Msg[1], ...)[1:32], ignore the first byte, since BN254 order < uint256
 
 	Pub [NumSignatures]PublicKey[T, S]     `gnark:",secret"`
 	Msg [NumSignatures]emulated.Element[S] `gnark:",secret"`
@@ -21,7 +21,7 @@ func (c *EcdsaCircuit[T, S]) Define(api frontend.API) error {
 	for i := range c.Sig {
 		c.Pub[i].Verify(api, sw_emulated.GetCurveParams[T](), &c.Msg[i], &c.Sig[i])
 	}
-	// SHA-3 (Keccak256) Commit to all signatures
+	// Keccak256 Commit to all signatures
 	h, err := sha3.NewLegacyKeccak256(api)
 	if err != nil {
 		return err
@@ -55,10 +55,14 @@ func (c *EcdsaCircuit[T, S]) Define(api frontend.API) error {
 		}
 	}
 	h.Write(hashIn)
-	res := h.Sum()
+	hashOutU8 := h.Sum() // Keccak256(Pub[0], Msg[0], Sig[1], Msg[1], ...)[0:32]
 
-	for i := range c.Commitment {
-		uapi.ByteAssertEq(c.Commitment[i], res[i])
+	// Commitment = hashoutU8[1:32]
+	hashOutU8[0] = uints.NewU8(0) // ignore the first byte, since BN254 order < uint256
+	// Big endian [32]bytes to BigInt
+	for i := range hashOutU8 {
+		index := len(hashOutU8) - i - 1
+		c.Commitment = api.MulAcc(c.Commitment, hashOutU8[index].Val, 1<<(i*8))
 	}
 	return nil
 }

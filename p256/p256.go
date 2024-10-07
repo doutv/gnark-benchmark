@@ -10,7 +10,6 @@ import (
 	"math/big"
 	"os"
 	"strconv"
-	"testing"
 	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
@@ -23,7 +22,6 @@ import (
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/consensys/gnark/std/math/emulated"
 	"github.com/consensys/gnark/std/math/uints"
-	"github.com/consensys/gnark/test"
 	"golang.org/x/crypto/cryptobyte"
 	"golang.org/x/crypto/cryptobyte/asn1"
 	"golang.org/x/crypto/sha3"
@@ -127,6 +125,12 @@ func Groth16Setup(fileDir string) {
 		panic(err)
 	}
 	// Write to file
+	if _, err := os.Stat(fileDir); os.IsNotExist(err) {
+		err := os.MkdirAll(fileDir, os.ModePerm)
+		if err != nil {
+			panic(err)
+		}
+	}
 	utils.WriteToFile(pk, fileDir+circuitName+".zkey")
 	utils.WriteToFile(r1cs, fileDir+circuitName+".r1cs")
 	utils.WriteToFile(vk, fileDir+circuitName+".vkey")
@@ -233,11 +237,4 @@ func printUint256(data []byte) {
 	// for i := 0; i < len(data); i += 32 {
 	// 	println(hex.EncodeToString(data[i : i+32]))
 	// }
-}
-
-func TestP256(t *testing.T) {
-	assert := test.NewAssert(t)
-	witnessCircuit := generateWitnessCircuit()
-	circuit := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
-	assert.CheckCircuit(&circuit, test.WithValidAssignment(&witnessCircuit), test.WithBackends(backend.GROTH16), test.WithCurves(ecc.BN254))
 }

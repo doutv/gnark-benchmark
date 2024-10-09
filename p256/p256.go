@@ -5,6 +5,7 @@ import (
 	"crypto/elliptic"
 	"crypto/rand"
 	"encoding/hex"
+	"fmt"
 	"gnark-benchmark/utils"
 	"log"
 	"math/big"
@@ -26,7 +27,7 @@ import (
 	"golang.org/x/crypto/sha3"
 )
 
-const NumSignatures = 1
+const NumSignatures = 10
 
 var circuitName string
 
@@ -174,36 +175,18 @@ func Groth16Prove(fileDir string) {
 	// proveElapsed := time.Since(proveStart)
 	// log.Printf("Prove: %d ms", proveElapsed.Milliseconds())
 
+	printProof(proof)
 	utils.WriteToFile(proof, fileDir+circuitName+".proof")
+
 	// Proof verification
 	publicWitness, err := witnessData.Public()
 	if err != nil {
 		panic(err)
 	}
+	printPublicInput(publicWitness)
 	vk := groth16.NewVerifyingKey(ecc.BN254)
 	utils.ReadFromFile(vk, fileDir+circuitName+".vkey")
 
-	// proof to hex
-	_proof, ok := proof.(interface{ MarshalSolidity() []byte })
-	if !ok {
-		panic("proof does not implement MarshalSolidity()")
-	}
-	proofBytes := _proof.MarshalSolidity()
-	println("len(proof) =", len(proofBytes))
-	printUint256(proofBytes)
-
-	publicInput, err := publicWitness.MarshalBinary()
-	if err != nil {
-		panic(err)
-	}
-	// https://github.com/Consensys/gnark/blob/dc04a1d3b221dbe7571b5a8394b55d02c2872700/test/assert_solidity.go#L78-L83
-	// that's quite dirty...
-	// first 4 bytes -> nbPublic
-	// next 4 bytes -> nbSecret
-	// next 4 bytes -> nb elements in the vector (== nbPublic + nbSecret)
-	publicInput = publicInput[12:]
-	println("len(publicInput) =", len(publicInput))
-	printUint256(publicInput)
 	err = groth16.Verify(proof, vk, publicWitness, solidity.WithVerifierTargetSolidityVerifier(backend.GROTH16))
 	if err != nil {
 		panic(err)
@@ -232,9 +215,54 @@ func keccak256(data []byte) (digest [32]byte) {
 	return
 }
 
-func printUint256(data []byte) {
-	println(hex.EncodeToString(data))
-	// for i := 0; i < len(data); i += 32 {
-	// 	println(hex.EncodeToString(data[i : i+32]))
-	// }
+func printPublicInput(publicWitness witness.Witness) {
+	publicInput, err := publicWitness.MarshalBinary()
+	if err != nil {
+		panic(err)
+	}
+	// https://github.com/Consensys/gnark/blob/dc04a1d3b221dbe7571b5a8394b55d02c2872700/test/assert_solidity.go#L78-L83
+	// that's quite dirty...
+	// first 4 bytes -> nbPublic
+	// next 4 bytes -> nbSecret
+	// next 4 bytes -> nb elements in the vector (== nbPublic + nbSecret)
+	publicInput = publicInput[12:]
+	println("publicInput:")
+	println(hex.EncodeToString(publicInput))
+}
+
+func printProof(groth16Proof groth16.Proof) {
+	fpSize := 32
+
+	// proof to hex
+	_proof, ok := groth16Proof.(interface{ MarshalSolidity() []byte })
+	if !ok {
+		panic("proof does not implement MarshalSolidity()")
+	}
+	proofBytes := _proof.MarshalSolidity()
+
+	// proof.Ar, proof.Bs, proof.Krs
+	println("proof:")
+	idx := 0
+	for i := 0; i < 8; i++ {
+		fmt.Printf("0x%32X\n", proofBytes[idx: idx+fpSize])
+		idx += fpSize
+	}
+
+	// prepare commitments for calling
+	c := new(big.Int).SetBytes(proofBytes[idx: idx+4])
+	idx += 4
+	commitmentCount := int(c.Int64())
+
+	// commitments
+	println("commitments:")
+	for i := 0; i < 2*commitmentCount; i++ {
+		fmt.Printf("0x%32X\n", proofBytes[idx: idx+fpSize])
+		idx += fpSize
+	}
+
+	// commitmentPok
+	println("commitmentPok:")
+	fmt.Printf("0x%32X\n", proofBytes[idx: idx+fpSize])
+	idx += fpSize
+	fmt.Printf("0x%32X\n", proofBytes[idx: idx+fpSize])
 }

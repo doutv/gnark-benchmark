@@ -3,7 +3,7 @@ package main
 import "gnark-benchmark/p256"
 
 func main() {
-	p256.Groth16Setup("build/p256/")
+	// p256.Groth16Setup("build/p256/")
 	p256.Groth16Prove("build/p256/")
 
 	// sha3.Groth16Setup("")

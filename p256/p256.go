@@ -26,7 +26,7 @@ import (
 	"golang.org/x/crypto/sha3"
 )
 
-const NumSignatures = 1
+const NumSignatures = 10
 
 var circuitName string
 
@@ -43,7 +43,7 @@ func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem
 	return r1cs, nil
 }
 
-func generateWitnessCircuit() (EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]) {
+func generateWitnessCircuit() EcdsaCircuit[emulated.P256Fp, emulated.P256Fr] {
 	witness := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
 	perSignatureHashSize := 2*emulated.P256Fp{}.NbLimbs() + emulated.P256Fr{}.NbLimbs()
 	hashIn := make([]byte, 0, NumSignatures*perSignatureHashSize)
@@ -162,14 +162,24 @@ func Groth16Prove(fileDir string) {
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
 	// Proof generation
+	// GPU
+	var proof groth16.Proof
+	for i := 0; i < 1; i++ {
+		start = time.Now()
+		proof, err = groth16.Prove(r1cs, pk, witnessData, solidity.WithProverTargetSolidityVerifier(backend.GROTH16), backend.WithZeknoxAcceleration())
+		if err != nil {
+			panic(err)
+		}
+		elapsed = time.Since(start)
+		log.Printf("GPU Prove %d: %d ms", i+1, elapsed.Milliseconds())
+	}
+	// CPU
 	start = time.Now()
-	proverOption := solidity.WithProverTargetSolidityVerifier(backend.GROTH16)
-	proof, err := groth16.Prove(r1cs, pk, witnessData, proverOption)
-	if err != nil {
+	if _, err := groth16.Prove(r1cs, pk, witnessData, solidity.WithProverTargetSolidityVerifier(backend.GROTH16)); err != nil {
 		panic(err)
 	}
 	elapsed = time.Since(start)
-	log.Printf("Prove: %d ms", elapsed.Milliseconds())
+	log.Printf("CPU Prove: %d ms", elapsed.Milliseconds())
 
 	// proveElapsed := time.Since(proveStart)
 	// log.Printf("Prove: %d ms", proveElapsed.Milliseconds())

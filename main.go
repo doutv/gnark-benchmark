@@ -1,19 +1,20 @@
 package main
 
 import (
-	"gnark-benchmark/p256"
-	"gnark-benchmark/sha2"
-	"gnark-benchmark/sha3"
+	"gnark-benchmark/mimc"
 )
 
 func main() {
-	p256.Groth16Setup("build/p256/")
-	p256.Groth16Prove("build/p256/")
+	// p256.Groth16Setup("build/p256/")
+	// p256.Groth16Prove("build/p256/")
 
-	sha3.Groth16Setup("build/sha3/")
-	sha3.Groth16Prove("build/sha3/")
-	sha2.Groth16Setup("build/sha2/")
-	sha2.Groth16Prove("build/sha2/")
+	// sha3.Groth16Setup("build/sha3/")
+	// sha3.Groth16Prove("build/sha3/")
+	// sha2.Groth16Setup("build/sha2/")
+	// sha2.Groth16Prove("build/sha2/")
+
+	mimc.Groth16Setup("build/mimc/")
+	mimc.Groth16Prove("build/mimc/")
 
 	// attributes, err := json.Marshal(eddsa.Attributes{Attributes: []int{1, 2, 3}})
 	// if err != nil {

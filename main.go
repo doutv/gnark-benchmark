@@ -1,8 +1,6 @@
 package main
 
-import (
-	"gnark-benchmark/mimc"
-)
+import "gnark-benchmark/keccak"
 
 func main() {
 	// p256.Groth16Setup("build/p256/")
@@ -10,11 +8,15 @@ func main() {
 
 	// sha3.Groth16Setup("build/sha3/")
 	// sha3.Groth16Prove("build/sha3/")
+
 	// sha2.Groth16Setup("build/sha2/")
 	// sha2.Groth16Prove("build/sha2/")
 
-	mimc.Groth16Setup("build/mimc/")
-	mimc.Groth16Prove("build/mimc/")
+	// mimc.Groth16Setup("build/mimc/")
+	// mimc.Groth16Prove("build/mimc/")
+
+	keccak.Groth16Setup("build/keccak/")
+	keccak.Groth16Prove("build/keccak/")
 
 	// attributes, err := json.Marshal(eddsa.Attributes{Attributes: []int{1, 2, 3}})
 	// if err != nil {

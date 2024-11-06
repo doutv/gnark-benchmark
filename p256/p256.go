@@ -6,14 +6,10 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"gnark-benchmark/utils"
-	"log"
 	"math/big"
-	"os"
 	"strconv"
-	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
-	"github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/backend/witness"
 	"github.com/consensys/gnark/constraint"
 	"github.com/consensys/gnark/frontend"
@@ -26,13 +22,15 @@ const NumSignatures = 1
 
 var circuitName string
 
+const curveId = ecc.BW6_761
+
 func init() {
 	circuitName = "p256-" + strconv.Itoa(NumSignatures)
 }
 
 func compileCircuit(newBuilder frontend.NewBuilder) (constraint.ConstraintSystem, error) {
 	circuit := EcdsaCircuit[emulated.P256Fp, emulated.P256Fr]{}
-	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), newBuilder, &circuit)
+	r1cs, err := frontend.Compile(curveId.ScalarField(), newBuilder, &circuit)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +82,7 @@ func generateWitness() (witness.Witness, error) {
 		}
 	}
 
-	witnessData, err := frontend.NewWitness(&witness, ecc.BN254.ScalarField())
+	witnessData, err := frontend.NewWitness(&witness, curveId.ScalarField())
 	if err != nil {
 		panic(err)
 	}
@@ -97,60 +95,61 @@ func Groth16Setup(fileDir string) {
 }
 
 func Groth16Prove(fileDir string) {
-	// proveStart := time.Now()
-	// Witness generation
-	start := time.Now()
-	witnessData, err := generateWitness()
-	if err != nil {
-		panic(err)
-	}
-	elapsed := time.Since(start)
-	log.Printf("Witness Generation: %d ms", elapsed.Milliseconds())
+	utils.Groth16Prove(curveId, fileDir, circuitName, generateWitness)
+	// // proveStart := time.Now()
+	// // Witness generation
+	// start := time.Now()
+	// witnessData, err := generateWitness()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// elapsed := time.Since(start)
+	// log.Printf("Witness Generation: %d ms", elapsed.Milliseconds())
 
-	// Read files
-	start = time.Now()
-	r1cs := groth16.NewCS(ecc.BN254)
-	utils.ReadFromFile(r1cs, fileDir+circuitName+".r1cs")
-	elapsed = time.Since(start)
-	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
+	// // Read files
+	// start = time.Now()
+	// r1cs := groth16.NewCS(curveId)
+	// utils.ReadFromFile(r1cs, fileDir+circuitName+".r1cs")
+	// elapsed = time.Since(start)
+	// log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
-	start = time.Now()
-	pk := groth16.NewProvingKey(ecc.BN254)
+	// start = time.Now()
+	// pk := groth16.NewProvingKey(curveId)
 
-	utils.UnsafeReadFromFile(pk, fileDir+circuitName+".zkey")
-	elapsed = time.Since(start)
-	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
+	// utils.UnsafeReadFromFile(pk, fileDir+circuitName+".zkey")
+	// elapsed = time.Since(start)
+	// log.Printf("Read zkey: %d ms", elapsed.Milliseconds())
 
-	// Proof generation
-	start = time.Now()
-	proof, err := groth16.Prove(r1cs, pk, witnessData)
-	if err != nil {
-		panic(err)
-	}
-	elapsed = time.Since(start)
-	log.Printf("Prove: %d ms", elapsed.Milliseconds())
+	// // Proof generation
+	// start = time.Now()
+	// proof, err := groth16.Prove(r1cs, pk, witnessData)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// elapsed = time.Since(start)
+	// log.Printf("Prove: %d ms", elapsed.Milliseconds())
 
-	// proveElapsed := time.Since(proveStart)
-	// log.Printf("Prove: %d ms", proveElapsed.Milliseconds())
+	// // proveElapsed := time.Since(proveStart)
+	// // log.Printf("Prove: %d ms", proveElapsed.Milliseconds())
 
-	utils.WriteToFile(proof, fileDir+circuitName+".proof")
-	// Proof verification
-	publicWitness, err := witnessData.Public()
-	if err != nil {
-		panic(err)
-	}
-	vk := groth16.NewVerifyingKey(ecc.BN254)
-	utils.ReadFromFile(vk, fileDir+circuitName+".vkey")
-	err = groth16.Verify(proof, vk, publicWitness)
-	if err != nil {
-		panic(err)
-	}
-	// Export Solidity verifier
-	f, _ := os.Create(fileDir + circuitName + "Verifier.sol")
-	err = vk.ExportSolidity(f)
-	if err != nil {
-		panic(err)
-	}
+	// utils.WriteToFile(proof, fileDir+circuitName+".proof")
+	// // Proof verification
+	// publicWitness, err := witnessData.Public()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// vk := groth16.NewVerifyingKey(curveId)
+	// utils.ReadFromFile(vk, fileDir+circuitName+".vkey")
+	// err = groth16.Verify(proof, vk, publicWitness)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// // Export Solidity verifier
+	// f, _ := os.Create(fileDir + circuitName + "Verifier.sol")
+	// err = vk.ExportSolidity(f)
+	// if err != nil {
+	// 	panic(err)
+	// }
 }
 
 func genRandomBytes(size int) ([]byte, error) {

@@ -43,7 +43,7 @@ func Groth16Setup(fileDir, circuitName string, compiler CircuitCompiler) {
 }
 
 // Groth16Prove performs the common proving process for Groth16
-func Groth16Prove(fileDir, circuitName string, witnessGen WitnessGenerator) {
+func Groth16Prove(curveId ecc.ID, fileDir, circuitName string, witnessGen WitnessGenerator) {
 	// Witness generation
 	start := time.Now()
 	witnessData, err := witnessGen()
@@ -55,13 +55,13 @@ func Groth16Prove(fileDir, circuitName string, witnessGen WitnessGenerator) {
 
 	// Read files
 	start = time.Now()
-	r1cs := groth16.NewCS(ecc.BN254)
+	r1cs := groth16.NewCS(curveId)
 	ReadFromFile(r1cs, fileDir+circuitName+".r1cs")
 	elapsed = time.Since(start)
 	log.Printf("Read r1cs: %d ms", elapsed.Milliseconds())
 
 	start = time.Now()
-	pk := groth16.NewProvingKey(ecc.BN254)
+	pk := groth16.NewProvingKey(curveId)
 	UnsafeReadFromFile(pk, fileDir+circuitName+".zkey")
 	elapsed = time.Since(start)
 	log.Printf("Read zkey: %d ms", elapsed.Milliseconds())

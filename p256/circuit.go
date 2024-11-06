@@ -7,11 +7,9 @@ import (
 )
 
 type EcdsaCircuit[T, S emulated.FieldParams] struct {
-	// Commitment [32]uints.U8 `gnark:",public"` // Commit(Sig[0], Msg[0], Sig[1], Msg[1], ...)
-
 	Sig [NumSignatures]Signature[S] `gnark:",secret"`
-	Msg [NumSignatures]emulated.Element[S] `gnark:",secret"`
-	Pub [NumSignatures]PublicKey[T, S] `gnark:",secret"`
+	Msg [NumSignatures]emulated.Element[S] `gnark:",public"`
+	Pub [NumSignatures]PublicKey[T, S] `gnark:",public"`
 }
 
 func (c *EcdsaCircuit[T, S]) Define(api frontend.API) error {
@@ -19,26 +17,6 @@ func (c *EcdsaCircuit[T, S]) Define(api frontend.API) error {
 	for i := range c.Sig {
 		c.Pub[i].Verify(api, sw_emulated.GetCurveParams[T](), &c.Msg[i], &c.Sig[i])
 	}
-	// SHA-3 (Keccak256) Commit to all signatures
-	// h, err := sha3.New256(api)
-	// if err != nil {
-	// 	return err
-	// }
-	// uapi, err := uints.New[uints.U64](api)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// for i := 0; i < NumSignatures; i++ {
-	// 	h.Write(c.Sig[i].R)
-	// 	h.Write(c.Sig[i].S)
-	// 	h.Write(c.Msg[i])
-	// }
-	// res := h.Sum()
-
-	// for i := range c.Commitment {
-	// 	uapi.ByteAssertEq(c.Commitment[i], res[i])
-	// }
 	return nil
 }
 

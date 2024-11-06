@@ -17,13 +17,13 @@ import (
 	"github.com/consensys/gnark/backend/witness"
 	"github.com/consensys/gnark/constraint"
 	"github.com/consensys/gnark/frontend"
-	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/consensys/gnark/std/math/emulated"
 	"golang.org/x/crypto/cryptobyte"
 	"golang.org/x/crypto/cryptobyte/asn1"
 )
 
-const NumSignatures = 128
+const NumSignatures = 1
+
 var circuitName string
 
 func init() {
@@ -93,18 +93,7 @@ func generateWitness() (witness.Witness, error) {
 }
 
 func Groth16Setup(fileDir string) {
-	r1cs, err := compileCircuit(r1cs.NewBuilder)
-	if err != nil {
-		panic(err)
-	}
-	pk, vk, err := groth16.Setup(r1cs)
-	if err != nil {
-		panic(err)
-	}
-	// Write to file
-	utils.WriteToFile(pk, fileDir+circuitName+".zkey")
-	utils.WriteToFile(r1cs, fileDir+circuitName+".r1cs")
-	utils.WriteToFile(vk, fileDir+circuitName+".vkey")
+	utils.Groth16Setup(fileDir, circuitName, compileCircuit)
 }
 
 func Groth16Prove(fileDir string) {
@@ -165,10 +154,10 @@ func Groth16Prove(fileDir string) {
 }
 
 func genRandomBytes(size int) ([]byte, error) {
-    blk := make([]byte, size)
-    _, err := rand.Read(blk)
-    if err != nil {
-        return nil, err
-    }
-    return blk, nil
+	blk := make([]byte, size)
+	_, err := rand.Read(blk)
+	if err != nil {
+		return nil, err
+	}
+	return blk, nil
 }
